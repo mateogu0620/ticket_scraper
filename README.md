@@ -1,26 +1,19 @@
-# demo-repo3
-
-An example flask rest API server, for SE Fall 2022.
+# TicketScraper
 
 To build production, type `make prod`.
 
 To create the env for a new developer, run `make dev_env`.
 
-We will write a API-driven adventure game where characters explore a world,
-meet threats, find treasure, etc.
+Website that gets ticket prices for nearby events (from Ticketmaster, EventBrite, SeatGeek, etc) and lists them based on user’s location, preferred event genre, and prices.
 
 ## Requirements
 
-- List all available character types
-- Get a description of a character type
-- List all active characters
-- Signup
-- Signin
-- Describe a locale
-- Allow character to move
-- Allow character to act
-- Allow character to talk to other characters in locale
+to be added
 
 ## Design
 
-Each of the main requirements will correspond to an API endpoint.
+to be added
+
+## UI
+
+to be added
