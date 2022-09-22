@@ -8,7 +8,21 @@ Website that gets ticket prices for nearby events (from Ticketmaster, EventBrite
 
 ## Requirements
 
-to be added
+List events/concerts based on a set of filters
+
+Potential Filters:
+    Location
+    Date
+    Price
+    Venue
+    Artist
+    Genre
+    Ticket Availability
+
+Allow viewing and sorting events by a given filter
+
+Link event/concerts to their according site where we got the information from
+
 
 ## Design
 
@@ -17,3 +31,13 @@ to be added
 ## UI
 
 to be added
+
+## Relevant APIs
+
+GitHub - public-apis/public-apis: A collective list of free APIs
+
+EventBrite https://www.eventbrite.com/platform/api/
+
+SeatGeek https://platform.seatgeek.com/
+
+TicketMaster https://developer.ticketmaster.com/products-and-docs/apis/getting-started/

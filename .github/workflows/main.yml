@@ -33,7 +33,6 @@ jobs:
       - name: Reset PYTHONPATH
         run: export PYTHONPATH="${PYTHONPATH}:/home/runner/work/ticket_scraper/ticket_scraper/"
         
-
       - name: echo PYTHONPATH for confirmation
         run: echo $PYTHONPATH
 
