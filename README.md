@@ -4,7 +4,10 @@ To build production, type `make prod`.
 
 To create the env for a new developer, run `make dev_env`.
 
-Website that gets ticket prices for nearby events (from Ticketmaster, EventBrite, SeatGeek, etc) and lists them based on user’s location, preferred event genre, and prices.
+A flask rest API server that searches for nearby converts(from Ticketmaster, EventBrite, SeatGeek, etc) and stores and presents them to users. We also allow users to filter events based on factors such as user’s location, preferred genre, ticket prices , etc..
+
+The goal is to make a website that helps users find new and exciting events near them to explore in a single place.
+
 
 ## Requirements
 
