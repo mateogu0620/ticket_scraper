@@ -26,10 +26,25 @@ Allow viewing and sorting events by a given filter
 
 Link event/concerts to their according site where we got the information from
 
-
 ## Design
 
-to be added
+UI has basic search interface, input genre and location (zip code?) and scraper will collect events from
+nearby from EventBrite, SeatGeek, TicketMaster, etc. 
+
+Database and table schema for “ticket prices” / “events”:
+- Have updating table with new events coming in, with primary key EVENT_ID
+- Additional tables based on genre (potentially designated TS_CONCERT_METAL, or TS_CONCERT_RNB or TS_COMEDY_SAMMORRIL)
+- Table columns should include venue field so “nearby” concerts included
+
+Potentially we use a scraper to fill out the database constantly, then query for every usage. Or, instead we call the API on every usage, and simply use the results from each. A combination of both might be good as well.
+
+## Tests
+
+- Basic tests (hello, etc)
+- Test each API call (simple calls)
+- Test if scraper is returning valid data with valid schema
+- Test if the DB is filling out (scraper is loading data into tables)
+- Reset test tables for each test. Maybe keep count of test run #? (this isn't necessary, probably)
 
 ## UI
 
