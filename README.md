@@ -48,7 +48,10 @@ Potentially we use a scraper to fill out the database constantly, then query for
 
 ## UI
 
-to be added
+UI is a simple, minimalistic web-based user interface, primarily centered around the search interface, which will 
+input a musical genre and location and return the concert tickets that fullfill the search data. The default will 
+return events from all three ticketing API's, with the option to filter tickets based on certain filter or optionally
+by which API's are being called. This design will be handled with simple http templates handled on the Flask server backend.
 
 ## Relevant APIs
 
