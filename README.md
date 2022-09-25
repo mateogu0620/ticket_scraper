@@ -53,9 +53,12 @@ input a musical genre and location and return the concert tickets that fullfill 
 return events from all three ticketing API's, with the option to filter tickets based on certain filter or optionally
 by which API's are being called. This design will be handled with simple http templates handled on the Flask server backend.
 
+The search interface will have buttons and a drop-down menu to select the filters from a pre-determined list, and optionally may
+include a Google maps window with the location pins of the nearby concerts overlaid on top.
+
 ## Relevant APIs
 
-GitHub - public-apis/public-apis: A collective list of free APIs
+GitHub - https://github.com/public-apis/public-apis: A collective list of free APIs
 
 EventBrite https://www.eventbrite.com/platform/api/
 
