@@ -19,10 +19,7 @@ SEATGEEK_API_SECRET = "ef42c7b4250a963a18a8f42fcb817bcdc3c2889e8740ac276b6834f48
 # Examples for searching events using all three APIs - refer to docs for more info
 testTMQuery = f"https://app.ticketmaster.com/discovery/v2/events?apikey={TICKETMASTER_API_KEY}&locale=*&size=1"
 testSGQuery = f"https://api.seatgeek.com/2/events?geoip=11201"
-
-
 responseTM = get(testTMQuery)
 responseSG = get(testSGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET))
-
 print(responseTM.json())
 print(responseSG.json())
