@@ -53,9 +53,9 @@ def api_insertOne():
                 "first": "Walter",
                 "last": "White"
             },
-            "birth": json.dumps(datetime.datetime.now(), indent=4,\
+            "birth": json.dumps(datetime.datetime.now(), indent=4,
                                 sort_keys=True, default=str),
-            "death": json.dumps(datetime.datetime.now(), indent=4,\
+            "death": json.dumps(datetime.datetime.now(), indent=4,
                                 sort_keys=True, default=str),
             "contribs": ["Jesse", "We", "Need", "To", "Cook"],
             "views": 5000000
