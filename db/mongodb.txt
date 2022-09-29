@@ -1,0 +1,19 @@
+Database User Username: Cluster08493
+Database User Password: RlhRbmFKSH1E
+
+Your connection string: mongodb+srv://cluster08493.lse2bn1.mongodb.net
+
+API KEY:
+scraperKey: Gyq0EYJvvC3z2bxJIY6b46HunN6LfqYlpXycSLEXPOYO77zOGmNvIRIUsQSqp44Y
+
+curl --location --request POST 'https://data.mongodb-api.com/app/data-gvhux/endpoint/data/v1/action/findOne' \
+--header 'Content-Type: application/json' \
+--header 'Access-Control-Request-Headers: *' \
+--header 'api-key: Gyq0EYJvvC3z2bxJIY6b46HunN6LfqYlpXycSLEXPOYO77zOGmNvIRIUsQSqp44Y' \
+--data-raw '{
+    "collection":"<COLLECTION_NAME>",
+    "database":"<DATABASE_NAME>",
+    "dataSource":"Cluster08493",
+    "projection": {"_id": 1}
+}'
+
