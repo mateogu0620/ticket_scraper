@@ -31,9 +31,9 @@ def fetch_pets():
 
 def POST(operation, docType, doc):
     url = ("https://data.mongodb-api.com"
-          "/app/data-gvhux/endpoint/data"
-          "/v1/action/{}"
-          .format(operation))
+           "/app/data-gvhux/endpoint/data"
+           "/v1/action/{}"
+           .format(operation))
 
     payload = json.dumps({
         "collection": "people",
