@@ -11,10 +11,10 @@ Eventbrite no longer allows for searching events since December 12, 2019
 '''
 
 # Ticketmaster
-TICKETMASTER_API_KEY = "W41W8WQEjosIaqHVjoWJGDDdFbB9Begq"
+TICKETMASTER_API_KEY = ""
 # SeatGeek
-SEATGEEK_API_KEY = "Mjk0MDI2MjJ8MTY2NDM5OTMyMi40MTQzNTQ"
-SEATGEEK_API_SECRET = "ef42c7b4250a963a18a8f42fcb817bcdc3c2889e8740ac276b6834f48df45275"
+SEATGEEK_API_KEY = ""
+SEATGEEK_API_SECRET = ""
 
 # Examples for searching events using all three APIs - refer to docs for more info
 testTMQuery = f"https://app.ticketmaster.com/discovery/v2/events?apikey={TICKETMASTER_API_KEY}&locale=*&size=1"
