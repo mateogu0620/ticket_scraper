@@ -9,9 +9,11 @@ from pymongo import MongoClient
 
 app = Flask(__name__)
 api = Api(app)
-client = MongoClient('localhost', 27017) # Username: Cluster08493 Password: RlhRbmFKSH1E
 
-db = client.flask_db # creating mongoDB instance 
+client = MongoClient('localhost', 27017)
+# Username: Cluster08493
+# Password: RlhRbmFKSH1E
+db = client.flask_db  # creating mongoDB instance
 collection = db.collec
 
 LIST = 'list'
