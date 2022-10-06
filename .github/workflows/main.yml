@@ -15,6 +15,9 @@ on:
 env:
   DEMO_HOME: /home/runner/work/ticket_scraper/ticket_scraper/
   PYTHONPATH: /home/runner/work/ticket_scraper/ticket_scraper/
+  TICKETMASTER_API_KEY: ${{ secrets.TICKETMASTER_API_KEY}}
+  SEATGEEK_API_KEY: ${{ secrets.SEATGEEK_API_KEY}}
+  SEATGEEK_API_SECRET: ${{ secrets.SEATGEEK_API_SECRET}}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -41,11 +44,8 @@ jobs:
       - name: Install dotenv python package separately
         run: pip3 install python-dotenv
       
-      - name: 'Create env file'
-        shell: bash
-        env:
-          PROD_ENV_FILE: ${{ secrets.PROD_ENV_FILE }}
-        run: touch .env; echo env.PROD_ENV_FILE > .env; cat .env
+      #- name: 'Create env file'
+      #  run: touch .env; echo env.PROD_ENV_FILE > .env; cat .env
 
       - name: Run Python tests.
         run: make all_tests
