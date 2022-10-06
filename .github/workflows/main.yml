@@ -41,6 +41,12 @@ jobs:
       
       - name: Install dotenv python package separately
         run: pip3 install python-dotenv
+      
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo ${{ secrets.PROD_ENV_FILE }} > .env
+          cat .env
 
       - name: Run Python tests.
         run: make all_tests
