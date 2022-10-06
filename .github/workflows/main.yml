@@ -15,7 +15,6 @@ on:
 env:
   DEMO_HOME: /home/runner/work/ticket_scraper/ticket_scraper/
   PYTHONPATH: /home/runner/work/ticket_scraper/ticket_scraper/
-  PROD_ENV_FILE: ${{ secrets.PROD_ENV_FILE }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -43,6 +42,9 @@ jobs:
         run: pip3 install python-dotenv
       
       - name: 'Create env file'
+        shell: bash
+        env:
+          PROD_ENV_FILE: ${{ secrets.PROD_ENV_FILE }}
         run: touch .env; echo env.PROD_ENV_FILE > .env; cat .env
 
       - name: Run Python tests.
