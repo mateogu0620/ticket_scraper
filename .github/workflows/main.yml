@@ -15,7 +15,9 @@ on:
 env:
   DEMO_HOME: /home/runner/work/ticket_scraper/ticket_scraper/
   PYTHONPATH: /home/runner/work/ticket_scraper/ticket_scraper/
-    # MONGO_PASSWD: ${{secrets.MONGO_PASSWD}}
+  TICKETMASTER_API_KEY: ${{secrets.TICKETMASTER_API_KEY}}
+  SEATGEEK_API_KEY: _${{secrets.SEATGEEK_API_KEY}}
+  SEATGEEK_API_SECRET: _${{secrets.SEATGEEK_API_SECRET}}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
