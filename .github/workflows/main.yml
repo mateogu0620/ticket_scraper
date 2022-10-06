@@ -15,9 +15,7 @@ on:
 env:
   DEMO_HOME: /home/runner/work/ticket_scraper/ticket_scraper/
   PYTHONPATH: /home/runner/work/ticket_scraper/ticket_scraper/
-  TICKETMASTER_API_KEY: ${{secrets.TICKETMASTER_API_KEY}}
-  SEATGEEK_API_KEY: _${{secrets.SEATGEEK_API_KEY}}
-  SEATGEEK_API_SECRET: _${{secrets.SEATGEEK_API_SECRET}}
+  PROD_ENV_FILE: ${{ secrets.PROD_ENV_FILE }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -40,6 +38,9 @@ jobs:
 
       - name: Install Python packages.
         run: pip install -r requirements-dev.txt
+      
+      - name: Install dotenv python package separately
+        run: pip3 install python-dotenv
 
       - name: Run Python tests.
         run: make all_tests
