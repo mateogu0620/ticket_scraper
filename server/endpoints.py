@@ -19,11 +19,6 @@ collection = db.collec
 LIST = 'list'
 HELLO = '/hello'
 MESSAGE = 'message'
-CHAR_TYPE_LIST = f'/character_types/{LIST}'
-CHAR_TYPE_LIST_NM = 'character_types_list'
-
-A_CHAR_TYPE = 'Wizard'
-ANOTHER_CHAR_TYPE = 'Warrior'
 
 
 @api.route(HELLO)
@@ -38,30 +33,3 @@ class HelloWorld(Resource):
         It just answers with "hello world."
         """
         return {MESSAGE: 'hello world'}
-
-
-@api.route(CHAR_TYPE_LIST)
-class CharacterTypeList(Resource):
-    """
-    This will get a list of character types.
-    """
-    def get(self):
-        """
-        Returns a list of character types.
-        """
-        return {CHAR_TYPE_LIST_NM: [A_CHAR_TYPE, ANOTHER_CHAR_TYPE]}
-
-
-@api.route('/endpoints')
-class Endpoints(Resource):
-    """
-    This class will serve as live, fetchable documentation of what endpoints
-    are available in the system.
-    """
-    def get(self):
-        """
-        The `get()` method will return a list of available endpoints.
-        """
-        endpoints = ''
-        # sorted(rule.rule for rule in api.app.url_map.iter_rules())
-        return {"Available endpoints": endpoints}
