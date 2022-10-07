@@ -6,6 +6,9 @@ Gradually, we will fill in actual calls to our datastore.
 
 import json
 import requests
+import os
+
+MONGODB_API_KEY = os.getenv("MONGODB_API_KEY")
 
 WALTER = {
     "name": {
@@ -29,7 +32,17 @@ def fetch_pets():
     return {"tigers": 2, "lions": 3, "zebras": 1}
 
 
-def POST(operation, docType, doc):
+def POST(operation, doc):
+    """
+    A multipurpose function for POST methods to the MongoDB
+    Atlas Data API. This should be split into several other
+    functions, methinks.
+    """
+    if operation == "findOne" or operation == "deleteOne":
+        docType = "filter"
+    else:
+        docType = "document"
+
     url = ("https://data.mongodb-api.com"
            "/app/data-gvhux/endpoint/data"
            "/v1/action/{}"
@@ -44,16 +57,20 @@ def POST(operation, docType, doc):
     headers = {
         'Content-Type': 'application/json',
         'Access-Control-Request-Headers': '*',
-        'api-key': ("Gyq0EYJvvC3z2bxJIY6b46HunN6L"
-                    "fqYlpXycSLEXPOYO77zOGmNvIRIUsQSqp44Y"),
+        'api-key': (MONGODB_API_KEY),
     }
     response = requests.request("POST", url, headers=headers, data=payload)
     print(response.text)
+    response_json = response.json()
+    if "error" in response_json:
+        raise Exception(f"{response_json['error']}")
+    return response.json()
 
 
-POST("insertOne", "document", WALTER)
-POST("findOne", "filter", FIND_ALAN)
-POST("findOne", "filter", FIND_WALTER)
-POST("deleteOne", "filter", FIND_WALTER)
-POST("findOne", "filter", FIND_ALAN)
-POST("findOne", "filter", FIND_WALTER)
+POST("insertOne", WALTER)
+find = POST("findOne", FIND_ALAN)
+print(isinstance(find["document"], dict))
+POST("findOne", FIND_WALTER)
+POST("deleteOne", FIND_WALTER)
+POST("findOne", FIND_ALAN)
+POST("findOne", FIND_WALTER)
