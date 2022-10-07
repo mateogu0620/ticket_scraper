@@ -33,9 +33,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Reset PYTHONPATH and echo for confirmation
-        run: export PYTHONPATH="${PYTHONPATH}:/home/runner/work/ticket_scraper/ticket_scraper/"; echo $PYTHONPATH
-
       - name: Install Python packages.
         run: pip install -r requirements-dev.txt
       
