@@ -49,8 +49,8 @@ def POST(operation, doc):
            .format(operation))
 
     payload = json.dumps({
-        "collection": "people",
-        "database": "gettingStarted",
+        "collection": "events",
+        "database": "ticketScraper",
         "dataSource": "Cluster08493",
         docType: doc
     })
@@ -60,11 +60,10 @@ def POST(operation, doc):
         'api-key': (MONGODB_API_KEY),
     }
     response = requests.request("POST", url, headers=headers, data=payload)
-    print(response.text)
     response_json = response.json()
     if "error" in response_json:
         raise Exception(f"{response_json['error']}")
-    return response.json()
+    return response_json
 
 
 POST("insertOne", WALTER)

@@ -26,8 +26,12 @@ MESSAGE = 'message'
 TM_GET_EVENTS = '/tm_get_events'
 SG_GET_EVENTS = '/sg_get_events'
 MG_GET_DOCUMENT = '/mg_get_document'
+MG_INSERT_DOCUMENT = '/mg_insert_document'
+MG_DELETE_DOCUMENT = '/mg_delete_document'
 EVENTS = 'events'
 DOCUMENT = 'document'
+INSERTED_ID = 'insertedId'
+DELETED_COUNT = 'deletedCount'
 
 
 @api.route(HELLO)
@@ -75,16 +79,46 @@ class SGGetEvents(Resource):
         return {EVENTS: events}
 
 
-@api.route(f'{MG_GET_DOCUMENT}/<firstname>/<lastname>')
-class MGGetDocument(Resource):
+@api.route(f'{MG_INSERT_DOCUMENT}/<size>/<postalCode>')
+class MGInsertDocument(Resource):
     """
-    Simple test to make sure the calls to MongoDB's Atlas Data
-    API endpoint is working
+    Test to make sure the MongoDB's Atlas Data
+    API POST requests can add data
     """
-    def get(self, firstname, lastname):
+    def get(self, size, postalCode):
         """
         Calls MongoDB's API and returns attributes of a doc
         """
-        doc = {"name": {"first": firstname, "last": lastname}}
+        doc = {"size": size, "postalCode": postalCode}
+        document = db.POST("insertOne", doc)
+        return document
+
+
+@api.route(f'{MG_GET_DOCUMENT}/<size>/<postalCode>')
+class MGGetDocument(Resource):
+    """
+    Test to make sure the MongoDB's Atlas Data
+    API POST request can find data
+    """
+    def get(self, size, postalCode):
+        """
+        Calls MongoDB's API and returns attributes of a doc
+        """
+        doc = {"size": size, "postalCode": postalCode}
         document = db.POST("findOne", doc)
+        return document
+
+
+@api.route(f'{MG_DELETE_DOCUMENT}/<size>/<postalCode>')
+class MGDeleteDocument(Resource):
+    """
+    Test to make sure the MongoDB's Atlas Data
+    API POST request can find data
+    """
+    def get(self, size, postalCode):
+        """
+        Calls MongoDB's API and returns attributes of a doc
+        """
+        doc = {"size": size, "postalCode": postalCode}
+        document = db.POST("deleteOne", doc)
         return document
