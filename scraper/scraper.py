@@ -57,11 +57,10 @@ def seatgeekGetEvents(size, postalCode):
     '''
     testSGQuery =  (
         f"https://api.seatgeek.com/2/events?"
-        f"geoip={postalCode}&"
-        f"range=30"     # search radius in miles (default 30mi)
+        f"geoip={postalCode}"
     )
-
     '''
+       f"range=30"     # search radius in miles (default 30mi) # RETURNS invalid range: 30 why?
        f"highest_price.lte=20  # filter events by max ticket price ($20)
        f"datetime_local.gte=2022-11-01  # filter events by date
        f"datetime_local.lte=2022-11-30  # -> returns all events in month of November
