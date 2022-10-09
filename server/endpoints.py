@@ -49,13 +49,13 @@ class HelloWorld(Resource):
         return {MESSAGE: 'hello world'}
 
 
-@api.route(f'{TM_GET_EVENTS}/<postalCode>')
+@api.route(f'{TM_GET_EVENTS}/<size>/<postalCode>')
 class TMGetEvents(Resource):
     """
     Simple test to make sure the calls to Ticketmaster's GetEvents
     endpoint is working
     """
-    def get(self, postalCode, size=20):
+    def get(self, postalCode, size):
         """
         Calls Ticketmaster's API and return a list of events
         """
