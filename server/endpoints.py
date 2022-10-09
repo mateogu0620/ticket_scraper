@@ -10,8 +10,8 @@ from db import db
 
 app = Flask(__name__)
 api = Api(app)
-'''
-Shelving the client connection for now, pivoting to Data API
+
+''' #Shelving the client connection for now, pivoting to Data API
 
 client = MongoClient('localhost', 27017)
 # Username: Cluster08493
@@ -54,11 +54,11 @@ class TMGetEvents(Resource):
     Simple test to make sure the calls to Ticketmaster's GetEvents
     endpoint is working
     """
-    def get(self, size, postalCode):
+    def get(self, postalCode, size=20):
         """
         Calls Ticketmaster's API and return a list of events
         """
-        events = scraper.ticketmasterGetEvents(size, postalCode)
+        events = scraper.ticketmasterGetEvents(postalCode, size)
         return {EVENTS: events}
 
 
