@@ -51,6 +51,35 @@ def ticketmasterGetEvents(postalCode, size=20):
         return responseTM['_embedded']['events']
 
 
+def seatgeekFiltered(postalCode, max_price, start_date, end_date, size=20):
+    '''
+      Testing return of a list of events from SeatGeek based on certain user event filters
+      !!! Dates MUST be in the format YYYY-MM-DD !!!
+    '''
+    testSGQuery =  (
+        f"https://api.seatgeek.com/2/events?"
+        f"geoip={postalCode}&"
+        f"highest_price.lte={max_price}&"  # filter events by max ticket price ($20)
+        f"datetime_local.gte={start_date}&"  # filter events by date
+        f"datetime_local.lte={end_date}"  # -> returns all events in month of November
+    )
+    '''
+       EVENT TYPE = 'concert' || 'band'  # figure out how to adapt filter for only musical events
+       f"range=30"     # search radius in miles (default 30mi) # RETURNS invalid range: 30 why?
+   ''' 
+
+    responseSG = get(testSGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
+
+    # If invalid API call
+    if 'status' in responseSG:
+        raise Exception(f"{responseSG['message']}")
+    # If no events were found
+    elif 'events' not in responseSG:
+        return []
+    # If events were found
+    else:
+        return responseSG['events'][:size] 
+
 def seatgeekGetEvents(size, postalCode):
     '''
     Return a list of events from SeatGeek based in a US postal code 
@@ -59,13 +88,6 @@ def seatgeekGetEvents(size, postalCode):
         f"https://api.seatgeek.com/2/events?"
         f"geoip={postalCode}"
     )
-    '''
-       f"range=30"     # search radius in miles (default 30mi) # RETURNS invalid range: 30 why?
-       f"highest_price.lte=20  # filter events by max ticket price ($20)
-       f"datetime_local.gte=2022-11-01  # filter events by date
-       f"datetime_local.lte=2022-11-30  # -> returns all events in month of November
-       EVENT TYPE = 'concert' || 'band'  # adapt filter for only musical events
-   ''' 
 
     responseSG = get(testSGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
 

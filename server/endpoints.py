@@ -25,6 +25,7 @@ HELLO = '/hello'
 MESSAGE = 'message'
 TM_GET_EVENTS = '/tm_get_events'
 SG_GET_EVENTS = '/sg_get_events'
+SG_FILTERS = '/sg_get_filtered_events'
 MG_GET_DOCUMENT = '/mg_get_document'
 MG_INSERT_DOCUMENT = '/mg_insert_document'
 MG_DELETE_DOCUMENT = '/mg_delete_document'
@@ -48,7 +49,7 @@ class HelloWorld(Resource):
         return {MESSAGE: 'hello world'}
 
 
-@api.route(f'{TM_GET_EVENTS}/<size>/<postalCode>')
+@api.route(f'{TM_GET_EVENTS}/<postalCode>')
 class TMGetEvents(Resource):
     """
     Simple test to make sure the calls to Ticketmaster's GetEvents
@@ -59,6 +60,19 @@ class TMGetEvents(Resource):
         Calls Ticketmaster's API and return a list of events
         """
         events = scraper.ticketmasterGetEvents(postalCode, size)
+        return {EVENTS: events}
+
+
+@api.route(f'{SG_FILTERS}/<max_price>/<postalCode>/<start_date>/<end_date>')
+class SGGetFilteredEvents(Resource):
+    """
+        Testing the filtering capacity of SeatGeek event calls
+        !!! Dates MUST be in the format YYYY-MM-DD !!!
+    """
+    def get(self, postalCode, max_price, start_date, end_date, size=20):
+        max_price = int(max_price)
+        events = scraper.seatgeekFiltered(
+            postalCode, max_price, start_date, end_date, size)
         return {EVENTS: events}
 
 
