@@ -11,15 +11,13 @@ TICKETMASTER_API_KEY = os.getenv('TICKETMASTER_API_KEY')
 SEATGEEK_API_KEY = os.getenv('SEATGEEK_API_KEY')
 SEATGEEK_API_SECRET = os.getenv('SEATGEEK_API_SECRET')
 
-
 '''
 Docs: 
     - https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#search-events-v2
     - https://platform.seatgeek.com/
 '''
 
-
-def ticketmasterGetEvents(size, postalCode):
+def ticketmasterGetEvents(postalCode, size=20):
     '''
     Return a list of events from Ticketmaster based in a US postal code
 
@@ -31,8 +29,10 @@ def ticketmasterGetEvents(size, postalCode):
         f"https://app.ticketmaster.com/discovery/v2/events?"
         f"apikey={TICKETMASTER_API_KEY}&"
         f"postalCode={postalCode}&"
+        f"classificationName=music&"   # for pulling only musical events
         f"locale=*&"
-        f"size={size}"
+        f"radius=30&"       # search radius in miles (default 30mi)
+        f"size={size}"      # page size of response, defaults to 20
     )
 
     responseTM = get(testTMQuery).json()
@@ -57,9 +57,17 @@ def seatgeekGetEvents(size, postalCode):
     '''
     testSGQuery =  (
         f"https://api.seatgeek.com/2/events?"
-        f"geoip={postalCode}"
+        f"geoip={postalCode}&"
+        f"range=30"     # search radius in miles (default 30mi)
     )
-    
+
+    '''
+       f"highest_price.lte=20  # filter events by max ticket price ($20)
+       f"datetime_local.gte=2022-11-01  # filter events by date
+       f"datetime_local.lte=2022-11-30  # -> returns all events in month of November
+       EVENT TYPE = 'concert' || 'band'  # adapt filter for only musical events
+   ''' 
+
     responseSG = get(testSGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
 
     # If invalid API call
