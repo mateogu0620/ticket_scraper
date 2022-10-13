@@ -7,9 +7,13 @@ load_dotenv()
 
 # Ticketmaster
 TICKETMASTER_API_KEY = os.getenv('TICKETMASTER_API_KEY')
+POSTAL_CODE = 'postal_code'
+SIZE = 'size'
+TM_REQUIRED_EVENT_FIELDS = [POSTAL_CODE, SIZE]
 # SeatGeek
 SEATGEEK_API_KEY = os.getenv('SEATGEEK_API_KEY')
 SEATGEEK_API_SECRET = os.getenv('SEATGEEK_API_SECRET')
+
 
 '''
 Docs: 

@@ -4,7 +4,7 @@ The endpoint called `endpoints` will return all available endpoints.
 """
 
 from flask import Flask
-from flask_restx import Resource, Api
+from flask_restx import Resource, Api, fields
 from scraper import scraper
 from db import db
 
@@ -47,6 +47,12 @@ class HelloWorld(Resource):
         It just answers with "hello world."
         """
         return {MESSAGE: 'hello world'}
+
+
+tm_event_fields = api.model('TMGetEvents', {
+    scraper.POSTAL_CODE: fields.Integer,
+    scraper.SIZE: fields.Integer
+})
 
 
 @api.route(f'{TM_GET_EVENTS}/<size>/<postalCode>')
