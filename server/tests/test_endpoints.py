@@ -1,7 +1,9 @@
 
+from sre_constants import ASSERT
 import pytest
 
 import server.endpoints as ep
+import scraper.scraper as scraper
 
 TEST_CLIENT = ep.app.test_client()
 
@@ -18,10 +20,15 @@ def test_hello():
 
 def test_tm_get_events():
     """
-    See if Ticketmaster's GetEvents return a list of events (could be empty if no events were found)
+    See if Ticketmaster's GetEvents returns makes a successful POST request and returns
+    a list of events (could be empty if no events were found)
     """
-    resp_json = TEST_CLIENT.get(f'{ep.TM_GET_EVENTS}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
-    assert isinstance(resp_json[ep.EVENTS], list)
+    response = TEST_CLIENT.post(f'{ep.TM_GET_EVENTS}', json={
+        scraper.TM_POSTAL_CODE: TEST_POSTAL_CODE,
+        scraper.TM_SIZE: TEST_EVENT_SIZE
+    })
+    assert response.status_code == 200
+    assert isinstance(response.get_json()[ep.EVENTS], list)
 
 def test_sg_get_events():
     """

@@ -3,7 +3,7 @@ This is the file containing all of the endpoints for our flask app.
 The endpoint called `endpoints` will return all available endpoints.
 """
 
-from flask import Flask
+from flask import Flask, request
 from flask_restx import Resource, Api, fields
 from scraper import scraper
 from db import db
@@ -50,22 +50,25 @@ class HelloWorld(Resource):
 
 
 tm_event_fields = api.model('TMGetEvents', {
-    scraper.POSTAL_CODE: fields.Integer,
-    scraper.SIZE: fields.Integer
+    scraper.TM_POSTAL_CODE: fields.Integer,
+    scraper.TM_SIZE: fields.Integer
 })
 
 
-@api.route(f'{TM_GET_EVENTS}/<size>/<postalCode>')
+@api.route(f'{TM_GET_EVENTS}')
 class TMGetEvents(Resource):
     """
     Simple test to make sure the calls to Ticketmaster's GetEvents
     endpoint is working
     """
-    def get(self, postalCode, size):
-        """
-        Calls Ticketmaster's API and return a list of events
-        """
-        events = scraper.ticketmasterGetEvents(postalCode, size)
+    @api.expect(tm_event_fields)
+    def post(self):
+        '''
+        Calls Ticketmaster's API and return a list of events as  POST request
+        '''
+        postal_code = request.json[scraper.TM_POSTAL_CODE]
+        size = request.json[scraper.TM_SIZE]
+        events = scraper.ticketmasterGetEvents(postal_code, size)
         return {EVENTS: events}
 
 
