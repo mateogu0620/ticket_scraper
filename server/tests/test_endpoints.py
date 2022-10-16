@@ -57,3 +57,10 @@ def test_mg_delete_document():
     """
     resp_json = TEST_CLIENT.post(f'{ep.MG_DELETE_DOCUMENT}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
     assert isinstance(resp_json[ep.DELETED_COUNT], int)
+
+def test_mg_get_many():
+    """
+    See if MongoDB's findMany returns a list of documents (could be empty if no events were found)
+    """
+    resp_json = TEST_CLIENT.post(f'{ep.MG_GET_MANY}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
+    assert isinstance(resp_json[ep.DOCUMENTS], list)

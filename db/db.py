@@ -38,7 +38,9 @@ def POST(operation, doc):
     Atlas Data API. This should be split into several other
     functions, methinks.
     """
-    if operation == "findOne" or operation == "deleteOne":
+    if operation == "findOne" or \
+       operation == "deleteOne" or \
+       operation == "find":
         docType = "filter"
     else:
         docType = "document"
