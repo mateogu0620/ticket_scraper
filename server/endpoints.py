@@ -29,8 +29,10 @@ SG_FILTERS = '/sg_get_filtered_events'
 MG_GET_DOCUMENT = '/mg_get_document'
 MG_INSERT_DOCUMENT = '/mg_insert_document'
 MG_DELETE_DOCUMENT = '/mg_delete_document'
+MG_GET_MANY = '/mg_get_many'
 EVENTS = 'events'
 DOCUMENT = 'document'
+DOCUMENTS = 'documents'
 INSERTED_ID = 'insertedId'
 DELETED_COUNT = 'deletedCount'
 
@@ -108,9 +110,9 @@ class MGInsertDocument(Resource):
     Test to make sure the MongoDB's Atlas Data
     API POST requests can add data
     """
-    def get(self, size, postalCode):
+    def post(self, size, postalCode):
         """
-        Calls MongoDB's API and returns attributes of a doc
+        Calls MongoDB's API and inserts a doc, returns inserted ID
         """
         doc = {"size": size, "postalCode": postalCode}
         document = db.POST("insertOne", doc)
@@ -123,7 +125,7 @@ class MGGetDocument(Resource):
     Test to make sure the MongoDB's Atlas Data
     API POST request can find data
     """
-    def get(self, size, postalCode):
+    def post(self, size, postalCode):
         """
         Calls MongoDB's API and returns attributes of a doc
         """
@@ -138,10 +140,25 @@ class MGDeleteDocument(Resource):
     Test to make sure the MongoDB's Atlas Data
     API POST request can find data
     """
-    def get(self, size, postalCode):
+    def post(self, size, postalCode):
         """
-        Calls MongoDB's API and returns attributes of a doc
+        Calls MongoDB's API and deletes a doc, returning # of items deleted
         """
         doc = {"size": size, "postalCode": postalCode}
         document = db.POST("deleteOne", doc)
         return document
+
+
+@api.route(f'{MG_GET_MANY}/<size>/<postalCode>')
+class MGGetMany(Resource):
+    """
+    Test to make sure the MongoDB's Atlas Data
+    API POST request can find data
+    """
+    def post(self, size, postalCode):
+        """
+        Calls MongoDB's API and returns list of documents
+        """
+        doc = {"size": size, "postalCode": postalCode}
+        documents = db.POST("find", doc)
+        return documents
