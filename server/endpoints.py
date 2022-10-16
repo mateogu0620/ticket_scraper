@@ -112,7 +112,7 @@ class MGInsertDocument(Resource):
     """
     def post(self, size, postalCode):
         """
-        Calls MongoDB's API and returns attributes of a doc
+        Calls MongoDB's API and inserts a doc, returns inserted ID
         """
         doc = {"size": size, "postalCode": postalCode}
         document = db.POST("insertOne", doc)
@@ -142,7 +142,7 @@ class MGDeleteDocument(Resource):
     """
     def post(self, size, postalCode):
         """
-        Calls MongoDB's API and returns attributes of a doc
+        Calls MongoDB's API and deletes a doc, returning # of items deleted
         """
         doc = {"size": size, "postalCode": postalCode}
         document = db.POST("deleteOne", doc)
@@ -157,7 +157,7 @@ class MGGetMany(Resource):
     """
     def post(self, size, postalCode):
         """
-        Calls MongoDB's API and returns attributes of a doc
+        Calls MongoDB's API and returns list of documents
         """
         doc = {"size": size, "postalCode": postalCode}
         documents = db.POST("find", doc)
