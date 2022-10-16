@@ -108,7 +108,7 @@ class MGInsertDocument(Resource):
     Test to make sure the MongoDB's Atlas Data
     API POST requests can add data
     """
-    def get(self, size, postalCode):
+    def post(self, size, postalCode):
         """
         Calls MongoDB's API and returns attributes of a doc
         """
@@ -123,7 +123,7 @@ class MGGetDocument(Resource):
     Test to make sure the MongoDB's Atlas Data
     API POST request can find data
     """
-    def get(self, size, postalCode):
+    def post(self, size, postalCode):
         """
         Calls MongoDB's API and returns attributes of a doc
         """
@@ -138,7 +138,7 @@ class MGDeleteDocument(Resource):
     Test to make sure the MongoDB's Atlas Data
     API POST request can find data
     """
-    def get(self, size, postalCode):
+    def post(self, size, postalCode):
         """
         Calls MongoDB's API and returns attributes of a doc
         """
