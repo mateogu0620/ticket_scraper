@@ -54,6 +54,24 @@ def ticketmasterGetEvents(postalCode, size=20):
     else:
         return responseTM['_embedded']['events']
 
+def parseTicketMaster(apiRequests):
+    events = {}
+    for event in apiRequests:
+        tracker = []
+        tracker.append(event['id'])
+        tracker.append(event['name'])
+        tracker.append(event['type'])
+        tracker.append(event['locate'])
+        tracker.append(event['url'])
+        tracker.append(event['price_range'])
+        tracker.append(event['images'])
+        events[tracker[0]] = tracker
+    return events
+    
+
+
+
+
 
 def seatgeekFiltered(postalCode, max_price, start_date, end_date, size=20):
     '''
