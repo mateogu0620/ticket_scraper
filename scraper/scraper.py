@@ -64,14 +64,11 @@ def parseTicketMaster(apiRequests):
         tracker.append(event['locate'])
         tracker.append(event['url'])
         tracker.append(event['price_range'])
+        tracker.append(event['dates'])
         tracker.append(event['images'])
         events[tracker[0]] = tracker
     return events
     
-
-
-
-
 
 def seatgeekFiltered(postalCode, max_price, start_date, end_date, size=20):
     '''
@@ -122,3 +119,16 @@ def seatgeekGetEvents(size, postalCode):
     # If events were found
     else:
         return responseSG['events'][:size]
+
+def parseSeatGeek(apiRequests):
+    events = {}
+    for event in apiRequests:
+        tracker = []
+        tracker.append(event['id'])
+        tracker.append(event['title'])
+        tracker.append(event['type'])
+        tracker.append(event['venue'])
+        tracker.append(event['url'])
+        events[tracker[0]] = tracker
+    return events
+    
