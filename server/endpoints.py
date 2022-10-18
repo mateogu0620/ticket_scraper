@@ -53,6 +53,9 @@ class HelloWorld(Resource):
 
 tm_event_fields = api.model('TMGetEvents', {
     scraper.TM_POSTAL_CODE: fields.Integer,
+    scraper.TM_MAX_PRICE: fields.Integer,
+    scraper.TM_START_DATE: fields.DateTime,
+    scraper.TM_END_DATE: fields.DateTime,
     scraper.TM_SIZE: fields.Integer
 })
 
@@ -69,8 +72,18 @@ class TMGetEvents(Resource):
         Calls Ticketmaster's API and return a list of events as  POST request
         '''
         postal_code = request.json[scraper.TM_POSTAL_CODE]
+        max_price = request.json[scraper.TM_MAX_PRICE]
+        # TODO: have a function that process the datetime-local input from the
+        # HTML form and converts timezones to UTC
+        # At the moment ticketmasterGetEvents assumes this format
+        start_date = request.json[scraper.TM_START_DATE]
+        end_date = request.json[scraper.TM_END_DATE]
         size = request.json[scraper.TM_SIZE]
-        events = scraper.ticketmasterGetEvents(postal_code, size)
+        events = scraper.ticketmasterGetEvents(postal_code,
+                                               max_price,
+                                               start_date,
+                                               end_date,
+                                               size)
         return {EVENTS: events}
 
 

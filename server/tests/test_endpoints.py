@@ -7,11 +7,11 @@ import scraper.scraper as scraper
 
 TEST_CLIENT = ep.app.test_client()
 
-TEST_EVENT_SIZE = 1
+TEST_EVENT_SIZE = 20
 TEST_POSTAL_CODE = '10036'
-MAX_PRICE = 200
-START_DATE = "2022-12-01"
-END_DATE = "2022-12-31"
+TEST_MAX_PRICE = 200
+TEST_START_DATE = "2022-12-01"
+TEST_END_DATE = "2022-12-31"
 
 
 def test_hello():
@@ -28,6 +28,9 @@ def test_tm_get_events():
     """
     response = TEST_CLIENT.post(f'{ep.TM_GET_EVENTS}', json={
         scraper.TM_POSTAL_CODE: TEST_POSTAL_CODE,
+        scraper.TM_MAX_PRICE: TEST_MAX_PRICE,
+        scraper.TM_START_DATE: TEST_START_DATE + "T00:00:00Z",
+        scraper.TM_END_DATE: TEST_END_DATE + "T23:59:00Z",
         scraper.TM_SIZE: TEST_EVENT_SIZE
     })
     assert response.status_code == 200
@@ -38,7 +41,7 @@ def test_sg_get_filtered_events():
     See if Seatgeek's GetFilteredEvents successfully returns a list of filtered events
     (could be empty if no events were found)
     """
-    resp_json = TEST_CLIENT.get(f'{ep.SG_FILTERS}/{MAX_PRICE}/{TEST_POSTAL_CODE}/{START_DATE}/{END_DATE}').get_json()
+    resp_json = TEST_CLIENT.get(f'{ep.SG_FILTERS}/{TEST_MAX_PRICE}/{TEST_POSTAL_CODE}/{TEST_START_DATE}/{TEST_END_DATE}').get_json()
     assert isinstance(resp_json[ep.EVENTS], list)
 
 def test_sg_get_events():

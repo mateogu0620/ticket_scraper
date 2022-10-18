@@ -8,8 +8,11 @@ load_dotenv()
 # Ticketmaster
 TICKETMASTER_API_KEY = os.getenv('TICKETMASTER_API_KEY')
 TM_POSTAL_CODE = 'postal_code'
+TM_MAX_PRICE = "max_price"
+TM_START_DATE = "start_date"
+TM_END_DATE = "end_date"
 TM_SIZE = 'size'
-TM_REQUIRED_EVENT_FIELDS = [TM_POSTAL_CODE, TM_SIZE]
+TM_REQUIRED_EVENT_FIELDS = [TM_POSTAL_CODE, TM_MAX_PRICE, TM_START_DATE, TM_END_DATE, TM_SIZE]
 # SeatGeek
 SEATGEEK_API_KEY = os.getenv('SEATGEEK_API_KEY')
 SEATGEEK_API_SECRET = os.getenv('SEATGEEK_API_SECRET')
@@ -21,9 +24,13 @@ Docs:
     - https://platform.seatgeek.com/
 '''
 
-def ticketmasterGetEvents(postalCode, size=20):
+def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
     '''
     Return a list of events from Ticketmaster based in a US postal code
+
+    start_date and end_date are in the format: %Y-%m-%dT%H:%M (e.g. 2019-01-01T00:00)
+        - this is UTC time
+    max_price is USD currency
 
     MGU: still some work pending in checking for edge cases and handling
     what is the max size we are allowing (TM allows for 200, but it is very
@@ -33,16 +40,19 @@ def ticketmasterGetEvents(postalCode, size=20):
         f"https://app.ticketmaster.com/discovery/v2/events?"
         f"apikey={TICKETMASTER_API_KEY}&"
         f"postalCode={postalCode}&"
-        f"classificationName=music&"   # for pulling only musical events
+        f"classificationName=music&"                        # for pulling only musical events
         f"locale=*&"
-        f"radius=30&"       # search radius in miles (default 30mi)
-        f"size={size}"      # page size of response, defaults to 20
+        f"radius=30&"                                       # search radius in miles (default 30mi)
+        f"startDateTime={start_date}&"
+        f"endDateTime={end_date}&"
+        f"size={size}"                                      # page size of response, defaults to 20
     )
 
     responseTM = get(testTMQuery).json()
 
     # If API call failed
     if 'errors' in responseTM:
+        print(responseTM)
         raise Exception("Invalid API call")
     # If API stops working for some reason
     elif 'fault' in responseTM:
@@ -52,7 +62,17 @@ def ticketmasterGetEvents(postalCode, size=20):
         return []
     # If events were found
     else:
-        return responseTM['_embedded']['events']
+        events = responseTM['_embedded']['events']
+        filtered_events = []
+        for e in events:
+            for ticket in e['priceRanges']:
+                # if any of the ticket types lies under the max_price range,
+                # we include that event in our filtered events return list
+                if ticket['max'] <= max_price:
+                    filtered_events.append(e)
+                    break
+        return filtered_events
+
 
 def parseTicketMaster(apiRequests):
     events = {}
@@ -132,3 +152,6 @@ def parseSeatGeek(apiRequests):
         events[tracker[0]] = tracker
     return events
     
+
+
+ticketmasterGetEvents("11216", 35, "2022-10-19T00:00:00Z", "2022-10-31T00:00:00Z", 20)
