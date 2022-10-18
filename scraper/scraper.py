@@ -152,6 +152,3 @@ def parseSeatGeek(apiRequests):
         events[tracker[0]] = tracker
     return events
     
-
-
-ticketmasterGetEvents("11216", 35, "2022-10-19T00:00:00Z", "2022-10-31T00:00:00Z", 20)
