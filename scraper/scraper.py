@@ -156,7 +156,3 @@ def parseSeatGeek(apiRequests):
         tracker.append(event['url'])
         events[tracker[0]] = tracker
     return events
-
-
-
-ticketmasterGetEvents('11216', 50, '2022-10-20T11:11:00Z', '2022-12-20T11:11:00Z', 10)
