@@ -3,7 +3,10 @@
 from requests import get, auth
 from json import loads, dumps
 
-CLIENT_ID = "Mjk0MDI2MjJ8MTY2NDM5OTMyMi40MTQzNTQ"   # SeatGeek CLIENT_ID
+from scraper.scraper import SEATGEEK_API_KEY
+
+
+CLIENT_ID = SEATGEEK_API_KEY                        # SeatGeek CLIENT_ID
 endpoint_url = "https://api.seatgeek.com/2/genres"  # genres endpoint for SeatGeek API
 url_auth = auth.HTTPBasicAuth(CLIENT_ID,"") # authorization, no pw
 
