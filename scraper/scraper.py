@@ -65,29 +65,34 @@ def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
         events = responseTM['_embedded']['events']
         filtered_events = []
         for e in events:
+            # Assuming here that price ranges are specified for all events
             for ticket in e['priceRanges']:
                 # if any of the ticket types lies under the max_price range,
                 # we include that event in our filtered events return list
                 if ticket['max'] <= max_price:
                     filtered_events.append(e)
                     break
-        return filtered_events
+        parsed_events = parseTicketmaster(filtered_events)
+        return parsed_events
 
 
-def parseTicketMaster(apiRequests):
-    events = {}
-    for event in apiRequests:
-        tracker = []
-        tracker.append(event['id'])
-        tracker.append(event['name'])
-        tracker.append(event['type'])
-        tracker.append(event['locate'])
-        tracker.append(event['url'])
-        tracker.append(event['price_range'])
-        tracker.append(event['dates'])
-        tracker.append(event['images'])
-        events[tracker[0]] = tracker
-    return events
+def parseTicketmaster(events):
+    # MGU: Not parsed yet, just setting up the parsing for now
+    # This helps a lot for parsing: https://developer.ticketmaster.com/api-explorer/v2/
+    # We should most likely have a single model/class for how we are representing events from both ticketmaster and 
+    # seatgeek and then parse the events from the APIs using that model
+    parsed_events = []
+    for ev in events:
+        p_ev = {}
+        p_ev['name'] = ev['name']
+        p_ev['url'] = ev['url']
+        p_ev['info'] = ev['info']
+        p_ev['sales'] = ev['sales']
+        p_ev['dates'] = ev['dates']
+        p_ev['classifications'] = ev['classifications']
+        p_ev['priceRanges'] = ev['priceRanges']
+        parsed_events.append(p_ev)
+    return parsed_events
     
 
 def seatgeekFiltered(postalCode, max_price, start_date, end_date, size=20):
@@ -151,4 +156,7 @@ def parseSeatGeek(apiRequests):
         tracker.append(event['url'])
         events[tracker[0]] = tracker
     return events
-    
+
+
+
+ticketmasterGetEvents('11216', 50, '2022-10-20T11:11:00Z', '2022-12-20T11:11:00Z', 10)
