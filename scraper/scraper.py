@@ -86,7 +86,6 @@ def parseTicketmaster(events):
         p_ev = {}
         p_ev['name'] = ev['name']
         p_ev['url'] = ev['url']
-        p_ev['info'] = ev['info']
         p_ev['sales'] = ev['sales']
         p_ev['dates'] = ev['dates']
         p_ev['classifications'] = ev['classifications']
