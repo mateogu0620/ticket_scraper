@@ -62,6 +62,14 @@ tm_event_fields = api.model('TMGetEvents', {
     scraper.TM_SIZE: fields.Integer
 })
 
+mg_tm_fields = api.model('MGTMInsert', {
+    scraper.TM_POSTAL_CODE: fields.Integer,
+    scraper.TM_MAX_PRICE: fields.Integer,
+    scraper.TM_START_DATE: fields.DateTime,
+    scraper.TM_END_DATE: fields.DateTime,
+    scraper.TM_SIZE: fields.Integer
+})
+
 
 @api.route(f'{TM_GET_EVENTS}')
 class TMGetEvents(Resource):
@@ -141,7 +149,12 @@ class MGTMInsert(Resource):
     Test insertion of parsed events from Ticketmaster
     into MongoDB collection
     """
+    @api.expect(mg_tm_fields)
     def post(self):
+        """
+        Calls Ticketmaster API and MongoAPI to get events and then
+        insert them, returns inserted IDs
+        """
         postal_code = request.json[scraper.TM_POSTAL_CODE]
         max_price = request.json[scraper.TM_MAX_PRICE]
         start_date = request.json[scraper.TM_START_DATE]

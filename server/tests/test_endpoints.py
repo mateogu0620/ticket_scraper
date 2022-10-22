@@ -83,11 +83,12 @@ def test_mg_tm_insert():
     """
     See if TM to Mongo insertion results in a list of inserted IDs
     """
-    resp_json = TEST_CLIENT.post(f'{ep.MG_TM_INSERT}', json={
+    response = TEST_CLIENT.post(f'{ep.MG_TM_INSERT}', json={
         scraper.TM_POSTAL_CODE: TEST_POSTAL_CODE,
         scraper.TM_MAX_PRICE: TEST_MAX_PRICE,
         scraper.TM_START_DATE: TEST_START_DATE + "T00:00:00Z",
         scraper.TM_END_DATE: TEST_END_DATE + "T23:59:00Z",
         scraper.TM_SIZE: TEST_EVENT_SIZE
-    }).get_json()
-    assert isinstance(resp_json[ep.INSERTED_IDS], list)
+    })
+    assert response.status_code == 200
+    assert isinstance(response.get_json()[ep.INSERTED_IDS], list)
