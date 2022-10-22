@@ -7,6 +7,7 @@ Gradually, we will fill in actual calls to our datastore.
 import json
 import requests
 import os
+from scraper import scraper
 
 MONGODB_API_KEY = os.getenv("MONGODB_API_KEY")
 
@@ -42,6 +43,8 @@ def POST(operation, doc):
        operation == "deleteOne" or \
        operation == "find":
         docType = "filter"
+    elif operation == "insertMany":
+        docType = "documents"
     else:
         docType = "document"
 
@@ -66,6 +69,16 @@ def POST(operation, doc):
     if "error" in response_json:
         raise Exception(f"{response_json['error']}")
     return response_json
+
+
+def insertManyTicketmaster(filter):
+    operation = "insertMany"
+    events = scraper.ticketmasterGetEvents(filter['postalCode'],
+                                           filter['maxPrice'],
+                                           filter['start_date'],
+                                           filter['end_date'],
+                                           filter['size'])
+    return POST(operation, events)
 
 
 POST("insertOne", WALTER)

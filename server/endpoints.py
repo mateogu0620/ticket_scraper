@@ -30,10 +30,13 @@ MG_GET_DOCUMENT = '/mg_get_document'
 MG_INSERT_DOCUMENT = '/mg_insert_document'
 MG_DELETE_DOCUMENT = '/mg_delete_document'
 MG_GET_MANY = '/mg_get_many'
+MG_TM_INSERT = '/mg_tm_insert'
+FILTER = 'filter'
 EVENTS = 'events'
 DOCUMENT = 'document'
 DOCUMENTS = 'documents'
 INSERTED_ID = 'insertedId'
+INSERTED_IDS = 'insertedIds'
 DELETED_COUNT = 'deletedCount'
 
 
@@ -129,6 +132,27 @@ class MGInsertDocument(Resource):
         """
         doc = {"size": size, "postalCode": postalCode}
         document = db.POST("insertOne", doc)
+        return document
+
+
+@api.route(f'{MG_TM_INSERT}')
+class MGTMInsert(Resource):
+    """
+    Test insertion of parsed events from Ticketmaster
+    into MongoDB collection
+    """
+    def post(self):
+        postal_code = request.json[scraper.TM_POSTAL_CODE]
+        max_price = request.json[scraper.TM_MAX_PRICE]
+        start_date = request.json[scraper.TM_START_DATE]
+        end_date = request.json[scraper.TM_END_DATE]
+        size = request.json[scraper.TM_SIZE]
+        events = scraper.ticketmasterGetEvents(postal_code,
+                                               max_price,
+                                               start_date,
+                                               end_date,
+                                               size)
+        document = db.POST("insertMany", events)
         return document
 
 
