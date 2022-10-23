@@ -7,22 +7,17 @@ load_dotenv()
 
 # Ticketmaster
 TICKETMASTER_API_KEY = os.getenv('TICKETMASTER_API_KEY')
-TM_POSTAL_CODE = 'postal_code'
-TM_MAX_PRICE = "max_price"
-TM_START_DATE = "start_date"
-TM_END_DATE = "end_date"
-TM_SIZE = 'size'
-TM_REQUIRED_EVENT_FIELDS = [TM_POSTAL_CODE, TM_MAX_PRICE, TM_START_DATE, TM_END_DATE, TM_SIZE]
-
+TM_REQUIRED_EVENT_FIELDS = [POSTAL_CODE, MAX_PRICE, START_DATE, END_DATE, SIZE]
 
 # SeatGeek
 SEATGEEK_API_KEY = os.getenv('SEATGEEK_API_KEY')
 SEATGEEK_API_SECRET = os.getenv('SEATGEEK_API_SECRET')
-SG_POSTAL_CODE = 'postal_code'
-SG_MAX_PRICE = "max_price"
-SG_START_DATE = "start_date"
-SG_END_DATE = "end_date"
-SG_SIZE = 'size'
+
+POSTAL_CODE = 'postal_code'
+MAX_PRICE = "max_price"
+START_DATE = "start_date"
+END_DATE = "end_date"
+SIZE = 'size'
 
 
 
@@ -112,7 +107,7 @@ def seatgeekFiltered(postalCode, max_price, start_date, end_date, size=20):
         f"geoip={postalCode}&"
         f"highest_price.lte={max_price}&"  # filter events by max ticket price ($20)
         f"datetime_local.gte={start_date}&"  # filter events by date
-        f"datetime_local.lte={end_date}"  # -> returns all events in month of November
+        f"datetime_local.lte={end_date}"  
     )
     '''
        EVENT TYPE = 'concert' || 'band'  # figure out how to adapt filter for only musical events
@@ -121,15 +116,7 @@ def seatgeekFiltered(postalCode, max_price, start_date, end_date, size=20):
 
     responseSG = get(SGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
 
-    # If invalid API call
-    if 'status' in responseSG:
-        raise Exception(f"{responseSG['message']}")
-    # If no events were found
-    elif 'events' not in responseSG:
-        return []
-    # If events were found
-    else:
-        return responseSG['events'][:size] 
+    return makeAPICall(responseSG, size)
 
 def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20):
     '''
@@ -146,15 +133,18 @@ def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20):
 
     responseSG = get(SGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
 
+    return makeAPICall(responseSG, size)
+
+def makeAPICall(response, size):
     # If invalid API call
-    if 'status' in responseSG:
-        raise Exception(f"{responseSG['message']}")
+    if 'status' in response:
+        raise Exception(f"{response['message']}")
     # If no events were found
-    elif 'events' not in responseSG:
+    elif 'events' not in response:
         return []
     # If events were found
     else:
-        return responseSG['events'][:size]
+        return response['events'][:size]
 
 def parseSeatGeek(apiRequests):
     events = {}

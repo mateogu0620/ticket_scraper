@@ -55,28 +55,28 @@ class HelloWorld(Resource):
 
 
 tm_event_fields = api.model('TMGetEvents', {
-    scraper.TM_POSTAL_CODE: fields.Integer,
-    scraper.TM_MAX_PRICE: fields.Integer,
-    scraper.TM_START_DATE: fields.DateTime,
-    scraper.TM_END_DATE: fields.DateTime,
-    scraper.TM_SIZE: fields.Integer
+    scraper.POSTAL_CODE: fields.Integer,
+    scraper.MAX_PRICE: fields.Integer,
+    scraper.START_DATE: fields.DateTime,
+    scraper.END_DATE: fields.DateTime,
+    scraper.SIZE: fields.Integer
 })
 
 sg_event_fields = api.model('SGGetEvents', {
-    scraper.SG_POSTAL_CODE: fields.Integer,
-    scraper.SG_MAX_PRICE: fields.Integer,
-    scraper.SG_START_DATE: fields.DateTime,
-    scraper.SG_END_DATE: fields.DateTime,
-    scraper.SG_SIZE: fields.Integer
+    scraper.POSTAL_CODE: fields.Integer,
+    scraper.MAX_PRICE: fields.Integer,
+    scraper.START_DATE: fields.DateTime,
+    scraper.END_DATE: fields.DateTime,
+    scraper.SIZE: fields.Integer
 })
 
 
 mg_tm_fields = api.model('MGTMInsert', {
-    scraper.TM_POSTAL_CODE: fields.Integer,
-    scraper.TM_MAX_PRICE: fields.Integer,
-    scraper.TM_START_DATE: fields.DateTime,
-    scraper.TM_END_DATE: fields.DateTime,
-    scraper.TM_SIZE: fields.Integer
+    scraper.POSTAL_CODE: fields.Integer,
+    scraper.MAX_PRICE: fields.Integer,
+    scraper.START_DATE: fields.DateTime,
+    scraper.END_DATE: fields.DateTime,
+    scraper.SIZE: fields.Integer
 })
 
 
@@ -91,14 +91,14 @@ class TMGetEvents(Resource):
         '''
         Calls Ticketmaster's API and return a list of events as  POST request
         '''
-        postal_code = request.json[scraper.TM_POSTAL_CODE]
-        max_price = request.json[scraper.TM_MAX_PRICE]
+        postal_code = request.json[scraper.POSTAL_CODE]
+        max_price = request.json[scraper.MAX_PRICE]
         # TODO: have a function that process the datetime-local input from the
         # HTML form and converts timezones to UTC
         # At the moment ticketmasterGetEvents assumes this format
-        start_date = request.json[scraper.TM_START_DATE]
-        end_date = request.json[scraper.TM_END_DATE]
-        size = request.json[scraper.TM_SIZE]
+        start_date = request.json[scraper.START_DATE]
+        end_date = request.json[scraper.END_DATE]
+        size = request.json[scraper.SIZE]
         events = scraper.ticketmasterGetEvents(postal_code,
                                                max_price,
                                                start_date,
@@ -131,13 +131,13 @@ class SGGetEvents(Resource):
         '''
         Calls SeatGeeks's API and return a list of events as  POST request
         '''
-        postal_code = request.json[scraper.SG_POSTAL_CODE]
-        max_price = request.json[scraper.SG_MAX_PRICE]
+        postal_code = request.json[scraper.POSTAL_CODE]
+        max_price = request.json[scraper.MAX_PRICE]
         # TODO: have a function that process the datetime-local input from the
         # HTML form and converts timezones to UTC
-        start_date = request.json[scraper.SG_START_DATE]
-        end_date = request.json[scraper.SG_END_DATE]
-        size = request.json[scraper.SG_SIZE]
+        start_date = request.json[scraper.START_DATE]
+        end_date = request.json[scraper.END_DATE]
+        size = request.json[scraper.SIZE]
         events = scraper.seatgeekGetEvents(postal_code, max_price,
                                            start_date, end_date, size)
         return {EVENTS: events}
@@ -170,11 +170,11 @@ class MGTMInsert(Resource):
         Calls Ticketmaster API and MongoAPI to get events and then
         insert them, returns inserted IDs
         """
-        postal_code = request.json[scraper.TM_POSTAL_CODE]
-        max_price = request.json[scraper.TM_MAX_PRICE]
-        start_date = request.json[scraper.TM_START_DATE]
-        end_date = request.json[scraper.TM_END_DATE]
-        size = request.json[scraper.TM_SIZE]
+        postal_code = request.json[scraper.POSTAL_CODE]
+        max_price = request.json[scraper.MAX_PRICE]
+        start_date = request.json[scraper.START_DATE]
+        end_date = request.json[scraper.END_DATE]
+        size = request.json[scraper.SIZE]
         events = scraper.ticketmasterGetEvents(postal_code,
                                                max_price,
                                                start_date,
