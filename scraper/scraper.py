@@ -13,9 +13,17 @@ TM_START_DATE = "start_date"
 TM_END_DATE = "end_date"
 TM_SIZE = 'size'
 TM_REQUIRED_EVENT_FIELDS = [TM_POSTAL_CODE, TM_MAX_PRICE, TM_START_DATE, TM_END_DATE, TM_SIZE]
+
+
 # SeatGeek
 SEATGEEK_API_KEY = os.getenv('SEATGEEK_API_KEY')
 SEATGEEK_API_SECRET = os.getenv('SEATGEEK_API_SECRET')
+SG_POSTAL_CODE = 'postal_code'
+SG_MAX_PRICE = "max_price"
+SG_START_DATE = "start_date"
+SG_END_DATE = "end_date"
+SG_SIZE = 'size'
+
 
 
 '''
@@ -36,19 +44,19 @@ def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
     what is the max size we are allowing (TM allows for 200, but it is very
     slow)
     '''
-    testTMQuery = (
+    TMQuery = (
         f"https://app.ticketmaster.com/discovery/v2/events?"
         f"apikey={TICKETMASTER_API_KEY}&"
         f"postalCode={postalCode}&"
-        f"classificationName=music&"                        # for pulling only musical events
+        f"classificationName=music&"           # for pulling only musical events
         f"locale=*&"
-        f"radius=30&"                                       # search radius in miles (default 30mi)
+        f"radius=30&"                          # search radius in miles (default 30mi)
         f"startDateTime={start_date}&"
         f"endDateTime={end_date}&"
-        f"size={size}"                                      # page size of response, defaults to 20
+        f"size={size}"                         # page size of response, defaults to 20
     )
 
-    responseTM = get(testTMQuery).json()
+    responseTM = get(TMQuery).json()
 
     # If API call failed
     if 'errors' in responseTM:
@@ -99,7 +107,7 @@ def seatgeekFiltered(postalCode, max_price, start_date, end_date, size=20):
       Testing return of a list of events from SeatGeek based on certain user event filters
       !!! Dates MUST be in the format YYYY-MM-DD !!!
     '''
-    testSGQuery =  (
+    SGQuery =  (
         f"https://api.seatgeek.com/2/events?"
         f"geoip={postalCode}&"
         f"highest_price.lte={max_price}&"  # filter events by max ticket price ($20)
@@ -111,7 +119,7 @@ def seatgeekFiltered(postalCode, max_price, start_date, end_date, size=20):
        f"range=30"     # search radius in miles (default 30mi) # RETURNS invalid range: 30 why?
    ''' 
 
-    responseSG = get(testSGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
+    responseSG = get(SGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
 
     # If invalid API call
     if 'status' in responseSG:
@@ -123,16 +131,20 @@ def seatgeekFiltered(postalCode, max_price, start_date, end_date, size=20):
     else:
         return responseSG['events'][:size] 
 
-def seatgeekGetEvents(size, postalCode):
+def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20):
     '''
-    Return a list of events from SeatGeek based in a US postal code 
+     Return a list of events from SeatGeek based in a US postal code
+               !!! Dates MUST be in the formay YYYY-MM-DD !!!
     '''
-    testSGQuery =  (
+    SGQuery =  (
         f"https://api.seatgeek.com/2/events?"
-        f"geoip={postalCode}"
+        f"geoip={postal_code}&"
+        f"highest_price.lte={max_price}&"  # filter events by max ticket price 
+        f"datetime_local.gte={start_date}&"  # filter events by date range
+        f"datetime_local.lte={end_date}"  
     )
 
-    responseSG = get(testSGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
+    responseSG = get(SGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
 
     # If invalid API call
     if 'status' in responseSG:
