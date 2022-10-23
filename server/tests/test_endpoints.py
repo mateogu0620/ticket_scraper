@@ -27,11 +27,11 @@ def test_tm_get_events():
     a list of events (could be empty if no events were found)
     """
     response = TEST_CLIENT.post(f'{ep.TM_GET_EVENTS}', json={
-        scraper.TM_POSTAL_CODE: TEST_POSTAL_CODE,
-        scraper.TM_MAX_PRICE: TEST_MAX_PRICE,
-        scraper.TM_START_DATE: TEST_START_DATE + "T00:00:00Z",
-        scraper.TM_END_DATE: TEST_END_DATE + "T23:59:00Z",
-        scraper.TM_SIZE: TEST_EVENT_SIZE
+        scraper.POSTAL_CODE: TEST_POSTAL_CODE,
+        scraper.MAX_PRICE: TEST_MAX_PRICE,
+        scraper.START_DATE: TEST_START_DATE + "T00:00:00Z",
+        scraper.END_DATE: TEST_END_DATE + "T23:59:00Z",
+        scraper.SIZE: TEST_EVENT_SIZE
     })
     assert response.status_code == 200
     assert isinstance(response.get_json()[ep.EVENTS], list)
@@ -46,20 +46,15 @@ def test_sg_get_filtered_events():
 
 def test_sg_get_events():
     """
-    See if Seatgeek's GetEvents returns a list of events (could be empty if no events were found)
-    resp_json = TEST_CLIENT.get(f'{ep.SG_GET_EVENTS}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
-    assert isinstance(resp_json[ep.EVENTS], list)
-    """
-    """
     See if Seatgeek's GetEvents returns makes a successful POST request and returns
     a list of events (could be empty if no events were found)
     """
     response = TEST_CLIENT.post(f'{ep.SG_GET_EVENTS}', json={
-        scraper.SG_POSTAL_CODE: TEST_POSTAL_CODE,
-        scraper.SG_MAX_PRICE: TEST_MAX_PRICE,
-        scraper.SG_START_DATE: TEST_START_DATE + "T00:00:00Z",
-        scraper.SG_END_DATE: TEST_END_DATE + "T23:59:00Z",
-        scraper.SG_SIZE: TEST_EVENT_SIZE
+        scraper.POSTAL_CODE: TEST_POSTAL_CODE,
+        scraper.MAX_PRICE: TEST_MAX_PRICE,
+        scraper.START_DATE: TEST_START_DATE + "T00:00:00Z",
+        scraper.END_DATE: TEST_END_DATE + "T23:59:00Z",
+        scraper.SIZE: TEST_EVENT_SIZE
     })
     assert response.status_code == 200
     assert isinstance(response.get_json()[ep.EVENTS], list)
@@ -98,11 +93,11 @@ def test_mg_tm_insert():
     See if TM to Mongo insertion results in a list of inserted IDs
     """
     response = TEST_CLIENT.post(f'{ep.MG_TM_INSERT}', json={
-        scraper.TM_POSTAL_CODE: TEST_POSTAL_CODE,
-        scraper.TM_MAX_PRICE: TEST_MAX_PRICE,
-        scraper.TM_START_DATE: TEST_START_DATE + "T00:00:00Z",
-        scraper.TM_END_DATE: TEST_END_DATE + "T23:59:00Z",
-        scraper.TM_SIZE: TEST_EVENT_SIZE
+        scraper.POSTAL_CODE: TEST_POSTAL_CODE,
+        scraper.MAX_PRICE: TEST_MAX_PRICE,
+        scraper.START_DATE: TEST_START_DATE + "T00:00:00Z",
+        scraper.END_DATE: TEST_END_DATE + "T23:59:00Z",
+        scraper.SIZE: TEST_EVENT_SIZE
     })
     assert response.status_code == 200
     assert isinstance(response.get_json()[ep.INSERTED_IDS], list)

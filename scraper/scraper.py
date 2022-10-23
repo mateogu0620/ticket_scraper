@@ -5,6 +5,12 @@ import os
 
 load_dotenv()
 
+POSTAL_CODE = 'postal_code'
+MAX_PRICE = "max_price"
+START_DATE = "start_date"
+END_DATE = "end_date"
+SIZE = 'size'
+
 # Ticketmaster
 TICKETMASTER_API_KEY = os.getenv('TICKETMASTER_API_KEY')
 TM_REQUIRED_EVENT_FIELDS = [POSTAL_CODE, MAX_PRICE, START_DATE, END_DATE, SIZE]
@@ -12,14 +18,6 @@ TM_REQUIRED_EVENT_FIELDS = [POSTAL_CODE, MAX_PRICE, START_DATE, END_DATE, SIZE]
 # SeatGeek
 SEATGEEK_API_KEY = os.getenv('SEATGEEK_API_KEY')
 SEATGEEK_API_SECRET = os.getenv('SEATGEEK_API_SECRET')
-
-POSTAL_CODE = 'postal_code'
-MAX_PRICE = "max_price"
-START_DATE = "start_date"
-END_DATE = "end_date"
-SIZE = 'size'
-
-
 
 '''
 Docs: 
