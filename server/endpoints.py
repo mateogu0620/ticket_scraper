@@ -62,6 +62,15 @@ tm_event_fields = api.model('TMGetEvents', {
     scraper.TM_SIZE: fields.Integer
 })
 
+sg_event_fields = api.model('SGGetEvents', {
+    scraper.SG_POSTAL_CODE: fields.Integer,
+    scraper.SG_MAX_PRICE: fields.Integer,
+    scraper.SG_START_DATE: fields.DateTime,
+    scraper.SG_END_DATE: fields.DateTime,
+    scraper.SG_SIZE: fields.Integer
+})
+
+
 mg_tm_fields = api.model('MGTMInsert', {
     scraper.TM_POSTAL_CODE: fields.Integer,
     scraper.TM_MAX_PRICE: fields.Integer,
@@ -111,20 +120,26 @@ class SGGetFilteredEvents(Resource):
         return {EVENTS: events}
 
 
-@api.route(f'{SG_GET_EVENTS}/<size>/<postalCode>')
+@api.route(f'{SG_GET_EVENTS}')
 class SGGetEvents(Resource):
     """
     Simple test to make sure the calls to SeatGeek's GetEvents
     endpoint is working
     """
-    def get(self, size, postalCode):
-        """
-        Calls SeatGeek's API and return a list of events
-        """
-        # MGU: adding this for now until I figure out how to specify
-        #      the types of the arguments using flask_restx
-        size = int(size)
-        events = scraper.seatgeekGetEvents(size, postalCode)
+    @api.expect(sg_event_fields)
+    def post(self):
+        '''
+        Calls SeatGeeks's API and return a list of events as  POST request
+        '''
+        postal_code = request.json[scraper.SG_POSTAL_CODE]
+        max_price = request.json[scraper.SG_MAX_PRICE]
+        # TODO: have a function that process the datetime-local input from the
+        # HTML form and converts timezones to UTC
+        start_date = request.json[scraper.SG_START_DATE]
+        end_date = request.json[scraper.SG_END_DATE]
+        size = request.json[scraper.SG_SIZE]
+        events = scraper.seatgeekGetEvents(postal_code, max_price,
+                                           start_date, end_date, size)
         return {EVENTS: events}
 
 
