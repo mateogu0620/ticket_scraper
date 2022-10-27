@@ -33,6 +33,15 @@ class Event:
         self.dates = dates
         self.classifications = classifications
         self.priceRanges = priceRanges
+    def toDict(self):
+        return {
+            "name": self.name,
+            "url": self.url,
+            "sales": self.sales,
+            "dates": self.dates,
+            "classifications": self.classifications,
+            "priceRanges":  self.priceRanges
+        }
         
 
 
@@ -94,7 +103,7 @@ def parseTicketmaster(events):
     parsed_events = []
     for ev in events:
         p_ev = Event(ev['name'], ev['url'], ev['sales'], ev['dates'], ev['classifications'], ev['priceRanges'])
-        parsed_events.append(p_ev)
+        parsed_events.append(p_ev.toDict())
     return parsed_events
     
 
