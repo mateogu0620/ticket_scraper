@@ -91,17 +91,9 @@ def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
 def parseTicketmaster(events):
     # MGU: Not parsed yet, just setting up the parsing for now
     # This helps a lot for parsing: https://developer.ticketmaster.com/api-explorer/v2/
-    # We should most likely have a single model/class for how we are representing events from both ticketmaster and 
-    # seatgeek and then parse the events from the APIs using that model
     parsed_events = []
     for ev in events:
-        p_ev = {}
-        p_ev['name'] = ev['name']
-        p_ev['url'] = ev['url']
-        p_ev['sales'] = ev['sales']
-        p_ev['dates'] = ev['dates']
-        p_ev['classifications'] = ev['classifications']
-        p_ev['priceRanges'] = ev['priceRanges']
+        p_ev = Event(ev['name'], ev['url'], ev['sales'], ev['dates'], ev['classification'], ev['priceRanges'])
         parsed_events.append(p_ev)
     return parsed_events
     
