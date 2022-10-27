@@ -93,7 +93,7 @@ def parseTicketmaster(events):
     # This helps a lot for parsing: https://developer.ticketmaster.com/api-explorer/v2/
     parsed_events = []
     for ev in events:
-        p_ev = Event(ev['name'], ev['url'], ev['sales'], ev['dates'], ev['classification'], ev['priceRanges'])
+        p_ev = Event(ev['name'], ev['url'], ev['sales'], ev['dates'], ev['classifications'], ev['priceRanges'])
         parsed_events.append(p_ev)
     return parsed_events
     
