@@ -25,6 +25,17 @@ Docs:
     - https://platform.seatgeek.com/
 '''
 
+class Event:
+    def __init__(self, name, url, sales, dates, classifications, priceRanges):
+        self.name = name
+        self.url = url
+        self.sales = sales
+        self.dates = dates
+        self.classifications = classifications
+        self.priceRanges = priceRanges
+        
+
+
 def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
     '''
     Return a list of events from Ticketmaster based in a US postal code
