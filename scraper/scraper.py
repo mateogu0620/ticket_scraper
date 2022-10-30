@@ -42,7 +42,6 @@ class Event:
             "classifications": self.classifications,
             "priceRanges":  self.priceRanges
         }
-        
 
 
 def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
@@ -97,37 +96,6 @@ def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
         return parsed_events
 
 
-def parseTicketmaster(events):
-    # MGU: Not parsed yet, just setting up the parsing for now
-    # This helps a lot for parsing: https://developer.ticketmaster.com/api-explorer/v2/
-    parsed_events = []
-    for ev in events:
-        p_ev = Event(ev['name'], ev['url'], ev['sales'], ev['dates'], ev['classifications'], ev['priceRanges'])
-        parsed_events.append(p_ev.toDict())
-    return parsed_events
-    
-
-def seatgeekFiltered(postalCode, max_price, start_date, end_date, size=20):
-    '''
-      Testing return of a list of events from SeatGeek based on certain user event filters
-      !!! Dates MUST be in the format YYYY-MM-DD !!!
-    '''
-    SGQuery =  (
-        f"https://api.seatgeek.com/2/events?"
-        f"geoip={postalCode}&"
-        f"highest_price.lte={max_price}&"  # filter events by max ticket price ($20)
-        f"datetime_local.gte={start_date}&"  # filter events by date
-        f"datetime_local.lte={end_date}"  
-    )
-    '''
-       EVENT TYPE = 'concert' || 'band'  # figure out how to adapt filter for only musical events
-       f"range=30"     # search radius in miles (default 30mi) # RETURNS invalid range: 30 why?
-   ''' 
-
-    responseSG = get(SGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
-
-    return makeAPICall(responseSG, size)
-
 def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20):
     '''
      Return a list of events from SeatGeek based in a US postal code
@@ -155,6 +123,16 @@ def makeAPICall(response, size):
     # If events were found
     else:
         return response['events'][:size]
+
+def parseTicketmaster(events):
+    # MGU: Not parsed yet, just setting up the parsing for now
+    # This helps a lot for parsing: https://developer.ticketmaster.com/api-explorer/v2/
+    parsed_events = []
+    for ev in events:
+        p_ev = Event(ev['name'], ev['url'], ev['sales'], ev['dates'], ev['classifications'], ev['priceRanges'])
+        parsed_events.append(p_ev.toDict())
+    return parsed_events
+
 
 def parseSeatGeek(apiRequests):
     events = {}

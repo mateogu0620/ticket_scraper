@@ -36,13 +36,6 @@ def test_tm_get_events():
     assert response.status_code == 200
     assert isinstance(response.get_json()[ep.EVENTS], list)
 
-def test_sg_get_filtered_events():
-    """
-    See if Seatgeek's GetFilteredEvents successfully returns a list of filtered events
-    (could be empty if no events were found)
-    """
-    resp_json = TEST_CLIENT.get(f'{ep.SG_FILTERS}/{TEST_MAX_PRICE}/{TEST_POSTAL_CODE}/{TEST_START_DATE}/{TEST_END_DATE}').get_json()
-    assert isinstance(resp_json[ep.EVENTS], list)
 
 def test_sg_get_events():
     """

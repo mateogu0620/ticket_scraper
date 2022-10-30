@@ -27,7 +27,6 @@ TM = "TICKETMASTER"
 SG = "SEATGEEK"
 TM_GET_EVENTS = '/tm_get_events'
 SG_GET_EVENTS = '/sg_get_events'
-SG_FILTERS = '/sg_get_filtered_events'
 MG_GET_DOCUMENT = '/mg_get_document'
 MG_INSERT_DOCUMENT = '/mg_insert_document'
 MG_DELETE_DOCUMENT = '/mg_delete_document'
@@ -73,7 +72,6 @@ sg_event_fields = api.model('SGGetEvents', {
     scraper.SIZE: fields.Integer
 })
 
-
 all_fields = api.model('AllInsert', {
     scraper.POSTAL_CODE: fields.Integer,
     scraper.MAX_PRICE: fields.Integer,
@@ -86,13 +84,13 @@ all_fields = api.model('AllInsert', {
 @api.route(f'{TM_GET_EVENTS}')
 class TMGetEvents(Resource):
     """
-    Simple test to make sure the calls to Ticketmaster's GetEvents
-    endpoint is working
+    Making an API call to Ticketmaster and returning the list of events
+    matching the user-provided filters
     """
     @api.expect(tm_event_fields)
     def post(self):
         '''
-        Calls Ticketmaster's API and return a list of events as  POST request
+        Calls Ticketmaster's API and return a list of events as POST request
         '''
         postal_code = request.json[scraper.POSTAL_CODE]
         max_price = request.json[scraper.MAX_PRICE]
@@ -110,29 +108,16 @@ class TMGetEvents(Resource):
         return {EVENTS: events}
 
 
-@api.route(f'{SG_FILTERS}/<max_price>/<postalCode>/<start_date>/<end_date>')
-class SGGetFilteredEvents(Resource):
-    """
-        Testing the filtering capacity of SeatGeek event calls
-        !!! Dates MUST be in the format YYYY-MM-DD !!!
-    """
-    def get(self, postalCode, max_price, start_date, end_date, size=20):
-        max_price = int(max_price)
-        events = scraper.seatgeekFiltered(
-            postalCode, max_price, start_date, end_date, size)
-        return {EVENTS: events}
-
-
 @api.route(f'{SG_GET_EVENTS}')
 class SGGetEvents(Resource):
     """
-    Simple test to make sure the calls to SeatGeek's GetEvents
-    endpoint is working
+    Making an API call to SeatGeek and returning the list of events
+    matching the user-provided filters
     """
     @api.expect(sg_event_fields)
     def post(self):
         '''
-        Calls SeatGeeks's API and return a list of events as  POST request
+        Calls SeatGeeks's API and return a list of events as POST request
         '''
         postal_code = request.json[scraper.POSTAL_CODE]
         max_price = request.json[scraper.MAX_PRICE]
