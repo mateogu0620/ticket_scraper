@@ -33,6 +33,7 @@ MG_INSERT_DOCUMENT = '/mg_insert_document'
 MG_DELETE_DOCUMENT = '/mg_delete_document'
 MG_GET_MANY = '/mg_get_many'
 ALL_INSERT = '/all_insert'
+ALL_CLEAR = '/all_clear'
 FILTER = 'filter'
 EVENTS = 'events'
 DOCUMENT = 'document'
@@ -232,3 +233,16 @@ class AllInsert(Resource):
         tm_response = db.POST("insertMany", tm_events)
         sg_response = db.POST("insertMany", sg_events)
         return {TM: tm_response, SG: sg_response}
+
+
+@api.route(f'{ALL_CLEAR}')
+class AllClear(Resource):
+    """
+    Clears the entire MongoDB Event collection
+    """
+    def post(self):
+        """
+        Calls MongoDB's API and returns number of deleted documents
+        """
+        document = db.POST("deleteMany", {})
+        return document

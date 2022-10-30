@@ -41,7 +41,8 @@ def POST(operation, doc):
     """
     if operation == "findOne" or \
        operation == "deleteOne" or \
-       operation == "find":
+       operation == "find" or \
+       operation == "deleteMany":
         docType = "filter"
     elif operation == "insertMany":
         docType = "documents"
