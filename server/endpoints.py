@@ -23,6 +23,8 @@ collection = db.collec
 LIST = 'list'
 HELLO = '/hello'
 MESSAGE = 'message'
+TM = "TICKETMASTER"
+SG = "SEATGEEK"
 TM_GET_EVENTS = '/tm_get_events'
 SG_GET_EVENTS = '/sg_get_events'
 SG_FILTERS = '/sg_get_filtered_events'
@@ -30,7 +32,7 @@ MG_GET_DOCUMENT = '/mg_get_document'
 MG_INSERT_DOCUMENT = '/mg_insert_document'
 MG_DELETE_DOCUMENT = '/mg_delete_document'
 MG_GET_MANY = '/mg_get_many'
-MG_TM_INSERT = '/mg_tm_insert'
+ALL_INSERT = '/all_insert'
 FILTER = 'filter'
 EVENTS = 'events'
 DOCUMENT = 'document'
@@ -71,7 +73,7 @@ sg_event_fields = api.model('SGGetEvents', {
 })
 
 
-mg_tm_fields = api.model('MGTMInsert', {
+all_fields = api.model('AllInsert', {
     scraper.POSTAL_CODE: fields.Integer,
     scraper.MAX_PRICE: fields.Integer,
     scraper.START_DATE: fields.DateTime,
@@ -158,32 +160,6 @@ class MGInsertDocument(Resource):
         return document
 
 
-@api.route(f'{MG_TM_INSERT}')
-class MGTMInsert(Resource):
-    """
-    Test insertion of parsed events from Ticketmaster
-    into MongoDB collection
-    """
-    @api.expect(mg_tm_fields)
-    def post(self):
-        """
-        Calls Ticketmaster API and MongoAPI to get events and then
-        insert them, returns inserted IDs
-        """
-        postal_code = request.json[scraper.POSTAL_CODE]
-        max_price = request.json[scraper.MAX_PRICE]
-        start_date = request.json[scraper.START_DATE]
-        end_date = request.json[scraper.END_DATE]
-        size = request.json[scraper.SIZE]
-        events = scraper.ticketmasterGetEvents(postal_code,
-                                               max_price,
-                                               start_date,
-                                               end_date,
-                                               size)
-        document = db.POST("insertMany", events)
-        return document
-
-
 @api.route(f'{MG_GET_DOCUMENT}/<size>/<postalCode>')
 class MGGetDocument(Resource):
     """
@@ -227,3 +203,32 @@ class MGGetMany(Resource):
         doc = {"size": size, "postalCode": postalCode}
         documents = db.POST("find", doc)
         return documents
+
+
+@api.route(f'{ALL_INSERT}')
+class AllInsert(Resource):
+    """
+    Test insertion of parsed events from Ticketmaster and Seatgeek
+    into MongoDB collection
+    """
+    @api.expect(all_fields)
+    def post(self):
+        """
+        Calls Ticketmaster, SeatGeek, and MongoAPI to get events and then
+        insert them, returns inserted IDs for both
+        """
+        postal_code = request.json[scraper.POSTAL_CODE]
+        max_price = request.json[scraper.MAX_PRICE]
+        start_date = request.json[scraper.START_DATE]
+        end_date = request.json[scraper.END_DATE]
+        size = request.json[scraper.SIZE]
+        tm_events = scraper.ticketmasterGetEvents(postal_code,
+                                                  max_price,
+                                                  start_date,
+                                                  end_date,
+                                                  size)
+        sg_events = scraper.seatgeekGetEvents(postal_code, max_price,
+                                              start_date, end_date, size)
+        tm_response = db.POST("insertMany", tm_events)
+        sg_response = db.POST("insertMany", sg_events)
+        return {TM: tm_response, SG: sg_response}

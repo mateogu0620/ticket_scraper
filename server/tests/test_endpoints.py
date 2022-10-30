@@ -59,7 +59,6 @@ def test_sg_get_events():
     assert response.status_code == 200
     assert isinstance(response.get_json()[ep.EVENTS], list)
 
-
 def test_mg_insert_document():
     """
     See if MongoDB's insertOne returns a string for an inserted event
@@ -88,11 +87,12 @@ def test_mg_get_many():
     resp_json = TEST_CLIENT.post(f'{ep.MG_GET_MANY}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
     assert isinstance(resp_json[ep.DOCUMENTS], list)
 
-def test_mg_tm_insert():
+def test_all_insert():
     """
-    See if TM to Mongo insertion results in a list of inserted IDs
+    See if TM and SG to Mongo insertion results in two lists of inserted IDs
+    (this basically checks if all three API keys are working properly)
     """
-    response = TEST_CLIENT.post(f'{ep.MG_TM_INSERT}', json={
+    response = TEST_CLIENT.post(f'{ep.ALL_INSERT}', json={
         scraper.POSTAL_CODE: TEST_POSTAL_CODE,
         scraper.MAX_PRICE: TEST_MAX_PRICE,
         scraper.START_DATE: TEST_START_DATE + "T00:00:00Z",
@@ -100,4 +100,8 @@ def test_mg_tm_insert():
         scraper.SIZE: TEST_EVENT_SIZE
     })
     assert response.status_code == 200
-    assert isinstance(response.get_json()[ep.INSERTED_IDS], list)
+    resp_json = response.get_json()
+    #check TM response
+    assert isinstance(resp_json[ep.TM][ep.INSERTED_IDS], list)
+    #check SG response
+    assert isinstance(resp_json[ep.SG][ep.INSERTED_IDS], list)
