@@ -44,6 +44,28 @@ class Event:
             "priceRanges":  self.priceRanges
         }
 
+class SGEvent:
+    def __init__(self, id_, name, type_, price, datetime, venue, url):
+        # i hate using the _ but its pep-8 convention
+        self.id_ = id_
+        self.name = name
+        self.type_ = type_
+        self.price = price
+        self.datetime = datetime
+        self.venue = venue
+        self.url = url
+        # TODO genre
+
+    def toDict(self):
+        return {
+            "id": self.id_,
+            "name": self.name,
+            "type": self.type_,
+            "price": self.price,
+            "datetime": self.datetime,
+            "venue": self.venue,
+            "url": self.url
+        }
 
 def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
     '''
