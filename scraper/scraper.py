@@ -33,6 +33,7 @@ class Event:
         self.dates = dates
         self.classifications = classifications
         self.priceRanges = priceRanges
+    
     def toDict(self):
         return {
             "name": self.name,
@@ -127,12 +128,31 @@ def makeAPICall(response, size):
 def parseTicketmaster(events):
     # MGU: Not parsed yet, just setting up the parsing for now
     # This helps a lot for parsing: https://developer.ticketmaster.com/api-explorer/v2/
+    # genre = ev['classifications'][0]['genre']['name']  # i.e Rock
+    # subGenre = ev['classifications'][0]['subGenre']['name'] # i.e Classic Rock
     parsed_events = []
     for ev in events:
         p_ev = Event(ev['name'], ev['url'], ev['sales'], ev['dates'], ev['classifications'], ev['priceRanges'])
         parsed_events.append(p_ev.toDict())
     return parsed_events
 
+
+def formatVenue(venue):
+    """
+    Formats SeatGeek venue field to a human-readable address
+    """
+    name = venue['name']
+    address = venue['address'] + ' ' + venue['extended_address']
+    return (name, address)
+
+def formatDatetime(datetime):
+    """
+    Formats datetime field to a human-readable local date and time
+    i.e. '2022-12-01T19:00:00' --> ('19:00', '2022-12-01')
+    """
+    date, time = dt.split('T')
+    time = time[:-3]
+    return (time, date)
 
 def parseSeatGeek(apiRequests):
     events = {}
@@ -141,7 +161,8 @@ def parseSeatGeek(apiRequests):
         tracker.append(event['id'])
         tracker.append(event['title'])
         tracker.append(event['type'])
-        tracker.append(event['venue'])
+        tracker.append(formatDatetime(event['datetime_local']))
+        tracker.append(formatVenue(event['venue']))
         tracker.append(event['url'])
         events[tracker[0]] = tracker
     return events
