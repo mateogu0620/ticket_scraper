@@ -45,23 +45,23 @@ class Event:
         }
 
 class SGEvent:
-    def __init__(self, id_, name, type_, price, datetime, venue, url):
+    def __init__(self, id_, name, type_, prices, datetime, venue, url):
         # i hate using the _ but its pep-8 convention
         self.id_ = id_
         self.name = name
         self.type_ = type_
-        self.price = price
+        self.prices = prices
         self.datetime = datetime
         self.venue = venue
         self.url = url
-        # TODO genre
+        # TODO genres
 
     def toDict(self):
         return {
             "id": self.id_,
             "name": self.name,
             "type": self.type_,
-            "price": self.price,
+            "prices": self.prices,
             "datetime": self.datetime,
             "venue": self.venue,
             "url": self.url
@@ -134,7 +134,9 @@ def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20):
 
     responseSG = get(SGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
 
-    return makeAPICall(responseSG, size)
+    events =  makeAPICall(responseSG, size)
+    parsed_events = parseSeatGeek(events)
+    return parsed_events
 
 def makeAPICall(response, size):
     # If invalid API call
@@ -159,9 +161,39 @@ def parseTicketmaster(events):
     return parsed_events
 
 
+def parseSeatGeek(events):
+    parsed_events = []
+    for e in events:
+        concert = SGEvent(e['id'], e['title'], e['type'],
+                        formatPrices(e['stats']),
+                        formatDatetime(e['datetime_local']), 
+                        formatVenue(e['venue']), e['url'])
+        parsed_events.append(concert.toDict())
+    return parsed_events
+
+
+def formatPrices(prices):
+    """
+    Formats SeatGeek stats dict into a tuple of price information
+    in the following format:
+    ->    (lowest_price, average_price, highest_price)
+    !! I am not sure how we want to represent prices yet, this can
+    be changed into whatever
+    """
+    lowest_price = prices['lowest_price']
+    avg_price = prices['average_price']
+    highest_price = prices['highest_price']
+
+    if (not lowest_price and not avg_price and not highest_price):
+        # if no price data is found
+        return None
+    
+    return (lowest_price, avg_price, highest_price)
+
 def formatVenue(venue):
     """
     Formats SeatGeek venue field to a human-readable address
+    e.g. ('New York Theatre Workshop', '721 Broadway New York, NY 10003')
     """
     name = venue['name']
     address = venue['address'] + ' ' + venue['extended_address']
@@ -170,21 +202,11 @@ def formatVenue(venue):
 def formatDatetime(datetime):
     """
     Formats datetime field to a human-readable local date and time
-    i.e. '2022-12-01T19:00:00' --> ('19:00', '2022-12-01')
+    e.g. '2022-12-01T19:00:00' --> ('19:00', '2022-12-01')
+    !! If this date is used for display purposes on the site i'll
+       change the date format to MM-DD-YYYY 
     """
-    date, time = dt.split('T')
+    date, time = datetime.split('T')
     time = time[:-3]
     return (time, date)
 
-def parseSeatGeek(apiRequests):
-    events = {}
-    for event in apiRequests:
-        tracker = []
-        tracker.append(event['id'])
-        tracker.append(event['title'])
-        tracker.append(event['type'])
-        tracker.append(formatDatetime(event['datetime_local']))
-        tracker.append(formatVenue(event['venue']))
-        tracker.append(event['url'])
-        events[tracker[0]] = tracker
-    return events
