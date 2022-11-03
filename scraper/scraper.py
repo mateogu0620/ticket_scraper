@@ -25,23 +25,29 @@ Docs:
     - https://platform.seatgeek.com/
 '''
 
-class Event:
-    def __init__(self, name, url, sales, dates, classifications, priceRanges):
+class TMEvent:
+    def __init__(self, name, url, venueName, venueAddress, eventDate, eventTime, genre, minPrice, maxPrice):
         self.name = name
         self.url = url
-        self.sales = sales
-        self.dates = dates
-        self.classifications = classifications
-        self.priceRanges = priceRanges
+        self.venueName = venueName
+        self.venueAdress = venueAddress
+        self.eventDate = eventDate
+        self.eventTime = eventTime
+        self.genre = genre
+        self.minPrice = minPrice
+        self.maxPrice = maxPrice
     
     def toDict(self):
         return {
             "name": self.name,
             "url": self.url,
-            "sales": self.sales,
-            "dates": self.dates,
-            "classifications": self.classifications,
-            "priceRanges":  self.priceRanges
+            "venueName": self.venueName,
+            "venueAddress": self.venueAdress,
+            "eventDate": self.eventDate,
+            "eventTime": self.eventTime,
+            "genre": self.genre,
+            "minPrice": self.minPrice,
+            "maxPrice": self.maxPrice
         }
 
 class SGEvent:
@@ -108,6 +114,8 @@ def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
         events = responseTM['_embedded']['events']
         filtered_events = []
         for e in events:
+            # Assuming here that venues are specified for all events
+            e['venues'] = e['_embedded']['venues']
             # Assuming here that price ranges are specified for all events
             for ticket in e['priceRanges']:
                 # if any of the ticket types lies under the max_price range,
@@ -150,16 +158,44 @@ def makeAPICall(response, size):
         return response['events'][:size]
 
 def parseTicketmaster(events):
-    # MGU: Not parsed yet, just setting up the parsing for now
-    # This helps a lot for parsing: https://developer.ticketmaster.com/api-explorer/v2/
-    # genre = ev['classifications'][0]['genre']['name']  # i.e Rock
-    # subGenre = ev['classifications'][0]['subGenre']['name'] # i.e Classic Rock
+    # Resource for parsing: https://developer.ticketmaster.com/api-explorer/v2/
     parsed_events = []
     for ev in events:
-        p_ev = Event(ev['name'], ev['url'], ev['sales'], ev['dates'], ev['classifications'], ev['priceRanges'])
+        # name, location/venue, dates, pirce, url, genre
+        eventName = ev['name']
+        eventUrl = ev['url']
+        venueName, venueAddress = parseVenue(ev['venues'])
+        eventDate, eventTime = parseDate(ev['dates'])
+        genre = ev['classifications'][0]['genre']['name']
+        minPrice, maxPrice = ev['priceRanges'][0]['min'], ev['priceRanges'][0]['max']
+        p_ev = TMEvent(eventName,
+                       eventUrl,
+                       venueName,
+                       venueAddress,
+                       eventDate,
+                       eventTime,
+                       genre,
+                       minPrice,
+                       maxPrice
+        )
         parsed_events.append(p_ev.toDict())
     return parsed_events
 
+def parseVenue(venues):
+    # Handling only one venue for now
+    for v in venues:
+        venueName = v['name']
+        venueCity = v['city']['name']
+        venueState = v['state']['name']
+        venueStateCode = v['state']['stateCode']
+        # FORMAT: 123 Some St. BrooklynNY 11201
+        venueAddress = v['address']['line1'] + " " + venueCity + venueState + " " + venueStateCode
+        return venueName, venueAddress
+
+def parseDate(dates):
+    localDate = dates['start']['localDate']
+    localTime = dates['start']['localTime']
+    return localDate, localTime
 
 def parseSeatGeek(events):
     parsed_events = []
@@ -209,4 +245,5 @@ def formatDatetime(datetime):
     date, time = datetime.split('T')
     time = time[:-3]
     return (time, date)
+
 
