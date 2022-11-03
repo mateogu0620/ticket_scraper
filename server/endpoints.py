@@ -94,9 +94,6 @@ class TMGetEvents(Resource):
         '''
         postal_code = request.json[scraper.POSTAL_CODE]
         max_price = request.json[scraper.MAX_PRICE]
-        # TODO: have a function that process the datetime-local input from the
-        # HTML form and converts timezones to UTC
-        # At the moment ticketmasterGetEvents assumes this format
         start_date = request.json[scraper.START_DATE]
         end_date = request.json[scraper.END_DATE]
         size = request.json[scraper.SIZE]

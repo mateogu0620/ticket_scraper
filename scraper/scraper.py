@@ -92,9 +92,9 @@ def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
         f"classificationName=music&"           # for pulling only musical events
         f"locale=*&"
         f"radius=30&"                          # search radius in miles (default 30mi)
-        f"startDateTime={start_date}&"
-        f"endDateTime={end_date}&"
-        f"size={size}"                         # page size of response, defaults to 20
+        f"localstartDateTime={start_date}&"
+        f"localendDateTime={end_date}&"
+        f"size={size}"                         
     )
 
     responseTM = get(TMQuery).json()
@@ -123,9 +123,8 @@ def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
                 if ticket['max'] <= max_price:
                     filtered_events.append(e)
                     break
-        parsed_events = parseTicketmaster(filtered_events)
+        parsed_events = parseTicketmasterEvents(filtered_events)
         return parsed_events
-
 
 def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20):
     '''
@@ -157,7 +156,7 @@ def makeAPICall(response, size):
     else:
         return response['events'][:size]
 
-def parseTicketmaster(events):
+def parseTicketmasterEvents(events):
     # Resource for parsing: https://developer.ticketmaster.com/api-explorer/v2/
     parsed_events = []
     for ev in events:
@@ -165,7 +164,7 @@ def parseTicketmaster(events):
         eventName = ev['name']
         eventUrl = ev['url']
         venueName, venueAddress = parseVenue(ev['venues'])
-        eventDate, eventTime = parseDate(ev['dates'])
+        eventDate, eventTime = parseDates(ev['dates'])
         genre = ev['classifications'][0]['genre']['name']
         minPrice, maxPrice = ev['priceRanges'][0]['min'], ev['priceRanges'][0]['max']
         p_ev = TMEvent(eventName,
@@ -188,14 +187,15 @@ def parseVenue(venues):
         venueCity = v['city']['name']
         venueState = v['state']['name']
         venueStateCode = v['state']['stateCode']
-        # FORMAT: 123 Some St. BrooklynNY 11201
+        # FORMAT: 123 Some St. Brooklyn NY 11201
         venueAddress = v['address']['line1'] + " " + venueCity + venueState + " " + venueStateCode
         return venueName, venueAddress
 
-def parseDate(dates):
+def parseDates(dates):
     localDate = dates['start']['localDate']
     localTime = dates['start']['localTime']
     return localDate, localTime
+    
 
 def parseSeatGeek(events):
     parsed_events = []
@@ -206,7 +206,6 @@ def parseSeatGeek(events):
                         formatVenue(e['venue']), e['url'])
         parsed_events.append(concert.toDict())
     return parsed_events
-
 
 def formatPrices(prices):
     """

@@ -29,8 +29,8 @@ def test_tm_get_events():
     response = TEST_CLIENT.post(f'{ep.TM_GET_EVENTS}', json={
         scraper.POSTAL_CODE: TEST_POSTAL_CODE,
         scraper.MAX_PRICE: TEST_MAX_PRICE,
-        scraper.START_DATE: TEST_START_DATE + "T00:00:00Z",
-        scraper.END_DATE: TEST_END_DATE + "T23:59:00Z",
+        scraper.START_DATE: TEST_START_DATE + "T00:00:00",
+        scraper.END_DATE: TEST_END_DATE + "T23:59:00",
         scraper.SIZE: TEST_EVENT_SIZE
     })
     assert response.status_code == 200
