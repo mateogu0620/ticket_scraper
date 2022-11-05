@@ -99,9 +99,11 @@ def test_all_insert():
     #check SG response
     assert isinstance(resp_json[ep.SG][ep.INSERTED_IDS], list)
 
-def test_all_clear():
+def test_get_and_convert():
     """
-    Clears the entire Mongo DB collection of events. Will get rid of this later.
+    See if the get_and_convert endpoint returns a list of Events(could be empty if no events were found)
     """
-    resp_json = TEST_CLIENT.post(f'{ep.ALL_CLEAR}').get_json()
-    assert isinstance(resp_json[ep.DELETED_COUNT], int)
+    resp_json = TEST_CLIENT.post(f'{ep.GET_AND_CONVERT}/{TEST_EVENT_SIZE}').get_json()
+    assert isinstance(resp_json[ep.EVENTS], list)
+    if len(resp_json[ep.EVENTS]) > 0:
+        assert isinstance(resp_json[ep.EVENTS][0], scraper.Event)

@@ -33,6 +33,7 @@ MG_DELETE_DOCUMENT = '/mg_delete_document'
 MG_GET_MANY = '/mg_get_many'
 ALL_INSERT = '/all_insert'
 ALL_CLEAR = '/all_clear'
+GET_AND_CONVERT = '/get_and_convert'
 FILTER = 'filter'
 EVENTS = 'events'
 DOCUMENT = 'document'
@@ -228,3 +229,15 @@ class AllClear(Resource):
         """
         document = db.POST("deleteMany", {})
         return document
+
+
+@api.route(f'{GET_AND_CONVERT}/<size>')
+class GetAndConvert(Resource):
+    """
+    MongoDB data API returning list of dicts and converting them
+    to Event objects
+    """
+    def post(self, size):
+        documents = db.POST("find", {"size": size})
+        events = db.convertToEvent(documents[DOCUMENTS])
+        return {EVENTS: events}
