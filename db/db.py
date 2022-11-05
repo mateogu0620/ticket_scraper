@@ -72,6 +72,31 @@ def POST(operation, doc):
     return response_json
 
 
+def convertToEvent(events):
+    converted = []
+    for e in events:
+        name = e["name"]
+
+        if "maxPrice" in e:
+            price = e["maxPrice"]
+        else:
+            price = e["prices"]
+
+        if "datetime" in e:
+            datetime = e["datetime"]
+        else:
+            datetime = e["eventDate"]
+
+        if "venueName" in e:
+            venue = e["venueName"]
+        else:
+            venue = e["venue"]
+
+        url = e["url"]
+        converted.append(scraper.Event(name, price, datetime, venue, url))
+    return converted
+
+
 def insertManyTicketmaster(filter):
     operation = "insertMany"
     events = scraper.ticketmasterGetEvents(filter['postalCode'],

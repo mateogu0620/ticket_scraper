@@ -61,13 +61,29 @@ class SGEvent:
         self.venue = venue
         self.url = url
         # TODO genres
-
     def toDict(self):
         return {
             "id": self.id_,
             "name": self.name,
             "type": self.type_,
             "prices": self.prices,
+            "datetime": self.datetime,
+            "venue": self.venue,
+            "url": self.url
+        }
+
+class Event:
+    def __init__(self, name, price, datetime, venue, url):
+        self.name = name,
+        self.price = price,
+        self.datetime = datetime,
+        self.venue = venue,
+        self.url = url
+    
+    def toDict(self):
+        return {
+            "name": self.name,
+            "price": self.price,
             "datetime": self.datetime,
             "venue": self.venue,
             "url": self.url
