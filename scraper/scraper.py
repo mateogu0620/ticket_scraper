@@ -26,7 +26,8 @@ Docs:
 '''
 
 class TMEvent:
-    def __init__(self, name, url, venueName, venueAddress, eventDate, eventTime, genre, minPrice, maxPrice):
+    def __init__(self, id_, name, url, venueName, venueAddress, eventDate, eventTime, genre, minPrice, maxPrice):
+        self.id_ = id_
         self.name = name
         self.url = url
         self.venueName = venueName
@@ -39,6 +40,7 @@ class TMEvent:
     
     def toDict(self):
         return {
+            "id": self.id_,
             "name": self.name,
             "url": self.url,
             "venueName": self.venueName,
@@ -89,7 +91,7 @@ class Event:
             "url": self.url
         }
 
-def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
+def ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size):
     '''
     Return a list of events from Ticketmaster based in a US postal code
 
@@ -104,7 +106,7 @@ def ticketmasterGetEvents(postalCode, max_price, start_date, end_date, size):
     TMQuery = (
         f"https://app.ticketmaster.com/discovery/v2/events?"
         f"apikey={TICKETMASTER_API_KEY}&"
-        f"postalCode={postalCode}&"
+        f"postalCode={postal_code}&"
         f"classificationName=music&"           # for pulling only musical events
         f"locale=*&"
         f"radius=30&"                          # search radius in miles (default 30mi)
@@ -177,13 +179,15 @@ def parseTicketmasterEvents(events):
     parsed_events = []
     for ev in events:
         # name, location/venue, dates, pirce, url, genre
+        eventID = ev['id']
         eventName = ev['name']
         eventUrl = ev['url']
         venueName, venueAddress = parseVenue(ev['venues'])
         eventDate, eventTime = parseDates(ev['dates'])
         genre = ev['classifications'][0]['genre']['name']
         minPrice, maxPrice = ev['priceRanges'][0]['min'], ev['priceRanges'][0]['max']
-        p_ev = TMEvent(eventName,
+        p_ev = TMEvent(eventID,
+                       eventName,
                        eventUrl,
                        venueName,
                        venueAddress,
@@ -212,7 +216,6 @@ def parseDates(dates):
     localTime = dates['start']['localTime']
     return localDate, localTime
     
-
 def parseSeatGeek(events):
     parsed_events = []
     for e in events:
