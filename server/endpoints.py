@@ -27,6 +27,7 @@ TM = "TICKETMASTER"
 SG = "SEATGEEK"
 TM_GET_EVENTS = '/tm_get_events'
 SG_GET_EVENTS = '/sg_get_events'
+GET_EVENTS = '/get_events'
 MG_GET_DOCUMENT = '/mg_get_document'
 MG_INSERT_DOCUMENT = '/mg_insert_document'
 MG_DELETE_DOCUMENT = '/mg_delete_document'
@@ -81,6 +82,13 @@ all_fields = api.model('AllInsert', {
     scraper.SIZE: fields.Integer
 })
 
+generic_event_fields = api.model('GetEvents', {
+    scraper.POSTAL_CODE: fields.Integer,
+    scraper.MAX_PRICE: fields.Integer,
+    scraper.START_DATE: fields.DateTime,
+    scraper.END_DATE: fields.DateTime,
+    scraper.SIZE: fields.Integer
+})
 
 @api.route(f'{TM_GET_EVENTS}')
 class TMGetEvents(Resource):
@@ -126,6 +134,27 @@ class SGGetEvents(Resource):
         size = request.json[scraper.SIZE]
         events = scraper.seatgeekGetEvents(postal_code, max_price,
                                            start_date, end_date, size)
+        return {EVENTS: events}
+
+
+@api.route(f'{GET_EVENTS}')
+class GetEvents(Resource):
+    """
+    Making API calls to Ticketmaster and Seatgeek and return a list of events
+    matching the user-provided filters
+    """
+    @api.expect(generic_event_fields)
+    def post(self):
+        postal_code = request.json[scraper.POSTAL_CODE]
+        max_price = request.json[scraper.MAX_PRICE]
+        start_date = request.json[scraper.START_DATE]
+        end_date = request.json[scraper.END_DATE]
+        size = request.json[scraper.SIZE]
+        events = scraper.getEvents(postal_code,
+                                   max_price,
+                                   start_date,
+                                   end_date,
+                                   size)
         return {EVENTS: events}
 
 

@@ -36,7 +36,6 @@ def test_tm_get_events():
     assert response.status_code == 200
     assert isinstance(response.get_json()[ep.EVENTS], list)
 
-
 def test_sg_get_events():
     """
     See if Seatgeek's GetEvents returns makes a successful POST request and returns
@@ -45,12 +44,33 @@ def test_sg_get_events():
     response = TEST_CLIENT.post(f'{ep.SG_GET_EVENTS}', json={
         scraper.POSTAL_CODE: TEST_POSTAL_CODE,
         scraper.MAX_PRICE: TEST_MAX_PRICE,
-        scraper.START_DATE: TEST_START_DATE + "T00:00:00Z",
-        scraper.END_DATE: TEST_END_DATE + "T23:59:00Z",
+        scraper.START_DATE: TEST_START_DATE + "T00:00:00",
+        scraper.END_DATE: TEST_END_DATE + "T23:59:00",
         scraper.SIZE: TEST_EVENT_SIZE
     })
     assert response.status_code == 200
     assert isinstance(response.get_json()[ep.EVENTS], list)
+
+def test_get_events():
+    """
+    See if Ticketmaster's GetEvents returns makes a successful POST request and returns
+    a list of events (could be empty if no events were found)
+    """
+    response = TEST_CLIENT.post(f'{ep.GET_EVENTS}', json={
+        scraper.POSTAL_CODE: TEST_POSTAL_CODE,
+        scraper.MAX_PRICE: TEST_MAX_PRICE,
+        scraper.START_DATE: TEST_START_DATE + "T00:00:00",
+        scraper.END_DATE: TEST_END_DATE + "T23:59:00",
+        scraper.SIZE: TEST_EVENT_SIZE
+    })
+    assert response.status_code == 200
+    jsonResp = response.get_json()
+    assert isinstance(jsonResp[ep.EVENTS], list)
+    # TODO: some check here to make sure these events are in the correct GenericEvent format. Using this for now
+    events = jsonResp[ep.EVENTS]
+    if len(events) > 0:
+        assert all('provider' in e for e in events)
+
 
 def test_mg_insert_document():
     """

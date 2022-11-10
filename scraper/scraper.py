@@ -25,6 +25,36 @@ Docs:
     - https://platform.seatgeek.com/
 '''
 
+class GenericEvent:
+    def __init__(self, provider, id_, name, url, venueName, venueAddress, eventDate, eventTime, genre, minPrice, maxPrice):
+        # provider: a string, either 'tm' or 'sg' to indicate where it comes from
+        # events will be identified by their provider AND the event id
+        self.provider = provider
+        self.id_ = id_
+        self.name = name
+        self.url = url
+        self.venueName = venueName
+        self.venueAdress = venueAddress
+        self.eventDate = eventDate
+        self.eventTime = eventTime
+        self.genre = genre
+        self.minPrice = minPrice
+        self.maxPrice = maxPrice
+    def toDict(self):
+        return {
+            "provider": self.provider,
+            "id": self.id_,
+            "name": self.name,
+            "url": self.url,
+            "venueName": self.venueName,
+            "venueAddress": self.venueAdress,
+            "eventDate": self.eventDate,
+            "eventTime": self.eventTime,
+            "genre": self.genre,
+            "minPrice": self.minPrice,
+            "maxPrice": self.maxPrice
+        }
+
 class TMEvent:
     def __init__(self, id_, name, url, venueName, venueAddress, eventDate, eventTime, genre, minPrice, maxPrice):
         self.id_ = id_
@@ -74,6 +104,8 @@ class SGEvent:
             "url": self.url
         }
 
+# Leaving this class for now since other parts of the code use this, but all event classes will eventually
+# just become a 'GenericEvent'
 class Event:
     def __init__(self, name, price, datetime, venue, url):
         self.name = name,
@@ -90,6 +122,44 @@ class Event:
             "venue": self.venue,
             "url": self.url
         }
+
+def getEvents(postal_code, max_price, start_date, end_date, size):
+    '''
+        TODO: Only handling ticketmaster events for now
+    '''
+    tmEvents = ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size)
+    tmEvents = tmEventToGenericEvent(tmEvents)
+
+    # TODO: For Joshua, call sgGetEvents and convert list of SGEvent to list of GenericEvent
+    # e.g.
+    #   sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, end_date, size)
+    #   sgEvents = convert to GenericEvent HERE
+    # doing this for now...
+    sgEvents = []
+
+    # Add events list together and convert to a list of dicitonaries represeting GenericEvent
+    events = tmEvents + sgEvents
+    
+    # TODO: If we make GenericEvent "JSON serializable" we don't have to do this
+    events = [e.toDict() for e in events]
+    return events
+
+def tmEventToGenericEvent(events):
+    """
+    events: list of dictionaries that represent a tmEvent 
+    Return a list of GenericEvent objects
+    """
+    return [(GenericEvent('tm',
+                        e['id'],
+                        e['name'],
+                        e['url'],
+                        e['venueName'],
+                        e['venueAddress'],
+                        e['eventDate'],
+                        e['eventTime'],
+                        e['genre'],
+                        e['minPrice'],
+                        e['maxPrice'])) for e in events]
 
 def ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size):
     '''
