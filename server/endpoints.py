@@ -90,6 +90,7 @@ generic_event_fields = api.model('GetEvents', {
     scraper.SIZE: fields.Integer
 })
 
+
 @api.route(f'{TM_GET_EVENTS}')
 class TMGetEvents(Resource):
     """
