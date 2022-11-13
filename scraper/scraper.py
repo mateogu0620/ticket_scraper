@@ -2,6 +2,7 @@ from urllib import response
 from requests import get
 from dotenv import load_dotenv
 import os
+import datetime
 
 load_dotenv()
 
@@ -81,6 +82,21 @@ class TMEvent:
             "minPrice": self.minPrice,
             "maxPrice": self.maxPrice
         }
+    
+    def toGeneric(self):
+        return GenericEvent(
+            "ticketmaster",
+            self.id_,
+            self.name,
+            self.url,
+            self.venueName,
+            self.venueAdress,
+            self.eventDate,
+            self.eventTime,
+            self.genre,
+            self.minPrice,
+            self.maxPrice
+        )
 
 class SGEvent:
     def __init__(self, id_, name, type_, prices, datetime, venue, url):
@@ -93,6 +109,7 @@ class SGEvent:
         self.venue = venue
         self.url = url
         # TODO genres
+    
     def toDict(self):
         return {
             "id": self.id_,
@@ -103,6 +120,21 @@ class SGEvent:
             "venue": self.venue,
             "url": self.url
         }
+    
+    def toGeneric(self):
+        return GenericEvent(
+            "seatgeek",
+            self.id_,
+            self.name,
+            self.url,
+            self.venue,
+            "tbd",
+            self.datetime.date(),
+            self.datetime.time(),
+            "tbd",
+            self.prices,
+            self.prices
+        )
 
 # Leaving this class for now since other parts of the code use this, but all event classes will eventually
 # just become a 'GenericEvent'
