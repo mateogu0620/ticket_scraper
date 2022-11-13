@@ -75,25 +75,19 @@ def POST(operation, doc):
 def convertToEvent(events):
     converted = []
     for e in events:
-        name = e["name"]
-
-        if "maxPrice" in e:
-            price = e["maxPrice"]
-        else:
-            price = e["prices"]
-
-        if "datetime" in e:
-            datetime = e["datetime"]
-        else:
-            datetime = e["eventDate"]
-
-        if "venueName" in e:
-            venue = e["venueName"]
-        else:
-            venue = e["venue"]
-
-        url = e["url"]
-        converted.append(scraper.Event(name, price, datetime, venue, url))
+        converted.append(scraper.GenericEvent(
+            e["provider"],
+            e["id"],
+            e["name"],
+            e["url"],
+            e["venueName"],
+            e["venueAddress"],
+            e["eventDate"],
+            e["eventTime"],
+            e["genre"],
+            e["minPrice"],
+            e["maxPrice"],
+        ))
     return converted
 
 

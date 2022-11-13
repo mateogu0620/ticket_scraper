@@ -126,4 +126,4 @@ def test_get_and_convert():
     resp_json = TEST_CLIENT.post(f'{ep.GET_AND_CONVERT}/{TEST_EVENT_SIZE}').get_json()
     assert isinstance(resp_json[ep.EVENTS], list)
     if len(resp_json[ep.EVENTS]) > 0:
-        assert isinstance(resp_json[ep.EVENTS][0], scraper.Event)
+        assert isinstance(resp_json[ep.EVENTS][0], scraper.GenericEvent)

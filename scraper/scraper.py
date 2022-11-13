@@ -85,7 +85,7 @@ class TMEvent:
     
     def toGeneric(self):
         return GenericEvent(
-            "ticketmaster",
+            "tm",
             self.id_,
             self.name,
             self.url,
@@ -123,14 +123,14 @@ class SGEvent:
     
     def toGeneric(self):
         return GenericEvent(
-            "seatgeek",
+            "sg",
             self.id_,
             self.name,
             self.url,
             self.venue,
             "tbd",
-            self.datetime.date(),
-            self.datetime.time(),
+            self.datetime[1],
+            self.datetime[0],
             "tbd",
             self.prices,
             self.prices
@@ -328,6 +328,31 @@ def parseSeatGeek(events):
         parsed_events.append(concert.toDict())
     return parsed_events
 
+def ticketmasterToGenericDict(ev):
+    event = TMEvent(ev["id"],
+                    ev["name"],
+                    ev["url"],
+                    ev["venueName"],
+                    ev["venueAddress"],
+                    ev["eventDate"],
+                    ev["eventTime"],
+                    ev["genre"],
+                    ev["minPrice"],
+                    ev["maxPrice"])
+    dic = event.toGeneric().toDict()
+    return dic
+
+def seatgeekToGenericDict(ev):
+    event = SGEvent(ev["id"],
+                    ev["name"],
+                    ev["type"],
+                    ev["prices"],
+                    ev["datetime"],
+                    ev["venue"],
+                    ev["url"])
+    dic = event.toGeneric().toDict()
+    return dic
+
 def formatPrices(prices):
     """
     Formats SeatGeek stats dict into a tuple of price information
@@ -365,5 +390,3 @@ def formatDatetime(datetime):
     date, time = datetime.split('T')
     time = time[:-3]
     return (time, date)
-
-

@@ -243,6 +243,12 @@ class AllInsert(Resource):
                                                   size)
         sg_events = scraper.seatgeekGetEvents(postal_code, max_price,
                                               start_date, end_date, size)
+
+        for i in range(len(tm_events)):
+            tm_events[i] = scraper.ticketmasterToGenericDict(tm_events[i])
+        for i in range(len(sg_events)):
+            sg_events[i] = scraper.seatgeekToGenericDict(sg_events[i])
+
         tm_response = db.POST("insertMany", tm_events)
         sg_response = db.POST("insertMany", sg_events)
         return {TM: tm_response, SG: sg_response}
