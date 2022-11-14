@@ -335,7 +335,7 @@ class SavedDict(Resource):
                 'Title': 'Saved Events'}
 
 
-@api.route(SHARE_NS)
+@api.route(SHARE_DICT)
 class SitesDict(Resource):
     """
     This will get a list of currrent websites to share events.
