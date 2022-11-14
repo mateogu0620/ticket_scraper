@@ -7,7 +7,7 @@ from flask import Flask, request
 from flask_restx import Resource, Api, fields, Namespace
 from scraper import scraper
 from scraper import saved_events as se
-from scraper import share 
+from scraper import share
 from db import db
 
 
@@ -324,11 +324,11 @@ class MainMenu(Resource):
 @api.route(SAVED_DICT)
 class SavedDict(Resource):
     """
-    This will get a list of currrent users.
+    This will get a list of currrent saved events.
     """
     def get(self):
         """
-        Returns a list of current users.
+        Returns a list of current events user has saved.
         """
         return {'Data': se.get_events_dict(),
                 'Type': 'Data',
@@ -338,12 +338,12 @@ class SavedDict(Resource):
 @api.route(SHARE_NS)
 class SitesDict(Resource):
     """
-    This will get a list of currrent users.
+    This will get a list of currrent websites to share events.
     """
     def get(self):
         """
-        Returns a list of current users.
+        Returns a list of current saved websites to share with.
         """
         return {'Data': share.get_sites_dict(),
                 'Type': 'Data',
-                'Title': 'Saved Events'}
+                'Title': 'Saved Websites'}
