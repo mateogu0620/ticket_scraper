@@ -99,22 +99,23 @@ class TMEvent:
         )
 
 class SGEvent:
-    def __init__(self, id_, name, type_, prices, datetime, venue, url):
+    def __init__(self, id_, name, type_, genre, prices, datetime, venue, url):
         # i hate using the _ but its pep-8 convention
         self.id_ = id_
         self.name = name
         self.type_ = type_
+        self.genre = genre
         self.prices = prices
         self.datetime = datetime
         self.venue = venue
         self.url = url
-        # TODO genres
     
     def toDict(self):
         return {
             "id": self.id_,
             "name": self.name,
             "type": self.type_,
+            "genre": self.genre,
             "prices": self.prices,
             "datetime": self.datetime,
             "venue": self.venue,
@@ -127,13 +128,13 @@ class SGEvent:
             self.id_,
             self.name,
             self.url,
-            self.venue,
-            "tbd",
+            self.venue[0],
+            self.venue[1],
             self.datetime[1],
             self.datetime[0],
-            "tbd",
-            self.prices,
-            self.prices
+            self.genre,
+            self.prices[0],
+            self.prices[2]
         )
 
 # Leaving this class for now since other parts of the code use this, but all event classes will eventually
@@ -185,7 +186,7 @@ def sgEventToGenericEvent(events):
                         e['venue'][1], # address
                         e['datetime'][1], # date
                         e['datetime'][0], # time
-                        None,   # genre TODO
+                        e['genre'],
                         e['prices'][0],
                         e['prices'][2])) for e in events]
 
@@ -336,7 +337,12 @@ def parseDates(dates):
 def parseSeatGeek(events):
     parsed_events = []
     for e in events:
-        concert = SGEvent(e['id'], e['title'], e['type'],
+        try:
+            genre = e['performers'][0]['genres'][0]["name"]
+        except:
+            genre = None
+
+        concert = SGEvent(e['id'], e['title'], e['type'], genre,
                         formatPrices(e['stats']),
                         formatDatetime(e['datetime_local']), 
                         formatVenue(e['venue']), e['url'])
@@ -361,6 +367,7 @@ def seatgeekToGenericDict(ev):
     event = SGEvent(ev["id"],
                     ev["name"],
                     ev["type"],
+                    ev["genre"],
                     ev["prices"],
                     ev["datetime"],
                     ev["venue"],
