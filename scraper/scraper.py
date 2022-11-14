@@ -162,12 +162,8 @@ def getEvents(postal_code, max_price, start_date, end_date, size):
     tmEvents = ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size)
     tmEvents = tmEventToGenericEvent(tmEvents)
 
-    # TODO: For Joshua, call sgGetEvents and convert list of SGEvent to list of GenericEvent
-    # e.g.
-    #   sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, end_date, size)
-    #   sgEvents = convert to GenericEvent HERE
-    # doing this for now...
-    sgEvents = []
+    sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, end_date, size)
+    sgEvents = sgEventToGenericEvent(sgEvents)
 
     # Add events list together and convert to a list of dicitonaries represeting GenericEvent
     events = tmEvents + sgEvents
@@ -175,6 +171,23 @@ def getEvents(postal_code, max_price, start_date, end_date, size):
     # TODO: If we make GenericEvent "JSON serializable" we don't have to do this
     events = [e.toDict() for e in events]
     return events
+
+def sgEventToGenericEvent(events):
+    """
+    events: list of dictionaries that represent a sgEvent 
+    Return a list of GenericEvent objects
+    """
+    return [(GenericEvent('sg',
+                        e['id'],
+                        e['name'],
+                        e['url'],
+                        e['venue'][0], # name
+                        e['venue'][1], # address
+                        e['datetime'][1], # date
+                        e['datetime'][0], # time
+                        None,   # genre TODO
+                        e['prices'][0],
+                        e['prices'][2])) for e in events]
 
 def tmEventToGenericEvent(events):
     """
@@ -256,7 +269,9 @@ def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20):
         f"geoip={postal_code}&"
         f"highest_price.lte={max_price}&"  # filter events by max ticket price 
         f"datetime_local.gte={start_date}&"  # filter events by date range
-        f"datetime_local.lte={end_date}"  
+        f"datetime_local.lte={end_date}&"
+        f"type=concert"          # only filter concert tickets, could possibly 
+                                 # change to include musicals, etc
     )
 
     responseSG = get(SGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
@@ -367,7 +382,7 @@ def formatPrices(prices):
 
     if (not lowest_price and not avg_price and not highest_price):
         # if no price data is found
-        return None
+        return (None, None, None)
     
     return (lowest_price, avg_price, highest_price)
 
