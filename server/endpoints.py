@@ -4,9 +4,12 @@ The endpoint called `endpoints` will return all available endpoints.
 """
 
 from flask import Flask, request
-from flask_restx import Resource, Api, fields
+from flask_restx import Resource, Api, fields, Namespace
 from scraper import scraper
+from scraper import saved_events as se
+from scraper import share 
 from db import db
+
 
 app = Flask(__name__)
 api = Api(app)
@@ -20,7 +23,16 @@ db = client.flask_db  # creating mongoDB instance
 collection = db.collec
 '''
 
+SAVED_NS = 'events'
+SHARE_NS = 'sites'
+
+events_ns = Namespace(SAVED_NS, 'Saved_Events')
+api.add_namespace(events_ns)
+sites_ns = Namespace(SHARE_NS, 'SM_Sites')
+api.add_namespace(sites_ns)
+
 LIST = 'list'
+DICT = 'dict'
 HELLO = '/hello'
 MESSAGE = 'message'
 TM = "TICKETMASTER"
@@ -42,6 +54,16 @@ DOCUMENTS = 'documents'
 INSERTED_ID = 'insertedId'
 INSERTED_IDS = 'insertedIds'
 DELETED_COUNT = 'deletedCount'
+EVENT_MENU = '/event_menu'
+EVENT_MENU_NM = 'Event Menu'
+SHARE_TYPES_NS = 'share_types'
+
+SAVED_DICT = f'/{DICT}'
+SAVED_DICT_W_NS = f'{SAVED_NS}/{DICT}'
+
+SHARE_DICT = f'/{DICT}'
+SHARE_DICT_W_NS = f'{SHARE_NS}/{DICT}'
+SHARE_DICT_NM = f'{SHARE_NS}_dict'
 
 
 @api.route(HELLO)
@@ -277,3 +299,51 @@ class GetAndConvert(Resource):
         documents = db.POST("find", {"size": size})
         events = db.convertToEvent(documents[DOCUMENTS])
         return {EVENTS: events}
+
+
+@api.route(EVENT_MENU)
+class MainMenu(Resource):
+    """
+    This will deliver our main menu.
+    """
+    def get(self):
+        """
+        Gets the main game menu.
+        """
+        return {'Title': EVENT_MENU_NM,
+                'Default': 0,
+                'Choices': {
+                    '1': {'url': f'/{SAVED_DICT_W_NS}',
+                          'method': 'get', 'text': 'Save Event'},
+                    '2': {'url': f'/{SHARE_DICT_W_NS}',
+                          'method': 'get', 'text': 'List where to share'},
+                    'X': {'text': 'Exit'},
+                }}
+
+
+@api.route(SAVED_DICT)
+class SavedDict(Resource):
+    """
+    This will get a list of currrent users.
+    """
+    def get(self):
+        """
+        Returns a list of current users.
+        """
+        return {'Data': se.get_events_dict(),
+                'Type': 'Data',
+                'Title': 'Saved Events'}
+
+
+@api.route(SHARE_NS)
+class SitesDict(Resource):
+    """
+    This will get a list of currrent users.
+    """
+    def get(self):
+        """
+        Returns a list of current users.
+        """
+        return {'Data': share.get_sites_dict(),
+                'Type': 'Data',
+                'Title': 'Saved Events'}
