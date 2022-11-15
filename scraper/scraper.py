@@ -157,9 +157,6 @@ class Event:
         }
 
 def getEvents(postal_code, max_price, start_date, end_date, size):
-    '''
-        TODO: Only handling ticketmaster events for now
-    '''
     tmEvents = ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size)
     tmEvents = tmEventToGenericEvent(tmEvents)
 
@@ -250,13 +247,17 @@ def ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size):
         for e in events:
             # Assuming here that venues are specified for all events
             e['venues'] = e['_embedded']['venues']
-            # Assuming here that price ranges are specified for all events
-            for ticket in e['priceRanges']:
-                # if any of the ticket types lies under the max_price range,
-                # we include that event in our filtered events return list
-                if ticket['max'] <= max_price:
-                    filtered_events.append(e)
-                    break
+            try:
+                for ticket in e['priceRanges']:
+                    # if any of the ticket types lies under the max_price range,
+                    # we include that event in our filtered events return list
+                    if ticket['max'] <= max_price:
+                        filtered_events.append(e)
+                        break
+            except:
+                # Handle scenario where price ranges is not specified
+                e['priceRanges'] = [{"min": None, "max": None}]
+                filtered_events.append(e)
         parsed_events = parseTicketmasterEvents(filtered_events)
         return parsed_events
 
@@ -323,10 +324,9 @@ def parseVenue(venues):
     for v in venues:
         venueName = v['name']
         venueCity = v['city']['name']
-        venueState = v['state']['name']
         venueStateCode = v['state']['stateCode']
         # FORMAT: 123 Some St. Brooklyn NY 11201
-        venueAddress = v['address']['line1'] + " " + venueCity + venueState + " " + venueStateCode
+        venueAddress = v['address']['line1'] + " " + venueCity.strip() + ", " + venueStateCode + " " + v['postalCode']
         return venueName, venueAddress
 
 def parseDates(dates):
