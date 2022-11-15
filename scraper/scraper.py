@@ -158,7 +158,7 @@ class Event:
 
 def getEvents(postal_code, max_price, start_date, end_date, size):
     tmEvents = ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size)
-    tmEvents = tmEventToGenericEvent(tmEvents)
+    tmEvents = [e.toGeneric() for e in tmEvents]
 
     sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, end_date, size)
     sgEvents = sgEventToGenericEvent(sgEvents)
@@ -166,8 +166,6 @@ def getEvents(postal_code, max_price, start_date, end_date, size):
     # Add events list together and convert to a list of dicitonaries represeting GenericEvent
     events = tmEvents + sgEvents
     
-    # TODO: If we make GenericEvent "JSON serializable" we don't have to do this
-    events = [e.toDict() for e in events]
     return events
 
 def sgEventToGenericEvent(events):
@@ -187,34 +185,9 @@ def sgEventToGenericEvent(events):
                         e['prices'][0],
                         e['prices'][2])) for e in events]
 
-def tmEventToGenericEvent(events):
-    """
-    events: list of dictionaries that represent a tmEvent 
-    Return a list of GenericEvent objects
-    """
-    return [(GenericEvent('tm',
-                        e['id'],
-                        e['name'],
-                        e['url'],
-                        e['venueName'],
-                        e['venueAddress'],
-                        e['eventDate'],
-                        e['eventTime'],
-                        e['genre'],
-                        e['minPrice'],
-                        e['maxPrice'])) for e in events]
-
 def ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size):
     '''
-    Return a list of events from Ticketmaster based in a US postal code
-
-    start_date and end_date are in the format: %Y-%m-%dT%H:%M (e.g. 2019-01-01T00:00)
-        - this is UTC time
-    max_price is USD currency
-
-    MGU: still some work pending in checking for edge cases and handling
-    what is the max size we are allowing (TM allows for 200, but it is very
-    slow)
+    Return a list of TMEvent objects from the Ticketmaster API
     '''
     TMQuery = (
         f"https://app.ticketmaster.com/discovery/v2/events?"
@@ -316,7 +289,7 @@ def parseTicketmasterEvents(events):
                        minPrice,
                        maxPrice
         )
-        parsed_events.append(p_ev.toDict())
+        parsed_events.append(p_ev)
     return parsed_events
 
 def parseVenue(venues):

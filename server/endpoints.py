@@ -129,12 +129,14 @@ class TMGetEvents(Resource):
         start_date = request.json[scraper.START_DATE]
         end_date = request.json[scraper.END_DATE]
         size = request.json[scraper.SIZE]
+        # Return a list of TMEvents
         events = scraper.ticketmasterGetEvents(postal_code,
                                                max_price,
                                                start_date,
                                                end_date,
                                                size)
-        return {EVENTS: events}
+        jsonEvents = [e.toDict() for e in events]
+        return {EVENTS: jsonEvents}
 
 
 @api.route(f'{SG_GET_EVENTS}')
@@ -178,7 +180,8 @@ class GetEvents(Resource):
                                    start_date,
                                    end_date,
                                    size)
-        return {EVENTS: events}
+        jsonEvents = [e.toDict() for e in events]
+        return {EVENTS: jsonEvents}
 
 
 @api.route(f'{MG_INSERT_DOCUMENT}/<size>/<postalCode>')
@@ -267,7 +270,7 @@ class AllInsert(Resource):
                                               start_date, end_date, size)
 
         for i in range(len(tm_events)):
-            tm_events[i] = scraper.ticketmasterToGenericDict(tm_events[i])
+            tm_events[i] = tm_events[i].toDict()
         for i in range(len(sg_events)):
             sg_events[i] = scraper.seatgeekToGenericDict(sg_events[i])
 

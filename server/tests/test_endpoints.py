@@ -7,7 +7,7 @@ import scraper.scraper as scraper
 
 TEST_CLIENT = ep.app.test_client()
 
-TEST_EVENT_SIZE = 20
+TEST_EVENT_SIZE = 5
 TEST_POSTAL_CODE = '10036'
 TEST_MAX_PRICE = 200
 TEST_START_DATE = "2022-12-01"
