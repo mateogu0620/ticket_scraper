@@ -3,7 +3,7 @@
 from requests import get, auth
 from json import loads, dumps
 
-from scraper.scraper import SEATGEEK_API_KEY
+from scraper import SEATGEEK_API_KEY
 
 
 CLIENT_ID = SEATGEEK_API_KEY                        # SeatGeek CLIENT_ID
