@@ -98,44 +98,6 @@ class TMEvent:
             self.maxPrice
         )
 
-class SGEvent:
-    def __init__(self, id_, name, type_, genre, prices, datetime, venue, url):
-        # i hate using the _ but its pep-8 convention
-        self.id_ = id_
-        self.name = name
-        self.type_ = type_
-        self.genre = genre
-        self.prices = prices
-        self.datetime = datetime
-        self.venue = venue
-        self.url = url
-    
-    def toDict(self):
-        return {
-            "id": self.id_,
-            "name": self.name,
-            "type": self.type_,
-            "genre": self.genre,
-            "prices": self.prices,
-            "datetime": self.datetime,
-            "venue": self.venue,
-            "url": self.url
-        }
-    
-    def toGeneric(self):
-        return GenericEvent(
-            "sg",
-            self.id_,
-            self.name,
-            self.url,
-            self.venue[0],
-            self.venue[1],
-            self.datetime[1],
-            self.datetime[0],
-            self.genre,
-            self.prices[0],
-            self.prices[2]
-        )
 
 # Leaving this class for now since other parts of the code use this, but all event classes will eventually
 # just become a 'GenericEvent'
@@ -161,7 +123,6 @@ def getEvents(postal_code, max_price, start_date, end_date, size):
     tmEvents = [e.toGeneric() for e in tmEvents]
 
     sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, end_date, size)
-    sgEvents = sgEventToGenericEvent(sgEvents)
 
     # Add events list together and convert to a list of dicitonaries represeting GenericEvent
     events = tmEvents + sgEvents
@@ -311,15 +272,18 @@ def parseSeatGeek(events):
     parsed_events = []
     for e in events:
         try:
+            # sometimes genre field is not provided
             genre = e['performers'][0]['genres'][0]["name"]
         except:
             genre = None
 
-        concert = SGEvent(e['id'], e['title'], e['type'], genre,
-                        formatPrices(e['stats']),
-                        formatDatetime(e['datetime_local']), 
-                        formatVenue(e['venue']), e['url'])
-        parsed_events.append(concert.toDict())
+        venue = formatVenue(e['venue'])
+        datetime = formatDatetime(e['datetime_local'])
+        prices = formatPrices(e['stats'])
+        concert = GenericEvent("sg", e['id'], e['title'], e['url'],
+                               venue[0], venue[1], datetime[1], datetime[0],
+                               genre, prices[0], prices[2])
+        parsed_events.append(concert)
     return parsed_events
 
 def ticketmasterToGenericDict(ev):
@@ -333,18 +297,6 @@ def ticketmasterToGenericDict(ev):
                     ev["genre"],
                     ev["minPrice"],
                     ev["maxPrice"])
-    dic = event.toGeneric().toDict()
-    return dic
-
-def seatgeekToGenericDict(ev):
-    event = SGEvent(ev["id"],
-                    ev["name"],
-                    ev["type"],
-                    ev["genre"],
-                    ev["prices"],
-                    ev["datetime"],
-                    ev["venue"],
-                    ev["url"])
     dic = event.toGeneric().toDict()
     return dic
 

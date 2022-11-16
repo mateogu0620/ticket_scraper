@@ -159,6 +159,7 @@ class SGGetEvents(Resource):
         size = request.json[scraper.SIZE]
         events = scraper.seatgeekGetEvents(postal_code, max_price,
                                            start_date, end_date, size)
+        events = [e.toDict() for e in events]
         return {EVENTS: events}
 
 
@@ -272,7 +273,7 @@ class AllInsert(Resource):
         for i in range(len(tm_events)):
             tm_events[i] = tm_events[i].toDict()
         for i in range(len(sg_events)):
-            sg_events[i] = scraper.seatgeekToGenericDict(sg_events[i])
+            sg_events[i] = sg_events[i].toDict()
 
         tm_response = db.POST("insertMany", tm_events)
         sg_response = db.POST("insertMany", sg_events)
