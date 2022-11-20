@@ -262,22 +262,17 @@ class AllInsert(Resource):
         start_date = request.json[scraper.START_DATE]
         end_date = request.json[scraper.END_DATE]
         size = request.json[scraper.SIZE]
-        tm_events = scraper.ticketmasterGetEvents(postal_code,
-                                                  max_price,
-                                                  start_date,
-                                                  end_date,
-                                                  size)
-        sg_events = scraper.seatgeekGetEvents(postal_code, max_price,
-                                              start_date, end_date, size)
+        events = scraper.getEvents(postal_code,
+                                   max_price,
+                                   start_date,
+                                   end_date,
+                                   size)
 
-        for i in range(len(tm_events)):
-            tm_events[i] = tm_events[i].toDict()
-        for i in range(len(sg_events)):
-            sg_events[i] = sg_events[i].toDict()
+        for i in range(len(events)):
+            events[i] = events[i].toDict()
 
-        tm_response = db.POST("insertMany", tm_events)
-        sg_response = db.POST("insertMany", sg_events)
-        return {TM: tm_response, SG: sg_response}
+        response = db.POST("insertMany", events)
+        return response
 
 
 @api.route(f'{ALL_CLEAR}')

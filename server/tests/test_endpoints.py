@@ -114,10 +114,8 @@ def test_all_insert():
     })
     assert response.status_code == 200
     resp_json = response.get_json()
-    #check TM response
-    assert isinstance(resp_json[ep.TM][ep.INSERTED_IDS], list)
-    #check SG response
-    assert isinstance(resp_json[ep.SG][ep.INSERTED_IDS], list)
+    #check response
+    assert isinstance(resp_json[ep.INSERTED_IDS], list)
 
 def test_get_and_convert():
     """
