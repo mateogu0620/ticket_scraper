@@ -121,7 +121,12 @@ def test_get_and_convert():
     """
     See if the get_and_convert endpoint returns a list of Events(could be empty if no events were found)
     """
-    resp_json = TEST_CLIENT.post(f'{ep.GET_AND_CONVERT}/{TEST_EVENT_SIZE}').get_json()
+    response = TEST_CLIENT.post(f'{ep.GET_AND_CONVERT}', json={
+        scraper.MAX_PRICE: TEST_MAX_PRICE,
+        scraper.START_DATE: TEST_START_DATE + "T00:00:00Z",
+    })
+    assert response.status_code == 200
+    resp_json = response.get_json()
     assert isinstance(resp_json[ep.EVENTS], list)
     if len(resp_json[ep.EVENTS]) > 0:
-        assert isinstance(resp_json[ep.EVENTS][0], scraper.GenericEvent)
+        assert isinstance(resp_json[ep.EVENTS][0], scraper.Event)

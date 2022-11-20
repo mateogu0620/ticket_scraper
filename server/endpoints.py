@@ -104,6 +104,11 @@ all_fields = api.model('AllInsert', {
     scraper.SIZE: fields.Integer
 })
 
+get_fields = api.model('GetAndConvert', {
+    scraper.MAX_PRICE: fields.Integer,
+    scraper.START_DATE: fields.DateTime,
+})
+
 generic_event_fields = api.model('GetEvents', {
     scraper.POSTAL_CODE: fields.Integer,
     scraper.MAX_PRICE: fields.Integer,
@@ -288,14 +293,24 @@ class AllClear(Resource):
         return document
 
 
-@api.route(f'{GET_AND_CONVERT}/<size>')
+@api.route(f'{GET_AND_CONVERT}')
 class GetAndConvert(Resource):
     """
     MongoDB data API returning list of dicts and converting them
     to Event objects
     """
-    def post(self, size):
-        documents = db.POST("find", {"size": size})
+    @api.expect(get_fields)
+    def post(self):
+        """
+        Calls MongoDB's API and returns documents to be converted
+        """
+        max_price = request.json[scraper.MAX_PRICE]
+        start_date = request.json[scraper.START_DATE]
+        filter = {
+            "maxPrice": max_price,
+            "eventDate": start_date
+        }
+        documents = db.POST("find", filter)
         events = db.convertToEvent(documents[DOCUMENTS])
         return {EVENTS: events}
 

@@ -75,7 +75,7 @@ def POST(operation, doc):
 def convertToEvent(events):
     converted = []
     for e in events:
-        converted.append(scraper.GenericEvent(
+        converted.append(scraper.Event(
             e["provider"],
             e["id"],
             e["name"],
