@@ -362,3 +362,24 @@ class SitesDict(Resource):
         return {'Data': share.get_sites_dict(),
                 'Type': 'Data',
                 'Title': 'Saved Websites'}
+
+save_event_fields = api.model('NewEvent', {
+    se.NAME: fields.String,
+    se.FULL_NAME: fields.String,
+})
+
+
+@api.route(SAVED_ADD)
+class AddUser(Resource):
+    """
+    Add a user.
+    """
+    @api.expect(save_event_fields)
+    def post(self):
+        """
+        Add a user.
+        """
+        print(f'{request.json=}')
+        name = request.json[se.NAME]
+        del request.json[se.NAME]
+        se.add_user(name, request.json)
