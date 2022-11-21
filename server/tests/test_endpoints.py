@@ -135,13 +135,13 @@ def test_get_and_convert():
 SAMPLE_EVENT_NM = 'Event1'
 SAMPLE_EVENT = {
     s_e.NAME : SAMPLE_EVENT_NM,
-    s_e.EVENT_ID: 0, 
+    s_e.EVENT_ID: '0', 
 }
 
 def test_add_event():
     """
-    Test adding a user.
+    test to add event to saved events
     """
     resp = TEST_CLIENT.post(ep.SAVED_ADD, json=SAMPLE_EVENT)
     assert s_e.event_exists(SAMPLE_EVENT_NM)
-    s_e.del_event(SAMPLE_EVENT)
+    s_e.del_event(SAMPLE_EVENT_NM)

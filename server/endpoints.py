@@ -366,22 +366,21 @@ class SitesDict(Resource):
 
 save_event_fields = api.model('NewEvent', {
     se.NAME: fields.String,
-    se.FULL_NAME: fields.String,
+    se.EVENT_ID: fields.String,
 })
 
 
 @api.route(SAVED_ADD)
-class AddUser(Resource):
+class AddEvent(Resource):
     """
-    Add a user.
+    Add a Event.
     """
     @api.expect(save_event_fields)
     def post(self):
         """
-        Add a user.
+        Add a Event.
         """
         print(f'{request.json=}')
         name = request.json[se.NAME]
         del request.json[se.NAME]
-        se.add_user(name, request.json)
-        
+        se.add_event(name, request.json)
