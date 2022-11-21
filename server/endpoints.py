@@ -384,4 +384,3 @@ class AddUser(Resource):
         name = request.json[se.NAME]
         del request.json[se.NAME]
         se.add_user(name, request.json)
-
