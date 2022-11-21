@@ -363,6 +363,7 @@ class SitesDict(Resource):
                 'Type': 'Data',
                 'Title': 'Saved Websites'}
 
+
 save_event_fields = api.model('NewEvent', {
     se.NAME: fields.String,
     se.FULL_NAME: fields.String,
@@ -383,3 +384,4 @@ class AddUser(Resource):
         name = request.json[se.NAME]
         del request.json[se.NAME]
         se.add_user(name, request.json)
+
