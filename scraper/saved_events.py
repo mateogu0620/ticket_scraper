@@ -37,6 +37,9 @@ def add_event(name, details):
             raise ValueError(f'Required {field=} missing from details.')
     events[name] = details
 
+def del_event(name):
+    del events[name]
+
 
 def main():
     events = get_events()

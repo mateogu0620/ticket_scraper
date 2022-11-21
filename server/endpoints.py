@@ -60,6 +60,7 @@ SHARE_TYPES_NS = 'share_types'
 
 SAVED_DICT = f'/{DICT}'
 SAVED_DICT_W_NS = f'{SAVED_NS}/{DICT}'
+SAVED_ADD = f'/{SAVED_NS}/add'
 
 SHARE_DICT = f'/{DICT}'
 SHARE_DICT_W_NS = f'{SHARE_NS}/{DICT}'
