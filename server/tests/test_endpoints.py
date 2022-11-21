@@ -138,10 +138,10 @@ SAMPLE_EVENT = {
     s_e.EVENT_ID: 0, 
 }
 
-def test_add_user():
+def test_add_event():
     """
     Test adding a user.
     """
-    resp = TEST_CLIENT.post(ep.USER_ADD, json=SAMPLE_EVENT)
+    resp = TEST_CLIENT.post(ep.SAVED_ADD, json=SAMPLE_EVENT)
     assert s_e.event_exists(SAMPLE_EVENT_NM)
     s_e.del_event(SAMPLE_EVENT)
