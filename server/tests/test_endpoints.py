@@ -14,6 +14,20 @@ TEST_MAX_PRICE = 200
 TEST_START_DATE = "2022-12-01"
 TEST_END_DATE = "2022-12-31"
 
+@pytest.fixture
+def event_size():
+    """
+    Generates a test event param
+    """
+    return 5
+
+@pytest.fixture
+def postal_code():
+    """
+    Generates a test event param
+    """
+    return '10036'
+
 
 def test_hello():
     """
@@ -72,26 +86,25 @@ def test_get_events():
     if len(events) > 0:
         assert all('provider' in e for e in events)
 
-
 def test_mg_insert_document():
     """
     See if MongoDB's insertOne returns a string for an inserted event
     """
-    resp_json = TEST_CLIENT.post(f'{ep.MG_INSERT_DOCUMENT}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
+    resp_json = TEST_CLIENT.post(f'{ep.MG_INSERT_DOCUMENT}/{event_size}/{postal_code}').get_json()
     assert isinstance(resp_json[ep.INSERTED_ID], str)
 
 def test_mg_get_document():
     """
     See if MongoDB's findOne returns a dictionary of attributes (could be empty if no events were found)
     """
-    resp_json = TEST_CLIENT.post(f'{ep.MG_GET_DOCUMENT}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
+    resp_json = TEST_CLIENT.post(f'{ep.MG_GET_DOCUMENT}/{event_size}/{postal_code}').get_json()
     assert isinstance(resp_json[ep.DOCUMENT], dict)
 
 def test_mg_delete_document():
     """
     See if MongoDB's deleteOne returns the number of deletedItems (could be zero if no events deleted)
     """
-    resp_json = TEST_CLIENT.post(f'{ep.MG_DELETE_DOCUMENT}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
+    resp_json = TEST_CLIENT.post(f'{ep.MG_DELETE_DOCUMENT}/{event_size}/{postal_code}').get_json()
     assert isinstance(resp_json[ep.DELETED_COUNT], int)
 
 def test_mg_get_many():

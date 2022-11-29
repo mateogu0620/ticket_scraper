@@ -30,7 +30,7 @@ class Event:
         self.name = name
         self.url = url
         self.venueName = venueName
-        self.venueAdress = venueAddress
+        self.venueAddress = venueAddress
         self.eventDate = eventDate
         self.eventTime = eventTime
         self.genre = genre
@@ -44,7 +44,7 @@ class Event:
             "name": self.name,
             "url": self.url,
             "venueName": self.venueName,
-            "venueAddress": self.venueAdress,
+            "venueAddress": self.venueAddress,
             "eventDate": self.eventDate,
             "eventTime": self.eventTime,
             "genre": self.genre,

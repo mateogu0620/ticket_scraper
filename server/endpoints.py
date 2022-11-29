@@ -57,6 +57,7 @@ DELETED_COUNT = 'deletedCount'
 EVENT_MENU = '/event_menu'
 EVENT_MENU_NM = 'Event Menu'
 SHARE_TYPES_NS = 'share_types'
+TEST_EVENT = 'test_event'
 
 SAVED_DICT = f'/{DICT}'
 SAVED_DICT_W_NS = f'{SAVED_NS}/{DICT}'
@@ -216,8 +217,8 @@ class MGGetDocument(Resource):
         """
         Calls MongoDB's API and returns attributes of a doc
         """
-        doc = {"size": size, "postalCode": postalCode}
-        document = db.POST("findOne", doc)
+        filter = {"size": size, "postalCode": postalCode}
+        document = db.POST("findOne", filter)
         return document
 
 
