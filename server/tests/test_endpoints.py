@@ -158,3 +158,8 @@ def test_add_event():
     resp = TEST_CLIENT.post(ep.SAVED_ADD, json=SAMPLE_EVENT)
     assert s_e.event_exists(SAMPLE_EVENT_NM)
     s_e.del_event(SAMPLE_EVENT_NM)
+
+@pytest.mark.skip(reason = "Don't want to clear entire DB just yet")
+def test_all_clear():
+    resp_json = TEST_CLIENT.post(f'{ep.ALL_CLEAR}').get_json()
+    assert isinstance(resp_json[ep.DELETED_COUNT], int)
