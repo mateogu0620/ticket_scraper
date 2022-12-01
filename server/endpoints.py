@@ -68,20 +68,6 @@ SHARE_DICT_W_NS = f'{SHARE_NS}/{DICT}'
 SHARE_DICT_NM = f'{SHARE_NS}_dict'
 
 
-@api.route(HELLO)
-class HelloWorld(Resource):
-    """
-    The purpose of the HelloWorld class is to have a simple test to see if the
-    app is working at all.
-    """
-    def get(self):
-        """
-        A trivial endpoint to see if the server is running.
-        It just answers with "hello world."
-        """
-        return {MESSAGE: 'hello world'}
-
-
 tm_event_fields = api.model('TMGetEvents', {
     scraper.POSTAL_CODE: fields.Integer,
     scraper.MAX_PRICE: fields.Integer,
@@ -117,6 +103,11 @@ generic_event_fields = api.model('GetEvents', {
     scraper.START_DATE: fields.DateTime,
     scraper.END_DATE: fields.DateTime,
     scraper.SIZE: fields.Integer
+})
+
+save_event_fields = api.model('NewEvent', {
+    se.NAME: fields.String,
+    se.EVENT_ID: fields.String,
 })
 
 
@@ -363,12 +354,6 @@ class SitesDict(Resource):
         return {'Data': share.get_sites_dict(),
                 'Type': 'Data',
                 'Title': 'Saved Websites'}
-
-
-save_event_fields = api.model('NewEvent', {
-    se.NAME: fields.String,
-    se.EVENT_ID: fields.String,
-})
 
 
 @api.route(SAVED_ADD)

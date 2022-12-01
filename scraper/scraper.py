@@ -1,8 +1,6 @@
-from urllib import response
 from requests import get
 from dotenv import load_dotenv
 import os
-import datetime
 
 load_dotenv()
 

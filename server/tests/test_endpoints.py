@@ -1,4 +1,3 @@
-
 from sre_constants import ASSERT
 import pytest
 
@@ -27,14 +26,6 @@ def postal_code():
     Generates a test event param
     """
     return '10036'
-
-
-def test_hello():
-    """
-    See if Hello works.
-    """
-    resp_json = TEST_CLIENT.get(ep.HELLO).get_json()
-    assert isinstance(resp_json[ep.MESSAGE], str)
 
 def test_tm_get_events():
     """
