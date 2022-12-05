@@ -11,6 +11,12 @@ function App() {
       setData(data)
       console.log(data)
     })},[])
+  useEffect(() => { fetch("/tm_get_events").then(
+    res=>res.json()
+    ).then(data => {
+      setData(data)
+      console.log(data)
+    })},[])
   
   return (
     <div className="App">
