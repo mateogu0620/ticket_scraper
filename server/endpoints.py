@@ -59,6 +59,8 @@ EVENT_MENU_NM = 'Event Menu'
 SHARE_TYPES_NS = 'share_types'
 TEST_EVENT = 'test_event'
 
+
+
 SAVED_DICT = f'/{DICT}'
 SAVED_DICT_W_NS = f'{SAVED_NS}/{DICT}'
 SAVED_ADD = f'/{SAVED_NS}/add'
@@ -370,3 +372,9 @@ class AddEvent(Resource):
         name = request.json[se.NAME]
         del request.json[se.NAME]
         se.add_event(name, request.json)
+
+@api.route(f'{TEST_EVENT}react')
+class ReactTest(Resource):
+    def getEventsREACT():
+        return {"events:" ["Event1","Event2"] }
+
