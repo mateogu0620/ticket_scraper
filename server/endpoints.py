@@ -5,6 +5,7 @@ The endpoint called `endpoints` will return all available endpoints.
 
 from flask import Flask, request
 from flask_restx import Resource, Api, fields, Namespace
+from flask_cors import CORS
 from scraper import scraper
 from scraper import saved_events as se
 from scraper import share
@@ -12,6 +13,7 @@ from db import db
 
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 
 ''' #Shelving the client connection for now, pivoting to Data API

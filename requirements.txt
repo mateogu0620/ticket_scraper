@@ -1,5 +1,6 @@
 flask==2.1.3
 flask-restx
+flask-cors
 werkzeug==2.1.2
 pymongo
 gunicorn==20.1.0
