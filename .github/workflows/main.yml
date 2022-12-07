@@ -18,7 +18,9 @@ env:
   TICKETMASTER_API_KEY: ${{ secrets.TICKETMASTER_API_KEY}}
   SEATGEEK_API_KEY: ${{ secrets.SEATGEEK_API_KEY}}
   SEATGEEK_API_SECRET: ${{ secrets.SEATGEEK_API_SECRET}}
+  MONGODB_TOGGLE: cloud
   MONGODB_API_KEY: ${{ secrets.MONGODB_API_KEY}}
+  MONGODB_PASS: ${{ secrets.MONGODB_PASS}}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

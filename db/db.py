@@ -7,9 +7,11 @@ Gradually, we will fill in actual calls to our datastore.
 import json
 import requests
 import os
+from pymongo import MongoClient
 from scraper import scraper
 
 MONGODB_API_KEY = os.getenv("MONGODB_API_KEY")
+MONGODB_TOGGLE = os.getenv("MONGODB_TOGGLE")
 
 WALTER = {
     "name": {
@@ -31,6 +33,36 @@ def fetch_pets():
     A function to return all pets in the data store.
     """
     return {"tigers": 2, "lions": 3, "zebras": 1}
+
+
+def local_POST(operation, doc):
+    connectionString = "mongodb://localhost:27017/"
+    client = MongoClient(connectionString)
+    db = client['ticketScraper']
+    collection = db['events']
+
+    if operation == "findOne":
+        result = collection.find_one(doc)
+        result.pop("_id")
+        return {"document": result}
+    elif operation == "find":
+        results = collection.find(doc)
+        for ev in results:
+            ev.pop("_id")
+        return {"documents": results}
+    elif operation == "deleteOne":
+        return {"deletedCount": collection.delete_one(doc).deleted_count}
+    elif operation == "deleteMany":
+        return {"deletedCount": collection.delete_many(doc).deleted_count}
+    elif operation == "insertOne":
+        return {"insertedId": str(collection.insert_one(doc)
+                                            .inserted_id)
+                }
+    elif operation == "insertMany":
+        return {"insertedIds": [str(i) for
+                                i in collection.insert_many(doc)
+                                               .inserted_ids]
+                }
 
 
 def POST(operation, doc):
