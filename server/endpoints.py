@@ -175,7 +175,8 @@ class GetEvents(Resource):
         max_price = request.json[scraper.MAX_PRICE]
         start_date = request.json[scraper.START_DATE]
         end_date = request.json[scraper.END_DATE]
-        size = request.json[scraper.SIZE]
+        size = int(request.json[scraper.SIZE])
+        print(postal_code, max_price, start_date, end_date, size)
         events = scraper.getEvents(postal_code,
                                    max_price,
                                    start_date,
