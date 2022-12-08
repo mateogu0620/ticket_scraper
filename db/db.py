@@ -11,21 +11,6 @@ from pymongo import MongoClient
 from scraper import scraper
 
 MONGODB_API_KEY = os.getenv("MONGODB_API_KEY")
-MONGODB_TOGGLE = os.getenv("MONGODB_TOGGLE")
-
-WALTER = {
-    "name": {
-        "first": "Walter",
-        "last": "White"
-    },
-    "birth": "eh",
-    "death": "eh",
-    "contribs": ["Jesse", "We", "Need", "To", "Cook"],
-    "views": 5000000
-}
-
-FIND_ALAN = {"name": {"first": "Alan", "last": "Turing"}}
-FIND_WALTER = {"name": {"first": "Walter", "last": "White"}}
 
 
 def fetch_pets():
@@ -35,8 +20,8 @@ def fetch_pets():
     return {"tigers": 2, "lions": 3, "zebras": 1}
 
 
-def local_POST(operation, doc):
-    connectionString = "mongodb://localhost:27017/"
+def POST(operation, doc):
+    connectionString = os.getenv("MG_CONNECTION_STRING")
     client = MongoClient(connectionString)
     db = client['ticketScraper']
     collection = db['events']
@@ -46,7 +31,7 @@ def local_POST(operation, doc):
         result.pop("_id")
         return {"document": result}
     elif operation == "find":
-        results = collection.find(doc)
+        results = list(collection.find(doc))
         for ev in results:
             ev.pop("_id")
         return {"documents": results}
@@ -65,7 +50,7 @@ def local_POST(operation, doc):
                 }
 
 
-def POST(operation, doc):
+def api_POST(operation, doc):
     """
     A multipurpose function for POST methods to the MongoDB
     Atlas Data API. This should be split into several other
@@ -131,12 +116,3 @@ def insertManyTicketmaster(filter):
                                            filter['end_date'],
                                            filter['size'])
     return POST(operation, events)
-
-
-POST("insertOne", WALTER)
-find = POST("findOne", FIND_ALAN)
-print(isinstance(find["document"], dict))
-POST("findOne", FIND_WALTER)
-POST("deleteOne", FIND_WALTER)
-POST("findOne", FIND_ALAN)
-POST("findOne", FIND_WALTER)
