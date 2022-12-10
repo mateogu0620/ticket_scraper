@@ -55,8 +55,17 @@ def getEvents(postal_code, max_price, start_date, end_date, size):
     '''
     Returns a list of the combined Events from Ticketmaster and Seatgeek
     '''
-    tmEvents = ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size)
-    sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, end_date, size)
+    # split the size as evenly as possible among both API calls
+    if size % 2 == 0:
+        tmsize = sgsize = size // 2
+    else:
+        # if the size is an odd number, SeatGeek will have to return 
+        # one more event than Ticketmaster
+        tmsize = size // 2
+        sgsize = (size // 2) + 1
+
+    tmEvents = ticketmasterGetEvents(postal_code, max_price, start_date, end_date, tmsize)
+    sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, end_date, sgsize)
     events = tmEvents + sgEvents
 
     return events
