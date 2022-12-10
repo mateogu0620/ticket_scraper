@@ -1,6 +1,5 @@
 from sre_constants import ASSERT
 import pytest
-
 import server.endpoints as ep
 import scraper.scraper as scraper
 import scraper.saved_events as s_e

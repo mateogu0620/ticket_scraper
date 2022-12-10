@@ -2,7 +2,6 @@
 This is the file containing all of the endpoints for our flask app.
 The endpoint called `endpoints` will return all available endpoints.
 """
-
 from flask import Flask, request
 from flask_restx import Resource, Api, fields, Namespace
 from flask_cors import CORS
@@ -11,19 +10,9 @@ from scraper import saved_events as se
 from scraper import share
 from db import db
 
-
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
-
-''' #Shelving the client connection for now, pivoting to Data API
-
-client = MongoClient('localhost', 27017)
-# Username: Cluster08493
-# Password: RlhRbmFKSH1E
-db = client.flask_db  # creating mongoDB instance
-collection = db.collec
-'''
 
 SAVED_NS = 'events'
 SHARE_NS = 'sites'
@@ -64,7 +53,6 @@ TEST_EVENT = 'test_event'
 SAVED_DICT = f'/{DICT}'
 SAVED_DICT_W_NS = f'{SAVED_NS}/{DICT}'
 SAVED_ADD = f'/{SAVED_NS}/add'
-
 SHARE_DICT = f'/{DICT}'
 SHARE_DICT_W_NS = f'{SHARE_NS}/{DICT}'
 SHARE_DICT_NM = f'{SHARE_NS}_dict'
