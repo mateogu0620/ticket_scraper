@@ -4,6 +4,8 @@ To create the env for a new developer, run `make dev_env`.
 To run the server and interact with the swagger api, run `./local.sh`
 To run the tests, run `make unit`
 
+You will need API keys to run the tests and use the API. Contact the admins of the repo to get access to the `.env` file needed to run or the API keys to add to your bashrc.
+
 This is a flask rest API server that searches for nearby converts (from Ticketmaster and Seatgeek) and stores and presents them to users. The goal is to make a website that helps users find new and exciting events near them to explore in a single place.
 
 
