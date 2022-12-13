@@ -67,8 +67,6 @@ def getEvents(postal_code, max_price, start_date, end_date, size):
     tmEvents = ticketmasterGetEvents(postal_code, max_price, start_date, end_date, tmsize)
     sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, end_date, sgsize)
 
-    print(tmEvents)
-
     events = tmEvents + sgEvents
 
     return events
