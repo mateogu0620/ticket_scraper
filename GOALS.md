@@ -10,6 +10,8 @@ Login functionality
 Favoriting events
 Solving duplicate events
 Solving repeated searches
+DB restructuring + expansion
+Remove redundant endpoints
 
 # Optional goals
 
