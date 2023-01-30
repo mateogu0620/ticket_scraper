@@ -9,8 +9,8 @@ TEST_CLIENT = ep.app.test_client()
 TEST_EVENT_SIZE = 5
 TEST_POSTAL_CODE = '10036'
 TEST_MAX_PRICE = 200
-TEST_START_DATE = "2022-12-01"
-TEST_END_DATE = "2022-12-31"
+TEST_START_DATE = "2023-1-01"
+TEST_END_DATE = "2023-1-31"
 
 @pytest.fixture
 def event_size():

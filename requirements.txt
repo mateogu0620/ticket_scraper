@@ -4,3 +4,5 @@ flask-cors
 werkzeug==2.1.2
 pymongo
 gunicorn==20.1.0
+python-dotenv
+requests
