@@ -34,5 +34,6 @@ Additional APIs aside from Seatgeek and Ticketmaster
 
 Option to select certain APIs for searching and filtering events (only displaying ticketmaster, only seatgeek, etc)
 
+Recomender System for similar type events, get people to use the application more
 
 
