@@ -38,6 +38,7 @@ MG_GET_MANY = '/mg_get_many'
 ALL_INSERT = '/all_insert'
 ALL_CLEAR = '/all_clear'
 GET_AND_CONVERT = '/get_and_convert'
+MG_REGISTER = '/mg_register'
 FILTER = 'filter'
 EVENTS = 'events'
 DOCUMENT = 'document'
@@ -234,6 +235,34 @@ class MGGetMany(Resource):
         return documents
 
 
+@api.route(f'{MG_REGISTER}/<email>/<username>/<password>')
+class MGRegister(Resource):
+    """
+    Test registration with MongoDB
+    """
+    def post(self, email, username, password):
+        """
+        Call POST method to check duplicates, then register
+        """
+        doc = {
+            "email": email,
+            "username": username,
+            "password": password
+        }
+        if len(db.POST("find",
+                       "accounts",
+                       {"email": email})
+               [DOCUMENTS]) > 0:
+            raise Exception("An account with this email already exists")
+        elif len(db.POST("find",
+                         "accounts",
+                         {"username": username})
+                 [DOCUMENTS]) > 0:
+            raise Exception("An account with this username already exists")
+        response = db.POST("insertOne", "accounts", doc)
+        return response
+
+
 @api.route(f'{ALL_INSERT}')
 class AllInsert(Resource):
     """
@@ -273,7 +302,7 @@ class AllClear(Resource):
         """
         Calls MongoDB's API and returns number of deleted documents
         """
-        document = db.POST("deleteMany", "events", {})
+        document = db.POST("deleteMany", "accounts", {})
         return document
 
 

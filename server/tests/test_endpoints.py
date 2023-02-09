@@ -12,6 +12,10 @@ TEST_MAX_PRICE = 200
 TEST_START_DATE = "2023-1-01"
 TEST_END_DATE = "2023-1-31"
 
+TEST_EMAIL = "testuser@website.com"
+TEST_USERNAME = "test_user"
+TEST_PASSWORD = "password123"
+
 @pytest.fixture
 def event_size():
     """
@@ -104,6 +108,16 @@ def test_mg_get_many():
     resp_json = TEST_CLIENT.post(f'{ep.MG_GET_MANY}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
     assert isinstance(resp_json[ep.DOCUMENTS], list)
 
+def test_mg_register():
+    """
+    See if MongoDB's accounts collection can accept a new, unique account
+    """
+    resp_json = TEST_CLIENT.post(f'{ep.MG_REGISTER}'
+                                 f'/{TEST_EMAIL}'
+                                 f'/{TEST_USERNAME}'
+                                 f'/{TEST_PASSWORD}').get_json()
+    assert isinstance(resp_json[ep.INSERTED_ID], str)
+
 def test_all_insert():
     """
     See if TM and SG to Mongo insertion results in two lists of inserted IDs
@@ -149,7 +163,8 @@ def test_add_event():
     assert s_e.event_exists(SAMPLE_EVENT_NM)
     s_e.del_event(SAMPLE_EVENT_NM)
 
-@pytest.mark.skip(reason = "Don't want to clear entire DB just yet")
+#@pytest.mark.skip(reason = "Don't want to clear entire DB just yet")
 def test_all_clear():
     resp_json = TEST_CLIENT.post(f'{ep.ALL_CLEAR}').get_json()
     assert isinstance(resp_json[ep.DELETED_COUNT], int)
+
