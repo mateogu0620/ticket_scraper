@@ -20,11 +20,11 @@ def fetch_pets():
     return {"tigers": 2, "lions": 3, "zebras": 1}
 
 
-def POST(operation, doc):
+def POST(operation, collection, doc):
     connectionString = os.getenv("MG_CONNECTION_STRING")
     client = MongoClient(connectionString)
     db = client['ticketScraper']
-    collection = db['events']
+    collection = db[collection]
 
     if operation == "findOne":
         result = collection.find_one(doc)

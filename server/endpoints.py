@@ -185,7 +185,7 @@ class MGInsertDocument(Resource):
         Calls MongoDB's API and inserts a doc, returns inserted ID
         """
         doc = {"size": size, "postalCode": postalCode}
-        document = db.POST("insertOne", doc)
+        document = db.POST("insertOne", "events", doc)
         return document
 
 
@@ -200,7 +200,7 @@ class MGGetDocument(Resource):
         Calls MongoDB's API and returns attributes of a doc
         """
         filter = {"size": size, "postalCode": postalCode}
-        document = db.POST("findOne", filter)
+        document = db.POST("findOne", "events", filter)
         return document
 
 
@@ -215,7 +215,7 @@ class MGDeleteDocument(Resource):
         Calls MongoDB's API and deletes a doc, returning # of items deleted
         """
         doc = {"size": size, "postalCode": postalCode}
-        document = db.POST("deleteOne", doc)
+        document = db.POST("deleteOne", "events", doc)
         return document
 
 
@@ -230,7 +230,7 @@ class MGGetMany(Resource):
         Calls MongoDB's API and returns list of documents
         """
         doc = {"size": size, "postalCode": postalCode}
-        documents = db.POST("find", doc)
+        documents = db.POST("find", "events", doc)
         return documents
 
 
@@ -260,7 +260,7 @@ class AllInsert(Resource):
         for i in range(len(events)):
             events[i] = events[i].toDict()
 
-        response = db.POST("insertMany", events)
+        response = db.POST("insertMany", "events", events)
         return response
 
 
@@ -273,7 +273,7 @@ class AllClear(Resource):
         """
         Calls MongoDB's API and returns number of deleted documents
         """
-        document = db.POST("deleteMany", {})
+        document = db.POST("deleteMany", "events", {})
         return document
 
 
@@ -294,7 +294,7 @@ class GetAndConvert(Resource):
             "maxPrice": max_price,
             "eventDate": start_date
         }
-        documents = db.POST("find", filter)
+        documents = db.POST("find", "events", filter)
         events = db.convertToEvent(documents[DOCUMENTS])
         return {EVENTS: events}
 
