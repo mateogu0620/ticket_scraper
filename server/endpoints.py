@@ -101,6 +101,7 @@ save_event_fields = api.model('NewEvent', {
     se.EVENT_ID: fields.String,
 })
 
+
 @api.route(f'{GET_EVENTS}')
 class GetEvents(Resource):
     """
