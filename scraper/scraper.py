@@ -105,8 +105,11 @@ def ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size):
         events = responseTM['_embedded']['events']
         filtered_events = []
         for e in events:
-            # Assuming here that venues are specified for all events
-            e['venues'] = e['_embedded']['venues']
+            # Check if a venue is specified
+            if not e['_embedded']['venues']:
+                e['venues'] = {}
+            else:
+                e['venues'] = e['_embedded']['venues']
             try:
                 for ticket in e['priceRanges']:
                     # if any of the ticket types lies under the max_price range,
@@ -162,7 +165,7 @@ def parseTicketmasterEvents(events):
         eventID = ev['id']
         eventName = ev['name']
         eventUrl = ev['url']
-        venueName, venueAddress = formatVenue('tm', ev['venues'])
+        venueName, venueAddress = formatVenue('tm', ev['venues']) if ev['venues'] else ("Not specified", "Not specified")
         eventDate, eventTime = parseDates(ev['dates'])
         genre = ev['classifications'][0]['genre']['name']
         minPrice, maxPrice = ev['priceRanges'][0]['min'], ev['priceRanges'][0]['max']
