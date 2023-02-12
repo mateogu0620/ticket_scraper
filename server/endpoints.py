@@ -101,57 +101,6 @@ save_event_fields = api.model('NewEvent', {
     se.EVENT_ID: fields.String,
 })
 
-
-@api.route(f'{TM_GET_EVENTS}')
-class TMGetEvents(Resource):
-    """
-    Making an API call to Ticketmaster and returning the list of events
-    matching the user-provided filters
-    """
-    @api.expect(tm_event_fields)
-    def post(self):
-        '''
-        Calls Ticketmaster's API and return a list of events as POST request
-        '''
-        postal_code = request.json[scraper.POSTAL_CODE]
-        max_price = request.json[scraper.MAX_PRICE]
-        start_date = request.json[scraper.START_DATE]
-        end_date = request.json[scraper.END_DATE]
-        size = request.json[scraper.SIZE]
-        # Return a list of TMEvents
-        events = scraper.ticketmasterGetEvents(postal_code,
-                                               max_price,
-                                               start_date,
-                                               end_date,
-                                               size)
-        jsonEvents = [e.toDict() for e in events]
-        return {EVENTS: jsonEvents}
-
-
-@api.route(f'{SG_GET_EVENTS}')
-class SGGetEvents(Resource):
-    """
-    Making an API call to SeatGeek and returning the list of events
-    matching the user-provided filters
-    """
-    @api.expect(sg_event_fields)
-    def post(self):
-        '''
-        Calls SeatGeeks's API and return a list of events as POST request
-        '''
-        postal_code = request.json[scraper.POSTAL_CODE]
-        max_price = request.json[scraper.MAX_PRICE]
-        # TODO: have a function that process the datetime-local input from the
-        # HTML form and converts timezones to UTC
-        start_date = request.json[scraper.START_DATE]
-        end_date = request.json[scraper.END_DATE]
-        size = request.json[scraper.SIZE]
-        events = scraper.seatgeekGetEvents(postal_code, max_price,
-                                           start_date, end_date, size)
-        events = [e.toDict() for e in events]
-        return {EVENTS: events}
-
-
 @api.route(f'{GET_EVENTS}')
 class GetEvents(Resource):
     """
