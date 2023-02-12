@@ -162,7 +162,8 @@ def parseTicketmasterEvents(events):
         eventID = ev['id']
         eventName = ev['name']
         eventUrl = ev['url']
-        venueName, venueAddress = parseVenue(ev['venues'])
+        venueName, venueAddress = formatVenue('tm', ev['venues'])
+        print("tm result !! ------> \n", venueName, venueAddress)
         eventDate, eventTime = parseDates(ev['dates'])
         genre = ev['classifications'][0]['genre']['name']
         minPrice, maxPrice = ev['priceRanges'][0]['min'], ev['priceRanges'][0]['max']
@@ -181,21 +182,11 @@ def parseTicketmasterEvents(events):
         parsed_events.append(p_ev)
     return parsed_events
 
-def parseVenue(venues):
-    # Handling only one venue for now
-    for v in venues:
-        venueName = v['name']
-        venueCity = v['city']['name']
-        venueStateCode = v['state']['stateCode']
-        # FORMAT: 123 Some St. Brooklyn NY 11201
-        venueAddress = v['address']['line1'] + " " + venueCity.strip() + ", " + venueStateCode + " " + v['postalCode']
-        return venueName, venueAddress
-
 def parseDates(dates):
     localDate = dates['start']['localDate']
     localTime = dates['start']['localTime']
     return localDate, localTime
-    
+
 def parseSeatGeek(events):
     parsed_events = []
     for e in events:
@@ -205,8 +196,8 @@ def parseSeatGeek(events):
         except:
             genre = None
         
-        print(e['venue'])
-        venue = formatVenue(e['venue'])
+        venue = formatVenue('sg', e['venue'])
+        print("sg result !! :------>\n", venue)
         datetime = formatDatetime(e['datetime_local'])
         prices = formatPrices(e['stats'])
         concert = Event("sg", e['id'], e['title'], e['url'],
@@ -215,6 +206,31 @@ def parseSeatGeek(events):
         parsed_events.append(concert)
     return parsed_events
 
+def formatVenue(provider, venue):
+    """
+        Formats TicketMaster and SeatGeek venue field to a human-readable address
+          e.g. ('New York Theatre Workshop', '721 Broadway New York, NY 10003')
+    """
+    if provider == 'tm':
+        venue = venue[0]
+        name = venue['name']
+        city = venue['city']['name']
+        state = venue['state']['stateCode'].strip()
+        address = f"{venue['address']['line1']} {city}, {state} {venue['postalCode']}"
+
+    elif provider == 'sg':
+        name = venue['name']
+        if not venue['address']:
+            return (name, 'Address not found')
+        if not venue['extended_address']:
+            return (name, venue['address'])
+
+        address = venue['address'] + ' ' + venue['extended_address']
+
+    else:
+        raise Exception("Invalid provider.")
+
+    return (name, address)
 
 def formatPrices(prices):
     """
@@ -232,6 +248,10 @@ def formatPrices(prices):
     
     return (lowest_price, avg_price, highest_price)
 
+'''
+These functions are deprecated now but im leaving them until im sure i didnt
+screw something up
+
 def formatVenue(venue):
     """
     Formats SeatGeek venue field to a human-readable address
@@ -245,6 +265,17 @@ def formatVenue(venue):
 
     address = venue['address'] + ' ' + venue['extended_address']
     return (name, address)
+
+def parseVenue(venues):
+    # Handling only one venue for now
+    for v in venues:
+        venueName = v['name']
+        venueCity = v['city']['name']
+        venueStateCode = v['state']['stateCode']
+        # FORMAT: 123 Some St. Brooklyn NY 11201
+        venueAddress = v['address']['line1'] + " " + venueCity.strip() + ", " + venueStateCode + " " + v['postalCode']
+        return venueName, venueAddress
+'''
 
 def formatDatetime(datetime):
     """
