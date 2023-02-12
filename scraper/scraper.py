@@ -163,7 +163,6 @@ def parseTicketmasterEvents(events):
         eventName = ev['name']
         eventUrl = ev['url']
         venueName, venueAddress = formatVenue('tm', ev['venues'])
-        print("tm result !! ------> \n", venueName, venueAddress)
         eventDate, eventTime = parseDates(ev['dates'])
         genre = ev['classifications'][0]['genre']['name']
         minPrice, maxPrice = ev['priceRanges'][0]['min'], ev['priceRanges'][0]['max']
@@ -197,7 +196,6 @@ def parseSeatGeek(events):
             genre = None
         
         venue = formatVenue('sg', e['venue'])
-        print("sg result !! :------>\n", venue)
         datetime = formatDatetime(e['datetime_local'])
         prices = formatPrices(e['stats'])
         concert = Event("sg", e['id'], e['title'], e['url'],
