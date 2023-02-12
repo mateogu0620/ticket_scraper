@@ -204,7 +204,8 @@ def parseSeatGeek(events):
             genre = e['performers'][0]['genres'][0]["name"]
         except:
             genre = None
-
+        
+        print(e['venue'])
         venue = formatVenue(e['venue'])
         datetime = formatDatetime(e['datetime_local'])
         prices = formatPrices(e['stats'])
@@ -237,6 +238,11 @@ def formatVenue(venue):
     e.g. ('New York Theatre Workshop', '721 Broadway New York, NY 10003')
     """
     name = venue['name']
+    if not venue['address']:
+        return (name, 'Address not found')
+    if not venue['extended_address']:
+        return (name, venue['address'])
+
     address = venue['address'] + ' ' + venue['extended_address']
     return (name, address)
 
