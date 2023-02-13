@@ -78,6 +78,7 @@ p {
 
 
 .icon-bar {
+  
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -92,9 +93,17 @@ p {
   transition: all 0.3s ease; 
   color: white; 
   font-size: 36px; 
+  float:right;
 }
 
 .icon-bar a:hover {
   background-color: #000; /* Add a hover color */
 }
+
+.info {
+  margin: auto;
+  text-align: center;
+  width:20%;
+}
+
 
