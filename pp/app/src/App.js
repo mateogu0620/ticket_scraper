@@ -40,7 +40,12 @@ function App() {
     <>
       <div className="App">
         <header className="App-header">
-          <h1>Ticket Scraper</h1>
+        
+          <div class="icon-bar">
+            <h3>Ticket Scraper</h3>
+            <a href="#">Log In</a>
+          </div>
+          
         </header>
         <div class="side_by_side">
           <div class="side_by_element">
