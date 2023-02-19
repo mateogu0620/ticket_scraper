@@ -15,6 +15,8 @@ TEST_END_DATE = "2023-1-31"
 TEST_EMAIL = "testuser@website.com"
 TEST_USERNAME = "test_user"
 TEST_PASSWORD = "password123"
+TEST_FALSE_USERNAME = "test_ooser"
+TEST_FALSE_PASSWORD = "possward123"
 
 @pytest.fixture
 def event_size():
@@ -96,6 +98,19 @@ def test_login():
                                  f'/{TEST_USERNAME}'
                                  f'/{TEST_PASSWORD}').get_json()
     assert resp_json[ep.RESPONSE] == True
+
+def test_login_fail():
+    """
+    See if the login endpoint can properly reject incorrect attempts
+    """
+    resp_1 = TEST_CLIENT.post(f'{ep.MG_LOGIN}'
+                                 f'/{TEST_FALSE_USERNAME}'
+                                 f'/{TEST_PASSWORD}').get_json()
+    assert resp_1[ep.MESSAGE] == "No account with that username found"
+    resp_2 = TEST_CLIENT.post(f'{ep.MG_LOGIN}'
+                                 f'/{TEST_USERNAME}'
+                                 f'/{TEST_FALSE_PASSWORD}').get_json()
+    assert resp_2[ep.MESSAGE] == "Incorrect password."
 
 def test_all_insert():
     """

@@ -226,13 +226,11 @@ class MGLogin(Resource):
         """
         doc = db.POST("findOne",
                       "accounts",
-                      {
-                        "username": username
-                      })
-        if doc is None:
-            raise Exception("No account with that username found")
+                      {"username": username})
+        if doc[DOCUMENT] is None:
+            return {MESSAGE: "No account with that username found"}
         elif not (doc[DOCUMENT]["password"] == password):
-            raise Exception("Incorrect password.")
+            return {MESSAGE: "Incorrect password."}
         else:
             return {RESPONSE: True}
 

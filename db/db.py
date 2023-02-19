@@ -28,7 +28,8 @@ def POST(operation, collection, doc):
 
     if operation == "findOne":
         result = collection.find_one(doc)
-        result.pop("_id")
+        if result is not None:
+            result.pop("_id")
         return {"document": result}
     elif operation == "find":
         results = list(collection.find(doc))
