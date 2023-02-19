@@ -76,7 +76,7 @@ def getEvents(postal_code, max_price, start_date, end_date, size):
     return events
 
 
-def ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size):
+def ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size, genre="music"):
     '''
     Return a list of TMEvent objects from the Ticketmaster API
     '''
@@ -84,7 +84,7 @@ def ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size):
         f"https://app.ticketmaster.com/discovery/v2/events?"
         f"apikey={TICKETMASTER_API_KEY}&"
         f"postalCode={postal_code}&"
-        f"classificationName=music&"           # for pulling only musical events
+        f"classificationName={genre}&"           # for pulling only musical events
         f"locale=*&"
         f"radius=30&"                          # search radius in miles (default 30mi)
         f"localstartDateTime={start_date}&"
@@ -129,7 +129,7 @@ def ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size):
         return parsed_events
 
 
-def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20):
+def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20, genre=None):
     '''
      Return a list of events from SeatGeek based in a US postal code
                !!! Dates MUST be in the formay YYYY-MM-DD !!!
@@ -143,6 +143,8 @@ def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20):
         f"type=concert"          # only filter concert tickets, could possibly 
                                  # change to include musicals, etc
     )
+    if genre is not None and genre in SG_GENRES:
+        SGQuery += f"&taxonomies.name={genre}" # filter events by genre
 
     responseSG = get(SGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
 
