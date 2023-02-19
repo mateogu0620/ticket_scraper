@@ -9,6 +9,10 @@ MAX_PRICE = "max_price"
 START_DATE = "start_date"
 END_DATE = "end_date"
 SIZE = 'size'
+SG_GENRES = ['Country', 'Pop', 'Rock', 'Alternative', 'Indie', 'Punk', 'Blues', 'Soul',
+             'Folk', 'Jazz', 'Reggae', 'Classic Rock', 'Hard Rock', 'Electronic', 'Rnb',
+             'Hip-Hop', 'Rap', 'Funk', 'Latin', 'Classical', 'Techno']
+TM_GENRES = [] # TBD
 
 # Ticketmaster
 TICKETMASTER_API_KEY = os.getenv('TICKETMASTER_API_KEY')
