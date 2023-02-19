@@ -88,6 +88,15 @@ def test_mg_register():
                                  f'/{TEST_PASSWORD}').get_json()
     assert isinstance(resp_json[ep.INSERTED_ID], str)
 
+def test_login():
+    """
+    See if MongoDB can check if login credentials are accurate
+    """
+    resp_json = TEST_CLIENT.post(f'{ep.MG_LOGIN}'
+                                 f'/{TEST_USERNAME}'
+                                 f'/{TEST_PASSWORD}').get_json()
+    assert resp_json[ep.RESPONSE] == True
+
 def test_all_insert():
     """
     See if TM and SG to Mongo insertion results in two lists of inserted IDs

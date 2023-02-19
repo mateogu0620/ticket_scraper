@@ -39,6 +39,7 @@ ALL_INSERT = '/all_insert'
 ALL_CLEAR = '/all_clear'
 GET_AND_CONVERT = '/get_and_convert'
 MG_REGISTER = '/mg_register'
+MG_LOGIN = '/mg_login'
 FILTER = 'filter'
 EVENTS = 'events'
 DOCUMENT = 'document'
@@ -50,6 +51,7 @@ EVENT_MENU = '/event_menu'
 EVENT_MENU_NM = 'Event Menu'
 SHARE_TYPES_NS = 'share_types'
 TEST_EVENT = 'test_event'
+RESPONSE = 'response'
 
 SAVED_DICT = f'/{DICT}'
 SAVED_DICT_W_NS = f'{SAVED_NS}/{DICT}'
@@ -211,6 +213,28 @@ class MGRegister(Resource):
             raise Exception("An account with this username already exists")
         response = db.POST("insertOne", "accounts", doc)
         return response
+
+
+@api.route(f'{MG_LOGIN}/<username>/<password>')
+class MGLogin(Resource):
+    """
+    Test login with MongoDB
+    """
+    def post(self, username, password):
+        """
+        Call POST method to check if password is correct
+        """
+        doc = db.POST("findOne",
+                      "accounts",
+                      {
+                        "username": username
+                      })
+        if doc is None:
+            raise Exception("No account with that username found")
+        elif not (doc[DOCUMENT]["password"] == password):
+            raise Exception("Incorrect password.")
+        else:
+            return {RESPONSE: True}
 
 
 @api.route(f'{ALL_INSERT}')
