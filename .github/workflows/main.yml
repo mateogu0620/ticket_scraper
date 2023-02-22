@@ -42,7 +42,12 @@ jobs:
 
       - name: Run Python tests.
         run: make all_tests
-        
+      
+      - name: Deploy to PythonAnywhere
+        run: ./deploy.sh
+        env:
+          DEMO_PA_PWD: ${{secrets.DEMO_PA_PWD}}
+
       # Deploy to Heroku
       #  - uses: akhileshns/heroku-deploy@v3.12.12
       #    with:
