@@ -43,9 +43,9 @@ jobs:
       - name: Run Python tests.
         run: make all_tests
       
+      - name: Permission to deploy file
+        run: chmod u+x rebuild.sh
+
       - name: Deploy to PythonAnywhere
-        run: | 
-        chmod u+x deploy.sh
-        chmod u+x rebuild.sh
-        ./deploy.sh
+        run: ./deploy.sh
         
