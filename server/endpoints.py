@@ -112,6 +112,10 @@ class GetEvents(Resource):
     """
     @api.expect(generic_event_fields)
     def post(self):
+        """
+        Making API calls to Ticketmaster and Seatgeek and return a list of events
+        matching the user-provided filters.
+        """
         postal_code = request.json[scraper.POSTAL_CODE]
         max_price = request.json[scraper.MAX_PRICE]
         start_date = request.json[scraper.START_DATE]
