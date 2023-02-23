@@ -46,6 +46,9 @@ jobs:
       - name: Permission to deploy file
         run: chmod u+x deploy.sh
 
+      - name: Permission to rebuild file
+        run: chmod u+x rebuild.sh
+
       - name: Deploy to PythonAnywhere
         run: ./deploy.sh
         
