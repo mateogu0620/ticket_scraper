@@ -31,6 +31,7 @@ SG = "SEATGEEK"
 TM_GET_EVENTS = '/tm_get_events'
 SG_GET_EVENTS = '/sg_get_events'
 GET_EVENTS = '/get-events'
+OAUTH_LOGIN = '/oauth_login'
 MG_GET_DOCUMENT = '/mg_get_document'
 MG_INSERT_DOCUMENT = '/mg_insert_document'
 MG_DELETE_DOCUMENT = '/mg_delete_document'
@@ -129,6 +130,20 @@ class GetEvents(Resource):
                                    size)
         jsonEvents = [e.toDict() for e in events]
         return {EVENTS: jsonEvents}
+
+
+@api.route(f'{OAUTH_LOGIN}')
+class OAuthLogin(Resource):
+    """
+    Test to make sure the OAuth token is working properly.
+    """
+    def get(self):
+        """
+        Calls OAuth token checker function, returns message
+        for success or new token required
+        """
+        response = db.login()
+        return response
 
 
 @api.route(f'{MG_INSERT_DOCUMENT}/<size>/<postalCode>')

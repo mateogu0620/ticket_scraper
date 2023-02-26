@@ -12,8 +12,10 @@ from scraper import scraper
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
+"""
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
+"""
 
 MONGODB_API_KEY = os.getenv("MONGODB_API_KEY")
 SCOPES = ['https://www.googleapis.com/auth/contacts.readonly']
@@ -75,10 +77,11 @@ def login():
         # Save the credentials for the next run
         with open('token.json', 'w') as token:
             token.write(creds.to_json())
-
+    else:
+        return {"message": "Valid OAuth token!"}
+    """
     try:
         service = build('people', 'v1', credentials=creds)
-
         # Call the People API
         print('List 10 connection names')
         results = service.people().connections().list(
@@ -86,7 +89,6 @@ def login():
             pageSize=10,
             personFields='names,emailAddresses').execute()
         connections = results.get('connections', [])
-
         for person in connections:
             names = person.get('names', [])
             if names:
@@ -94,6 +96,7 @@ def login():
                 print(name)
     except HttpError as err:
         print(err)
+    """
 
 
 def api_POST(operation, doc):

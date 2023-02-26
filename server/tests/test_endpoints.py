@@ -18,6 +18,8 @@ TEST_PASSWORD = "password123"
 TEST_FALSE_USERNAME = "test_ooser"
 TEST_FALSE_PASSWORD = "possward123"
 
+TEST_OAUTH_MESSAGE = "Valid OAuth token!"
+
 @pytest.fixture
 def event_size():
     """
@@ -51,6 +53,13 @@ def test_get_events():
     events = jsonResp[ep.EVENTS]
     if len(events) > 0:
         assert all('provider' in e for e in events)
+
+def test_oauth_login():
+    """
+    See if OAuth token is valid, and returns a message corresponding to such.
+    """
+    resp_json = TEST_CLIENT.get(f'{ep.OAUTH_LOGIN}').get_json()
+    assert resp_json[ep.MESSAGE] == TEST_OAUTH_MESSAGE
 
 def test_mg_insert_document():
     """
