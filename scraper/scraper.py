@@ -255,34 +255,6 @@ def formatPrices(prices):
     
     return (lowest_price, avg_price, highest_price)
 
-'''
-These functions are deprecated now but im leaving them until im sure i didnt
-screw something up
-
-def formatVenue(venue):
-    """
-    Formats SeatGeek venue field to a human-readable address
-    e.g. ('New York Theatre Workshop', '721 Broadway New York, NY 10003')
-    """
-    name = venue['name']
-    if not venue['address']:
-        return (name, 'Address not found')
-    if not venue['extended_address']:
-        return (name, venue['address'])
-
-    address = venue['address'] + ' ' + venue['extended_address']
-    return (name, address)
-
-def parseVenue(venues):
-    # Handling only one venue for now
-    for v in venues:
-        venueName = v['name']
-        venueCity = v['city']['name']
-        venueStateCode = v['state']['stateCode']
-        # FORMAT: 123 Some St. Brooklyn NY 11201
-        venueAddress = v['address']['line1'] + " " + venueCity.strip() + ", " + venueStateCode + " " + v['postalCode']
-        return venueName, venueAddress
-'''
 
 def formatDatetime(datetime):
     """
