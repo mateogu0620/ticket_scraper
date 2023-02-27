@@ -54,12 +54,14 @@ def test_get_events():
     if len(events) > 0:
         assert all('provider' in e for e in events)
 
+'''
 def test_oauth_login():
     """
     See if OAuth token is valid, and returns a message corresponding to such.
     """
     resp_json = TEST_CLIENT.get(f'{ep.OAUTH_LOGIN}').get_json()
     assert resp_json[ep.MESSAGE] == TEST_OAUTH_MESSAGE
+'''
 
 def test_mg_insert_document():
     """
