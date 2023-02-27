@@ -1,5 +1,6 @@
 import './App.css';
 import React, { useState } from 'react'
+import Navbar from './Navbar';
 
 function App() {
 
@@ -37,24 +38,18 @@ function App() {
   }
 
   return (
-    <>
       <div className="App">
-        <header className="App-header">
-          <div class="icon-bar">
-            <h3 class="side_by_element">Ticket Scraper</h3>
-            <a class = "side_by_element" href="#">Log In</a>
-          </div>
-        </header>
+        <Navbar/>
 
         <div>
-          <h1 class="info">Ticket Scraper</h1>
+          <h1 className="info">Ticket Scraper</h1>
           <br></br>
-          <p class = "info">Quickly and easily find all the local events happening in your area. Whether it's a concert, festival, or simply a community gathering, the web scraper will provide you with all the details you need to know, including location, date, and time. With its user-friendly interface and accurate data, you'll never miss out on a single local event again! </p>
+          <p className= "info">Quickly and easily find all the local events happening in your area. Whether it's a concert, festival, or simply a community gathering, the web scraper will provide you with all the details you need to know, including location, date, and time. With its user-friendly interface and accurate data, you'll never miss out on a single local event again! </p>
         </div>
 
         <hr></hr>
-        <div class="side_by_side">
-          <div class="side_by_element">
+        <div className="side_by_side">
+          <div className="side_by_element">
             <h2>Search For Event</h2>
             <form onSubmit={handleSubmit}>
               <input
@@ -91,8 +86,8 @@ function App() {
             </form>
           </div>
 
-          <div class="side_by_element" id="space" ></div>
-          <div class="side_by_element">
+          <div className="side_by_element" id="space" ></div>
+          <div className="side_by_element">
             <div>
               <table id="events">
                 <tr>
@@ -123,7 +118,7 @@ function App() {
               </table>
             </div>
           </div>
-          <div class="side_by_element" id="space" ></div>
+          <div className="side_by_element" id="space" ></div>
         </div>
 
 
@@ -134,7 +129,6 @@ function App() {
           <p>About: This event searcher searches for nearby events in the area. The options given to filter the events by Location, Date, Price, Venue, Artist, Genre, and Ticket Availability. This project was done to make nearby, local events more accessable to visitors, tourists , and people that are bored and are looking for fun things to do in the area. This website searches using SeatGeek and Ticketmaster to provide a streamline and one stop shop for events near you.</p>
         </footer>
       </div>
-    </>
   );
 }
 

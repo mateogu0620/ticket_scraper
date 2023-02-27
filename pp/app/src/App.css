@@ -1,6 +1,9 @@
 .App {
   justify-content: center;
-  margin-top: 5rem;
+}
+
+body{
+  margin:0;
 }
 
 input {
@@ -76,34 +79,41 @@ p {
   vertical-align: middle;
 }  
 
-
-.icon-bar {
-  
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  background-color: #0044ff;
-  padding: 5px;
-  font-size: 20px;
-}
-
-.icon-bar a {
-  text-align: right;
-  background-color: #044caa;
-  transition: all 0.3s ease; 
-  color: white; 
-  font-size: 36px; 
-  float:right;
-}
-
-.icon-bar a:hover {
-  background-color: #000; /* Add a hover color */
-}
-
 .info {
   margin: auto;
   text-align: center;
   width:20%;
+}
+
+.nav{
+  background-color: #0000FF;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.nav a{
+  color: inherit;
+  text-decoration: none;
+  height: 100%;
+  display:flex;
+  align-items: center;
+  padding: .25rem;
+}
+
+.site-title {
+  font-size: 3.0rem;
+}
+
+.nav ul{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  
 }
 
 
