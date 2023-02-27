@@ -172,7 +172,7 @@ def parseTicketmasterEvents(events):
         eventName = ev['name']
         eventUrl = ev['url']
         venueName, venueAddress = formatVenue('tm', ev['venues']) if ev['venues'] else ("Not specified", "Not specified")
-        eventDate, eventTime = parseDates(ev['dates'])
+        eventTime, eventDate = formatDatetime('tm', ev['dates'])
         genre = ev['classifications'][0]['genre']['name']
         minPrice, maxPrice = ev['priceRanges'][0]['min'], ev['priceRanges'][0]['max']
         p_ev = Event("tm",
@@ -190,10 +190,12 @@ def parseTicketmasterEvents(events):
         parsed_events.append(p_ev)
     return parsed_events
 
+'''
 def parseDates(dates):
     localDate = dates['start']['localDate']
     localTime = dates['start']['localTime']
     return localDate, localTime
+'''
 
 def parseSeatGeek(events):
     parsed_events = []
@@ -205,7 +207,7 @@ def parseSeatGeek(events):
             genre = None
         
         venue = formatVenue('sg', e['venue'])
-        datetime = formatDatetime(e['datetime_local'])
+        datetime = formatDatetime('sg', e['datetime_local'])
         prices = formatPrices(e['stats'])
         concert = Event("sg", e['id'], e['title'], e['url'],
                                venue[0], venue[1], datetime[1], datetime[0],
@@ -256,11 +258,18 @@ def formatPrices(prices):
     return (lowest_price, avg_price, highest_price)
 
 
-def formatDatetime(datetime):
+def formatDatetime(provider, datetime):
     """
-    Formats SeatGeek datetime field to a human-readable local date and time
+    Formats datetime field to a unified human-readable local date and time
     e.g. '2022-12-01T19:00:00' --> ('19:00', '2022-12-01')
     """
-    date, time = datetime.split('T')
-    time = time[:-3]
-    return (time, date)
+    
+    if provider == 'tm':
+        date = datetime['start']['localDate'] 
+        time = datetime['start']['localTime']    
+        return (time, date)
+
+    elif provider == 'sg':
+        date, time = datetime.split('T')
+        time = time[:-3]
+        return (time, date)
