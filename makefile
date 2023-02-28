@@ -2,7 +2,7 @@ LINTER = flake8
 API_DIR = server
 DB_DIR = db
 REQ_DIR = .
-PYTESTFLAGS = -vv --verbose --tb=short
+PYTESTFLAGS = -vv --verbose --tb=short --cov=$(API_DIR) --cov-branch --cov-report term-missing
 
 FORCE:
 
@@ -16,6 +16,7 @@ all_tests: lint unit
 
 unit: FORCE
 	cd $(API_DIR); pytest $(PYTESTFLAGS)
+	cd $(DB_DIR); pytest $(PYTESTFLAGS)
 
 lint: FORCE
 	$(LINTER) $(API_DIR)/*.py
