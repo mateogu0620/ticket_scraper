@@ -13,7 +13,11 @@ SG_GENRES = ['Country', 'Pop', 'Rock', 'Alternative', 'Indie', 'Punk', 'Blues', 
              'Folk', 'Jazz', 'Reggae', 'Classic Rock', 'Hard Rock', 'Electronic', 'Rnb',
              'Hip-Hop', 'Rap', 'Funk', 'Latin', 'Classical', 'Techno']
 
-TM_GENRES = [] #TBD
+# List is not exhaustive!
+TM_GENRES = ['Alternative', 'Blues', 'Theatre', 'Classical', 'Comedy', 'Country', 'Dance',
+             'Family', 'Festivals','Hip-Hop/Rap',  'Jazz', 'Latin','Miscellaneous', 'Musicals',
+             'New Age', 'Opera', 'Pop', 'R&B/Soul', 'Reggae', 'Rock', 'Sports', 'Soul', 'Hip-Hop',
+             'Rap', 'R&B', 'Funk', 'Electronic', 'Folk', 'Punk', 'Indie'] # Hard Rock, Metal ? 
 
 # Ticketmaster
 TICKETMASTER_API_KEY = os.getenv('TICKETMASTER_API_KEY')
@@ -81,6 +85,9 @@ def ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size, ge
     '''
     Return a list of TMEvent objects from the Ticketmaster API
     '''
+    if genre is None or genre not in TM_GENRES:
+        genre = "music"
+
     TMQuery = (
         f"https://app.ticketmaster.com/discovery/v2/events?"
         f"apikey={TICKETMASTER_API_KEY}&"
