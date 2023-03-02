@@ -12,7 +12,8 @@ SIZE = 'size'
 SG_GENRES = ['Country', 'Pop', 'Rock', 'Alternative', 'Indie', 'Punk', 'Blues', 'Soul',
              'Folk', 'Jazz', 'Reggae', 'Classic Rock', 'Hard Rock', 'Electronic', 'Rnb',
              'Hip-Hop', 'Rap', 'Funk', 'Latin', 'Classical', 'Techno']
-TM_GENRES = [] # TBD
+
+TM_GENRES = [] #TBD
 
 # Ticketmaster
 TICKETMASTER_API_KEY = os.getenv('TICKETMASTER_API_KEY')
@@ -225,7 +226,10 @@ def formatVenue(provider, venue):
         name = venue['name']
         city = venue['city']['name']
         state = venue['state']['stateCode'].strip()
-        address = f"{venue['address']['line1']} {city}, {state} {venue['postalCode']}"
+        try:
+            address = f"{venue['address']['line1']} {city}, {state} {venue['postalCode']}"
+        except KeyError:
+            address = f"{venue['address']} {city}, {state} {venue['postalCode']}"
 
     elif provider == 'sg':
         name = venue['name']
@@ -265,8 +269,11 @@ def formatDatetime(provider, datetime):
     """
     
     if provider == 'tm':
-        date = datetime['start']['localDate'] 
-        time = datetime['start']['localTime']    
+        date = datetime['start']['localDate']
+        try:
+            time = datetime['start']['localTime']
+        except KeyError:
+            time = 'N/A'
         return (time, date)
 
     elif provider == 'sg':
