@@ -147,6 +147,7 @@ class OAuthLogin(Resource):
         response = db.login()
         return response
 
+
 @api.route(f'{OAUTH_SET_CREDS}')
 class OAuthSetCredentials(Resource):
     """
@@ -157,9 +158,10 @@ class OAuthSetCredentials(Resource):
         Calls OAuth set cred function, gets creds
         """
         response = db.set_credentials()
-        with open("credentials.json","w") as outfile:
+        with open("credentials.json", "w") as outfile:
             json.dump(response, outfile)
         return {MESSAGE: "Credentials successfully set!"}
+
 
 @api.route(f'{MG_INSERT_DOCUMENT}/<size>/<postalCode>')
 class MGInsertDocument(Resource):
