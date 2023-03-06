@@ -21,6 +21,8 @@ env:
   MONGODB_API_KEY: ${{ secrets.MONGODB_API_KEY}}
   MG_CONNECTION_STRING: mongodb+srv://Cluster08493:${{ secrets.MONGODB_PASS}}@cluster08493.lse2bn1.mongodb.net/test
   DEMO_PA_PWD: ${{secrets.DEMO_PA_PWD}}
+  OAUTH_CLIENT_ID: ${{secrets.OAUTH_CLIENT_ID}}
+  OAUTH_CLIENT_SECRET: ${{secrets.OAUTH_CLIENT_SECRET}}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

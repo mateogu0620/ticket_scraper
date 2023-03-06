@@ -20,20 +20,6 @@ TEST_FALSE_PASSWORD = "possward123"
 
 TEST_OAUTH_MESSAGE = "Valid OAuth token!"
 
-@pytest.fixture
-def event_size():
-    """
-    Generates a test event param
-    """
-    return 5
-
-@pytest.fixture
-def postal_code():
-    """
-    Generates a test event param
-    """
-    return '10036'
-
 def test_get_events():
     """
     See if Ticketmaster's GetEvents returns makes a successful POST request and returns
@@ -54,6 +40,28 @@ def test_get_events():
     if len(events) > 0:
         assert all('provider' in e for e in events)
 
+def test_add_event():
+    """
+    test to add event to saved events
+    """
+    resp = TEST_CLIENT.post(ep.SAVED_ADD, json=SAMPLE_EVENT)
+    assert s_e.event_exists(SAMPLE_EVENT_NM)
+    s_e.del_event(SAMPLE_EVENT_NM)
+
+@pytest.fixture
+def event_size():
+    """
+    Generates a test event param
+    """
+    return 5
+
+@pytest.fixture
+def postal_code():
+    """
+    Generates a test event param
+    """
+    return '10036'
+
 @pytest.mark.skip("token generation not working properly")
 def test_oauth_login():
     """
@@ -61,6 +69,10 @@ def test_oauth_login():
     """
     resp_json = TEST_CLIENT.get(f'{ep.OAUTH_LOGIN}').get_json()
     assert resp_json[ep.MESSAGE] == TEST_OAUTH_MESSAGE
+
+def test_oauth_set_credentials():
+    resp_json = TEST_CLIENT.get(f'{ep.OAUTH_SET_CREDS}').get_json()
+    assert resp_json[ep.MESSAGE] == "Credentials successfully set!"
 
 def test_mg_insert_document():
     """
@@ -153,22 +165,13 @@ def test_get_and_convert():
     if len(resp_json[ep.EVENTS]) > 0:
         assert isinstance(resp_json[ep.EVENTS][0], scraper.Event)
 
-SAMPLE_EVENT_NM = 'Event1'
-SAMPLE_EVENT = {
-    s_e.NAME : SAMPLE_EVENT_NM,
-    s_e.EVENT_ID: '0', 
-}
-
-def test_add_event():
-    """
-    test to add event to saved events
-    """
-    resp = TEST_CLIENT.post(ep.SAVED_ADD, json=SAMPLE_EVENT)
-    assert s_e.event_exists(SAMPLE_EVENT_NM)
-    s_e.del_event(SAMPLE_EVENT_NM)
-
 #@pytest.mark.skip(reason = "Don't want to clear entire DB just yet")
 def test_all_clear():
     resp_json = TEST_CLIENT.post(f'{ep.ALL_CLEAR}').get_json()
     assert isinstance(resp_json[ep.DELETED_COUNT], int)
 
+SAMPLE_EVENT_NM = 'Event1'
+SAMPLE_EVENT = {
+    s_e.NAME : SAMPLE_EVENT_NM,
+    s_e.EVENT_ID: '0', 
+}

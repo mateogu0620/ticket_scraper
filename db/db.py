@@ -27,6 +27,20 @@ def fetch_pets():
     """
     return {"tigers": 2, "lions": 3, "zebras": 1}
 
+def set_credentials():
+    client_id = os.getenv("OAUTH_CLIENT_ID")
+    client_secret = os.getenv("OAUTH_CLIENT_SECRET")
+    form = {
+        "web": {
+            "client_id":f"{client_id}",
+            "project_id":"ticket-scraper-379001",
+            "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+            "token_uri":"https://oauth2.googleapis.com/token",
+            "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+            "client_secret":f"{client_secret}"
+        }
+    }
+    return form
 
 def POST(operation, collection, doc):
     connectionString = os.getenv("MG_CONNECTION_STRING")
@@ -98,6 +112,9 @@ def login():
         print(err)
     """
 
+def getInfo():
+
+    return 1
 
 def api_POST(operation, doc):
     """
