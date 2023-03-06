@@ -74,6 +74,10 @@ def test_oauth_set_credentials():
     resp_json = TEST_CLIENT.get(f'{ep.OAUTH_SET_CREDS}').get_json()
     assert resp_json[ep.MESSAGE] == "Credentials successfully set!"
 
+def test_oauth_remove_credentials():
+    resp_json = TEST_CLIENT.get(f'{ep.OAUTH_DELETE_CREDS}').get_json()
+    assert resp_json[ep.MESSAGE] == "Credentials successfully removed!"
+
 def test_mg_insert_document():
     """
     See if MongoDB's insertOne returns a string for an inserted event

@@ -32,6 +32,7 @@ SG = "SEATGEEK"
 TM_GET_EVENTS = '/tm_get_events'
 SG_GET_EVENTS = '/sg_get_events'
 OAUTH_SET_CREDS = '/oauth_set_credentials'
+OAUTH_DELETE_CREDS = '/oauth_delete_creds'
 GET_EVENTS = '/get-events'
 OAUTH_LOGIN = '/oauth_login'
 MG_GET_DOCUMENT = '/mg_get_document'
@@ -161,6 +162,21 @@ class OAuthSetCredentials(Resource):
         with open("credentials.json", "w") as outfile:
             json.dump(response, outfile)
         return {MESSAGE: "Credentials successfully set!"}
+
+
+@api.route(f'{OAUTH_DELETE_CREDS}')
+class OAuthDeleteCredentials(Resource):
+    """
+    Endpoint for removing OAuth credentials
+    """
+    def get(self):
+        """
+        Removes creds
+        """
+        doc = {"message": "these are empty creds, set credentials endpoint"}
+        with open("credentials.json", "w") as outfile:
+            json.dump(doc, outfile)
+        return {MESSAGE: "Credentials successfully removed!"}
 
 
 @api.route(f'{MG_INSERT_DOCUMENT}/<size>/<postalCode>')
