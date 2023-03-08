@@ -1,5 +1,5 @@
 # TicketScraper Front-End 
-Note: This repository manages the backend of the TicketScraper app. The front-end reposity for Ticketscraper can be found at https://github.com/mateogu0620/ticket_scraper_pp.
+Note: This repository manages the backend of the TicketScraper app. The front-end reposity for Ticketscraper can be found at https://github.com/mateogu0620/ticket_scraper_pp. The front-end code is still being migrated from this repository to the front-end repository, so please bear that in mind.
 
 # TicketScraper Backend
 
