@@ -1,4 +1,7 @@
-# TicketScraper
+# TicketScraper Front-End 
+Note: This repository manages the backend of the TicketScraper app. The front-end reposity for Ticketscraper can be found at https://github.com/mateogu0620/ticket_scraper_pp.
+
+# TicketScraper Backend
 
 To create the env for a new developer, run `make dev_env`.
 To run the server and interact with the swagger api, run `./local.sh`
