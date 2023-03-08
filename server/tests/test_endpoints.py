@@ -35,7 +35,6 @@ def test_get_events():
     assert response.status_code == 200
     jsonResp = response.get_json()
     assert isinstance(jsonResp[ep.EVENTS], list)
-    # TODO: some check here to make sure these events are in the correct GenericEvent format. Using this for now
     events = jsonResp[ep.EVENTS]
     if len(events) > 0:
         assert all('provider' in e for e in events)

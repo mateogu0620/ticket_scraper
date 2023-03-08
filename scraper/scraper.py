@@ -160,6 +160,7 @@ def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20, gen
     parsed_events = parseSeatGeek(events)
     return parsed_events
 
+
 def makeAPICall(response, size):
     # If invalid API call
     if 'status' in response:
@@ -170,6 +171,7 @@ def makeAPICall(response, size):
     # If events were found
     else:
         return response['events'][:size]
+
 
 def parseTicketmasterEvents(events):
     # Resource for parsing: https://developer.ticketmaster.com/api-explorer/v2/
@@ -198,12 +200,6 @@ def parseTicketmasterEvents(events):
         parsed_events.append(p_ev)
     return parsed_events
 
-'''
-def parseDates(dates):
-    localDate = dates['start']['localDate']
-    localTime = dates['start']['localTime']
-    return localDate, localTime
-'''
 
 def parseSeatGeek(events):
     parsed_events = []
@@ -222,6 +218,7 @@ def parseSeatGeek(events):
                                genre, prices[0], prices[2])
         parsed_events.append(concert)
     return parsed_events
+
 
 def formatVenue(provider, venue):
     """
@@ -251,6 +248,7 @@ def formatVenue(provider, venue):
         raise Exception("Invalid provider.")
 
     return (name, address)
+
 
 def formatPrices(prices):
     """
