@@ -162,9 +162,13 @@ class OAuthSetCredentials(Resource):
         Calls OAuth set cred function, gets creds
         """
         response = db.set_credentials()
-        with open("credentials.json", "w") as outfile:
-            json.dump(response, outfile)
-        return {MESSAGE: "Credentials successfully set!"}
+        try:
+            f = open("credentials.json", "x")
+            json.dump(response, f)
+        except OSError:
+            return {MESSAGE: "OSError: file already exists"}
+        finally:
+            return {MESSAGE: "Credentials successfully set!"}
 
 
 @api.route(f'{OAUTH_DELETE_CREDS}')
