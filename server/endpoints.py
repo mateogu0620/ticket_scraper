@@ -10,6 +10,7 @@ from scraper import scraper
 from scraper import saved_events as se
 from scraper import share
 import json
+import os
 from db import db
 
 print(sys.path)
@@ -180,9 +181,10 @@ class OAuthDeleteCredentials(Resource):
         """
         Removes creds
         """
-        doc = {"message": "these are empty creds, set credentials endpoint"}
-        with open("credentials.json", "w") as outfile:
-            json.dump(doc, outfile)
+        try:
+            os.remove("credentials.json")
+        except FileNotFoundError:
+            return {MESSAGE: "FileNotFoundError: no file to delete"}
         return {MESSAGE: "Credentials successfully removed!"}
 
 
