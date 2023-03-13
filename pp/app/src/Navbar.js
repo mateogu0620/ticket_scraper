@@ -17,9 +17,9 @@ function Navbar(){
         </ul>
         <div className={`DropDown ${open? 'active' : 'inactive'}`}>
             <ul>
-            <DropDownElement text={"My Profile"} />
-            <DropDownElement text={"Edit Profile"} />
-            <DropDownElement text={"Log Out"} />
+                <DropDownElement name="My Profile" link=""/>
+                <DropDownElement name="Edit Profile" link=""/>
+                <DropDownElement name="Log Out" link=""/>
             </ul>            
         </div>
     </nav>);
@@ -28,7 +28,7 @@ function Navbar(){
 function DropDownElement(props){
     return(
         <li className="dropDownElement">
-            <a>[props.text]</a>
+            <a href={props.link}>{props.name}</a>
         </li>
     );
 }

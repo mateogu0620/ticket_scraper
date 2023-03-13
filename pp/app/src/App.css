@@ -125,6 +125,7 @@ p {
   top: 55px;
   right: 20px;
   background-color: grey;
+  
   border-radius: var(--border-radius);
   padding: 10px 20px;
   width: 200px;
@@ -137,12 +138,15 @@ p {
   right: 20px;
   height: 20px;
   width: 20px;
+  background: var(--secondary-bg);
+  transform: rotate(45deg);
 }
 
 .DropDown.active{
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+  height: 100px;
   transition: var(--speed) ease;
 }
 
@@ -155,26 +159,25 @@ p {
 .DropDown ul li{
   padding: 10px  0;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
+  
 }
 
 .DropDown ul li:hover a{
-  color: rgb(212, 33, 9);
-  cursor: pointer;
-}
-
-.DropDown ul li:hover img{
-  opacity: 1;
+  color: rgb(32, 0, 177);
   cursor: pointer;
 }
 
 .DropDownElement{
   display: flex;
+  align-items: center;
+  text-decoration: none;
   margin: 10px auto;
 }
 
 .DropDownElement a{
   max-width: 100px;
   margin-left: 10px;
+  transition: var(--speed);
 }
 
 
