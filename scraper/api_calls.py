@@ -9,7 +9,7 @@ from scraper import SEATGEEK_API_KEY, TICKETMASTER_API_KEY
 #CLIENT_ID = SEATGEEK_API_KEY                        # SeatGeek CLIENT_ID
 CLIENT_ID = TICKETMASTER_API_KEY                     # TicketMaster CLIENT_ID
 #endpoint_url = "https://api.seatgeek.com/2/genres"  # genres endpoint for SeatGeek API
-endpoint_url = "https://app.ticketmaster.com/discovery/v2/classifications/genres/" 
+endpoint_url = "https://app.ticketmaster.com/discovery/v2/classifications/genres/KnvZfZ7vA71.json?apikey={TICKETMASTER_API_KEY}"
 url_auth = auth.HTTPBasicAuth(CLIENT_ID,"") # authorization, no pw
 
 # for making an arbitrary SeatGeek API call
@@ -24,7 +24,7 @@ def api_call(url, auth):
 
     # if error 
     if res.status_code != 200:
-        print("ERROR!")
+        print(f"ERROR!: status code {res.status_code} -> {res.text}")
         return
 
     # parse and format response in JSON
@@ -34,4 +34,17 @@ def api_call(url, auth):
     for i in range(len(parsed_json['genres'])): 
         print(parsed_json['genres'][i]['name'])
 
-api_call(endpoint_url, url_auth) # call API
+def tm_genre_call(auth):
+    for i in range(20):
+        url = "https://app.ticketmaster.com/discovery/v2/classifications/genres/{i}?apikey={TICKETMASTER_API_KEY}"
+        res = get(url=url, auth=auth)
+        if res.status_code != 200:         
+            print(f"ERROR!: {res.status_code} -> {res.text}")
+            return
+
+        parsed_json = loads(res.content)
+        for i in range(len(parsed_json['genres'])):
+            print(parsed_json['genres'][i]['name'])
+
+#api_call(endpoint_url, url_auth) # call API
+#tm_genre_call(url_auth)
