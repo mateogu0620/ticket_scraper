@@ -115,6 +115,14 @@ p {
   display: flex;
 }
 
+#bob{
+  background-color: #0000FF;
+  color: white;
+  display: flex;
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
 .toggle {
   background-color: darkblue;
   
@@ -159,7 +167,6 @@ p {
 .DropDown ul li{
   padding: 10px  0;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
-  
 }
 
 .DropDown ul li:hover a{

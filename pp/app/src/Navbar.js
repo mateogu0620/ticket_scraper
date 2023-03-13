@@ -13,10 +13,9 @@ function Navbar(){
             <li>
                 <div className='toggle' onClick={()=>{setOpen(!open)}}><p>Profile</p></div>
             </li>
-            
         </ul>
         <div className={`DropDown ${open? 'active' : 'inactive'}`}>
-            <ul>
+            <ul id='bob'>
                 <DropDownElement name="My Profile" link=""/>
                 <DropDownElement name="Edit Profile" link=""/>
                 <DropDownElement name="Log Out" link=""/>
