@@ -116,6 +116,32 @@ def login():
     """
 
 
+def refresh_token():
+    token = open('token.json', 'r')
+    tokenDict = json.load(token)
+
+    params = {
+                "grant_type": "refresh_token",
+                "client_id": os.getenv("OAUTH_CLIENT_ID"),
+                "client_secret": os.getenv("OAUTH_CLIENT_SECRET"),
+                "refresh_token": tokenDict["refresh_token"]
+    }
+
+    token.close()
+
+    authorization_url = tokenDict["token_uri"]
+
+    r = requests.post(authorization_url, data=params)
+
+    if r.status_code == 200:
+        token = open("token.json", 'w')
+        newToken = tokenDict
+        newToken["token"] = r.json()['access_token']
+        token.write(json.dumps(newToken))
+
+    return r.status_code
+
+
 def api_POST(operation, doc):
     """
     A multipurpose function for POST methods to the MongoDB

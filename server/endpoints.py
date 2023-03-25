@@ -37,6 +37,7 @@ TM_GET_EVENTS = '/tm_get_events'
 SG_GET_EVENTS = '/sg_get_events'
 OAUTH_SET_CREDS = '/oauth_set_credentials'
 OAUTH_DELETE_CREDS = '/oauth_delete_creds'
+OAUTH_REFRESH_TOKEN = '/oauth_refresh_token'
 GET_EVENTS = '/get-events'
 OAUTH_LOGIN = '/oauth_login'
 MG_GET_DOCUMENT = '/mg_get_document'
@@ -186,6 +187,19 @@ class OAuthDeleteCredentials(Resource):
         except FileNotFoundError:
             return {MESSAGE: "FileNotFoundError: no file to delete"}
         return {MESSAGE: "Credentials successfully removed!"}
+
+
+@api.route(f'{OAUTH_REFRESH_TOKEN}')
+class OAuthRefreshToken(Resource):
+    """
+    Endpoint for refreshing OAuth token
+    """
+    def get(self):
+        """
+        Refreshes token
+        """
+        response = db.refresh_token()
+        return response
 
 
 @api.route(f'{MG_INSERT_DOCUMENT}/<size>/<postalCode>')
