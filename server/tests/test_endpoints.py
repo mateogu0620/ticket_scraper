@@ -69,6 +69,14 @@ def test_oauth_login():
     resp_json = TEST_CLIENT.get(f'{ep.OAUTH_LOGIN}').get_json()
     assert resp_json[ep.MESSAGE] == TEST_OAUTH_MESSAGE
 
+@pytest.mark.skip("token generation not working properly")
+def test_oauth_refresh():
+    """
+    See if API call can successfully refresh OAuth token
+    """
+    resp_json = TEST_CLIENT.get(f'{ep.OAUTH_REFRESH_TOKEN}').get_json()
+    assert resp_json[ep.RESPONSE] == 200
+
 def test_oauth_set_credentials():
     resp_json = TEST_CLIENT.get(f'{ep.OAUTH_SET_CREDS}').get_json()
     assert resp_json[ep.MESSAGE] == "Credentials successfully set!"

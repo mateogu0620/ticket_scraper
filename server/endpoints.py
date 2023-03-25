@@ -199,7 +199,7 @@ class OAuthRefreshToken(Resource):
         Refreshes token
         """
         response = db.refresh_token()
-        return response
+        return {RESPONSE: response}
 
 
 @api.route(f'{MG_INSERT_DOCUMENT}/<size>/<postalCode>')
