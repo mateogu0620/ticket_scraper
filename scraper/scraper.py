@@ -23,6 +23,10 @@ TM_GENRES = ['Alternative', 'Blues', 'Theatre', 'Classical', 'Comedy', 'Country'
 INCLUSIVE_GENRES = ['Alternative', 'Blues', 'Classical', 'Country', 'Jazz', 'Latin', 'Pop', 'Reggae', 
                     'Rock', 'Soul', 'Hip-Hop', 'Rap', 'Funk', 'Electronic', 'Folk', 'Punk',  'Indie']
 
+# Match SeatGeek genre field to Ticketmaster equivalent
+GENRE_MATCH_DICT = {"Hip-Hop": "Hip-Hop/Rap", "Rap": "Hip-Hop/Rap", "Classic Rock": "Rock", "Hard Rock": "Rock"
+                    "Rnb": "R&B", "Techno": "Electronic" }
+
 # Ticketmaster
 TICKETMASTER_API_KEY = os.getenv('TICKETMASTER_API_KEY')
 TM_REQUIRED_EVENT_FIELDS = [POSTAL_CODE, MAX_PRICE, START_DATE, END_DATE, SIZE]
