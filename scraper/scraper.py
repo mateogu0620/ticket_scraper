@@ -24,7 +24,7 @@ INCLUSIVE_GENRES = ['Alternative', 'Blues', 'Classical', 'Country', 'Jazz', 'Lat
                     'Rock', 'Soul', 'Hip-Hop', 'Rap', 'Funk', 'Electronic', 'Folk', 'Punk',  'Indie']
 
 # Match SeatGeek genre field to Ticketmaster equivalent
-GENRE_MATCH_DICT = {"Hip-Hop": "Hip-Hop/Rap", "Rap": "Hip-Hop/Rap", "Classic Rock": "Rock", "Hard Rock": "Rock"
+GENRE_MATCH_DICT = {"Hip-Hop": "Hip-Hop/Rap", "Rap": "Hip-Hop/Rap", "Classic Rock": "Rock", "Hard Rock": "Rock",
                     "Rnb": "R&B", "Techno": "Electronic" }
 
 # Ticketmaster
