@@ -23,6 +23,11 @@ TM_GENRES = ['Alternative', 'Blues', 'Theatre', 'Classical', 'Comedy', 'Country'
 INCLUSIVE_GENRES = ['Alternative', 'Blues', 'Classical', 'Country', 'Jazz', 'Latin', 'Pop', 'Reggae', 
                     'Rock', 'Soul', 'Hip-Hop', 'Rap', 'Funk', 'Electronic', 'Folk', 'Punk',  'Indie']
 
+# Genres with no equivalent in other API
+UNINCLUSIVE_GENRES = ['Theatre', 'Comedy', 'Dance', 'Family', 'Festivals', 'Hip-Hop/Rap', 'Miscellaneous', 
+                      'Musicals', 'New Age', 'Opera', 'R&B/Soul', 'Sports', 'R&B', 'Classic Rock', 
+                      'Hard Rock', 'Rnb', 'Techno'] 
+
 # Match SeatGeek genre field to Ticketmaster equivalent
 GENRE_MATCH_DICT = {"Hip-Hop": "Hip-Hop/Rap", "Rap": "Hip-Hop/Rap", "Classic Rock": "Rock", "Hard Rock": "Rock",
                     "Rnb": "R&B", "Techno": "Electronic" }
