@@ -32,7 +32,7 @@ def test_get_events():
         scraper.END_DATE: TEST_END_DATE + "T23:59:00",
         scraper.SIZE: TEST_EVENT_SIZE
     })
-    
+
     assert response.status_code == 200
     jsonResp = response.get_json()
     assert isinstance(jsonResp[ep.EVENTS], list)
@@ -81,6 +81,13 @@ def test_oauth_refresh():
 def test_oauth_set_credentials():
     resp_json = TEST_CLIENT.get(f'{ep.OAUTH_SET_CREDS}').get_json()
     assert resp_json[ep.MESSAGE] == "Credentials successfully set!"
+
+def test_oauth_get_people():
+    """
+    See if API call can successfully get personal info 
+    """
+    resp_json = TEST_CLIENT.get(f'{ep.OAUTH_GET_PEOPLE}').get_json()
+    assert isinstance(resp_json[ep.RESPONSE], list)
 
 def test_oauth_remove_credentials():
     resp_json = TEST_CLIENT.get(f'{ep.OAUTH_DELETE_CREDS}').get_json()
