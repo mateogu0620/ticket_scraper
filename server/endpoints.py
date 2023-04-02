@@ -38,6 +38,7 @@ SG_GET_EVENTS = '/sg_get_events'
 OAUTH_SET_CREDS = '/oauth_set_credentials'
 OAUTH_DELETE_CREDS = '/oauth_delete_creds'
 OAUTH_REFRESH_TOKEN = '/oauth_refresh_token'
+OAUTH_GET_PEOPLE = '/oauth_get_people'
 GET_EVENTS = '/get-events'
 OAUTH_LOGIN = '/oauth_login'
 MG_GET_DOCUMENT = '/mg_get_document'
@@ -199,6 +200,16 @@ class OAuthRefreshToken(Resource):
         Refreshes token
         """
         response = db.refresh_token()
+        return {RESPONSE: response}
+
+
+@api.route(f'{OAUTH_GET_PEOPLE}')
+class OAuthGetPeople(Resource):
+    """
+    Endpoint for getting information from user
+    """
+    def get(self):
+        response = db.people()
         return {RESPONSE: response}
 
 

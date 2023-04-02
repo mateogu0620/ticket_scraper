@@ -32,6 +32,7 @@ def test_get_events():
         scraper.END_DATE: TEST_END_DATE + "T23:59:00",
         scraper.SIZE: TEST_EVENT_SIZE
     })
+    
     assert response.status_code == 200
     jsonResp = response.get_json()
     assert isinstance(jsonResp[ep.EVENTS], list)
