@@ -160,7 +160,7 @@ class OAuthSetCredentials(Resource):
     """
     Endpoint for setting OAuth credentials
     """
-    def get(self):
+    def post(self):
         """
         Calls OAuth set cred function, gets creds
         """
@@ -179,7 +179,7 @@ class OAuthDeleteCredentials(Resource):
     """
     Endpoint for removing OAuth credentials
     """
-    def get(self):
+    def delete(self):
         """
         Removes creds
         """
@@ -195,7 +195,7 @@ class OAuthRefreshToken(Resource):
     """
     Endpoint for refreshing OAuth token
     """
-    def get(self):
+    def post(self):
         """
         Refreshes token
         """
@@ -219,7 +219,7 @@ class MGInsertDocument(Resource):
     Test to make sure the MongoDB's Atlas Data
     API POST requests can add data
     """
-    def post(self, size, postalCode):
+    def put(self, size, postalCode):
         """
         Calls MongoDB's API and inserts a doc, returns inserted ID
         """
@@ -234,7 +234,7 @@ class MGGetDocument(Resource):
     Test to make sure the MongoDB's Atlas Data
     API POST request can find data
     """
-    def post(self, size, postalCode):
+    def get(self, size, postalCode):
         """
         Calls MongoDB's API and returns attributes of a doc
         """
@@ -249,7 +249,7 @@ class MGDeleteDocument(Resource):
     Test to make sure the MongoDB's Atlas Data
     API POST request can find data
     """
-    def post(self, size, postalCode):
+    def delete(self, size, postalCode):
         """
         Calls MongoDB's API and deletes a doc, returning # of items deleted
         """
@@ -264,7 +264,7 @@ class MGGetMany(Resource):
     Test to make sure the MongoDB's Atlas Data
     API POST request can find data
     """
-    def post(self, size, postalCode):
+    def get(self, size, postalCode):
         """
         Calls MongoDB's API and returns list of documents
         """
@@ -306,7 +306,7 @@ class MGLogin(Resource):
     """
     Test login with MongoDB
     """
-    def post(self, username, password):
+    def put(self, username, password):
         """
         Call POST method to check if password is correct
         """
@@ -328,7 +328,7 @@ class AllInsert(Resource):
     into MongoDB collection
     """
     @api.expect(all_fields)
-    def post(self):
+    def put(self):
         """
         Calls Ticketmaster, SeatGeek, and MongoAPI to get events and then
         insert them, returns inserted IDs for both
@@ -356,7 +356,7 @@ class AllClear(Resource):
     """
     Clears the entire MongoDB Event collection
     """
-    def post(self):
+    def delete(self):
         """
         Calls MongoDB's API and returns number of deleted documents
         """
@@ -371,7 +371,7 @@ class GetAndConvert(Resource):
     to Event objects
     """
     @api.expect(get_fields)
-    def post(self):
+    def get(self):
         """
         Calls MongoDB's API and returns documents to be converted
         """

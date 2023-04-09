@@ -75,11 +75,11 @@ def test_oauth_refresh():
     """
     See if API call can successfully refresh OAuth token
     """
-    resp_json = TEST_CLIENT.get(f'{ep.OAUTH_REFRESH_TOKEN}').get_json()
+    resp_json = TEST_CLIENT.post(f'{ep.OAUTH_REFRESH_TOKEN}').get_json()
     assert resp_json[ep.RESPONSE] == 200
 
 def test_oauth_set_credentials():
-    resp_json = TEST_CLIENT.get(f'{ep.OAUTH_SET_CREDS}').get_json()
+    resp_json = TEST_CLIENT.post(f'{ep.OAUTH_SET_CREDS}').get_json()
     assert resp_json[ep.MESSAGE] == "Credentials successfully set!"
 
 def test_oauth_get_people():
@@ -89,36 +89,36 @@ def test_oauth_get_people():
     resp_json = TEST_CLIENT.get(f'{ep.OAUTH_GET_PEOPLE}').get_json()
     assert isinstance(resp_json[ep.RESPONSE], list)
 
-def test_oauth_remove_credentials():
-    resp_json = TEST_CLIENT.get(f'{ep.OAUTH_DELETE_CREDS}').get_json()
+def test_oauth_delete_credentials():
+    resp_json = TEST_CLIENT.delete(f'{ep.OAUTH_DELETE_CREDS}').get_json()
     assert resp_json[ep.MESSAGE] == "Credentials successfully removed!"
 
 def test_mg_insert_document():
     """
     See if MongoDB's insertOne returns a string for an inserted event
     """
-    resp_json = TEST_CLIENT.post(f'{ep.MG_INSERT_DOCUMENT}/{event_size}/{postal_code}').get_json()
+    resp_json = TEST_CLIENT.put(f'{ep.MG_INSERT_DOCUMENT}/{event_size}/{postal_code}').get_json()
     assert isinstance(resp_json[ep.INSERTED_ID], str)
 
 def test_mg_get_document():
     """
     See if MongoDB's findOne returns a dictionary of attributes (could be empty if no events were found)
     """
-    resp_json = TEST_CLIENT.post(f'{ep.MG_GET_DOCUMENT}/{event_size}/{postal_code}').get_json()
+    resp_json = TEST_CLIENT.get(f'{ep.MG_GET_DOCUMENT}/{event_size}/{postal_code}').get_json()
     assert isinstance(resp_json[ep.DOCUMENT], dict)
 
 def test_mg_delete_document():
     """
     See if MongoDB's deleteOne returns the number of deletedItems (could be zero if no events deleted)
     """
-    resp_json = TEST_CLIENT.post(f'{ep.MG_DELETE_DOCUMENT}/{event_size}/{postal_code}').get_json()
+    resp_json = TEST_CLIENT.delete(f'{ep.MG_DELETE_DOCUMENT}/{event_size}/{postal_code}').get_json()
     assert isinstance(resp_json[ep.DELETED_COUNT], int)
 
 def test_mg_get_many():
     """
     See if MongoDB's findMany returns a list of documents (could be empty if no events were found)
     """
-    resp_json = TEST_CLIENT.post(f'{ep.MG_GET_MANY}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
+    resp_json = TEST_CLIENT.get(f'{ep.MG_GET_MANY}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
     assert isinstance(resp_json[ep.DOCUMENTS], list)
 
 def test_mg_register():
@@ -135,7 +135,7 @@ def test_login():
     """
     See if MongoDB can check if login credentials are accurate
     """
-    resp_json = TEST_CLIENT.post(f'{ep.MG_LOGIN}'
+    resp_json = TEST_CLIENT.put(f'{ep.MG_LOGIN}'
                                  f'/{TEST_USERNAME}'
                                  f'/{TEST_PASSWORD}').get_json()
     assert resp_json[ep.RESPONSE] == True
@@ -144,11 +144,11 @@ def test_login_fail():
     """
     See if the login endpoint can properly reject incorrect attempts
     """
-    resp_1 = TEST_CLIENT.post(f'{ep.MG_LOGIN}'
+    resp_1 = TEST_CLIENT.put(f'{ep.MG_LOGIN}'
                                  f'/{TEST_FALSE_USERNAME}'
                                  f'/{TEST_PASSWORD}').get_json()
     assert resp_1[ep.MESSAGE] == "No account with that username found"
-    resp_2 = TEST_CLIENT.post(f'{ep.MG_LOGIN}'
+    resp_2 = TEST_CLIENT.put(f'{ep.MG_LOGIN}'
                                  f'/{TEST_USERNAME}'
                                  f'/{TEST_FALSE_PASSWORD}').get_json()
     assert resp_2[ep.MESSAGE] == "Incorrect password."
@@ -158,7 +158,7 @@ def test_all_insert():
     See if TM and SG to Mongo insertion results in two lists of inserted IDs
     (this basically checks if all three API keys are working properly)
     """
-    response = TEST_CLIENT.post(f'{ep.ALL_INSERT}', json={
+    response = TEST_CLIENT.put(f'{ep.ALL_INSERT}', json={
         scraper.POSTAL_CODE: TEST_POSTAL_CODE,
         scraper.MAX_PRICE: TEST_MAX_PRICE,
         scraper.START_DATE: TEST_START_DATE + "T00:00:00Z",
@@ -174,7 +174,7 @@ def test_get_and_convert():
     """
     See if the get_and_convert endpoint returns a list of Events(could be empty if no events were found)
     """
-    response = TEST_CLIENT.post(f'{ep.GET_AND_CONVERT}', json={
+    response = TEST_CLIENT.get(f'{ep.GET_AND_CONVERT}', json={
         scraper.MAX_PRICE: TEST_MAX_PRICE,
         scraper.START_DATE: TEST_START_DATE + "T00:00:00Z",
     })
@@ -186,7 +186,7 @@ def test_get_and_convert():
 
 #@pytest.mark.skip(reason = "Don't want to clear entire DB just yet")
 def test_all_clear():
-    resp_json = TEST_CLIENT.post(f'{ep.ALL_CLEAR}').get_json()
+    resp_json = TEST_CLIENT.delete(f'{ep.ALL_CLEAR}').get_json()
     assert isinstance(resp_json[ep.DELETED_COUNT], int)
 
 SAMPLE_EVENT_NM = 'Event1'
