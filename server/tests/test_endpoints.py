@@ -87,7 +87,7 @@ def test_oauth_get_people():
     See if API call can successfully get personal info 
     """
     resp_json = TEST_CLIENT.get(f'{ep.OAUTH_GET_PEOPLE}').get_json()
-    assert isinstance(resp_json[ep.RESPONSE], list)
+    assert isinstance(resp_json[ep.RESPONSE], dict)
 
 def test_oauth_delete_credentials():
     resp_json = TEST_CLIENT.delete(f'{ep.OAUTH_DELETE_CREDS}').get_json()

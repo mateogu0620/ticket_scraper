@@ -21,7 +21,8 @@ from googleapiclient.errors import HttpError
 """
 
 MONGODB_API_KEY = os.getenv("MONGODB_API_KEY")
-SCOPES = ['https://www.googleapis.com/auth/contacts.readonly']
+SCOPES = ['https://www.googleapis.com/auth/contacts.readonly',
+          'https://www.googleapis.com/auth/userinfo.profile']
 
 
 def fetch_pets():
@@ -106,18 +107,12 @@ def people():
     try:
         service = build('people', 'v1', credentials=creds)
 
-        results = service.people().connections().list(
+        results = service.people().get(
             resourceName='people/me',
-            pageSize=10,
             personFields='names,emailAddresses').execute()
-        connections = results.get('connections', [])
-        result = []
-        for person in connections:
-            names = person.get('names', [])
-            if names:
-                name = names[0].get('displayName')
-                result.append(name)
-        return result
+        names = results.get('names', [])[0]
+        nDisplayName = names.get('displayName')
+        return {"name": nDisplayName}
     except HttpError as err:
         print(err)
 
