@@ -9,6 +9,7 @@ from flask_cors import CORS
 from scraper import scraper
 from scraper import saved_events as se
 from scraper import share
+from scraper import URL
 import json
 import os
 from db import db
@@ -21,6 +22,7 @@ api = Api(app)
 
 SAVED_NS = 'events'
 SHARE_NS = 'sites'
+URL_NS = 'url'
 
 events_ns = Namespace(SAVED_NS, 'Saved_Events')
 api.add_namespace(events_ns)
@@ -57,9 +59,10 @@ DOCUMENTS = 'documents'
 INSERTED_ID = 'insertedId'
 INSERTED_IDS = 'insertedIds'
 DELETED_COUNT = 'deletedCount'
-EVENT_MENU = '/event_menu'
-EVENT_MENU_NM = 'Event Menu'
+PROFILE_MENU = '/profile_menu'
+PROFILE_MENU_NM = 'Profile Menu'
 SHARE_TYPES_NS = 'share_types'
+
 TEST_EVENT = 'test_event'
 RESPONSE = 'response'
 
@@ -69,6 +72,9 @@ SAVED_ADD = f'/{SAVED_NS}/add'
 SHARE_DICT = f'/{DICT}'
 SHARE_DICT_W_NS = f'{SHARE_NS}/{DICT}'
 SHARE_DICT_NM = f'{SHARE_NS}_dict'
+URL_DICT = f'/{DICT}'
+URL_DICT_W_NS = f'{URL_NS}/{DICT}'
+URL_ADD = f'/{URL_NS}/add'
 
 
 tm_event_fields = api.model('TMGetEvents', {
@@ -386,24 +392,40 @@ class GetAndConvert(Resource):
         return {EVENTS: events}
 
 
-@api.route(EVENT_MENU)
-class MainMenu(Resource):
+@api.route(PROFILE_MENU)
+class ProfileBar(Resource):
     """
-    This will deliver our main menu.
+    Will deliver the drop down task bar
     """
     def get(self):
         """
-        Gets the main game menu.
+        Gets the drop down task bar
         """
-        return {'Title': EVENT_MENU_NM,
+        return {'Title': PROFILE_MENU_NM,
                 'Default': 0,
                 'Choices': {
-                    '1': {'url': f'/{SAVED_DICT_W_NS}',
-                          'method': 'get', 'text': 'Save Event'},
-                    '2': {'url': f'/{SHARE_DICT_W_NS}',
-                          'method': 'get', 'text': 'List where to share'},
+                    '1': {'url': f'/{URL_DICT_W_NS}',
+                          'method': 'get', 'text': 'My Profile'},
+                    '2': {'url': f'/{URL_DICT_W_NS}',
+                          'method': 'get', 'text': 'Settings'},
+                    '3': {'url': f'/{URL_DICT_W_NS}',
+                          'method': 'get', 'text': 'Log In'},
                     'X': {'text': 'Exit'},
                 }}
+
+
+@api.route(URL_DICT)
+class UrlDict(Resource):
+    """
+    This will get a list of currrent saved events.
+    """
+    def get(self):
+        """
+        Returns a list of current events user has saved.
+        """
+        return {'Data': URL.get_url(),
+                'Type': 'Data',
+                'Title': 'Saved Events'}
 
 
 @api.route(SAVED_DICT)
