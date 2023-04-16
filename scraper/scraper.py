@@ -9,6 +9,8 @@ MAX_PRICE = "max_price"
 START_DATE = "start_date"
 END_DATE = "end_date"
 SIZE = 'size'
+GENRE = 'genre'
+
 SG_GENRES = ['Country', 'Pop', 'Rock', 'Alternative', 'Indie', 'Punk', 'Blues', 'Soul',
              'Folk', 'Jazz', 'Reggae', 'Classic Rock', 'Hard Rock', 'Electronic', 'Rnb',
              'Hip-Hop', 'Rap', 'Funk', 'Latin', 'Classical', 'Techno']
@@ -73,7 +75,7 @@ class Event:
         }
 
 
-def getEvents(postal_code, max_price, start_date, end_date, size):
+def getEvents(postal_code, max_price, start_date, end_date, size, genre):
     '''
     Returns a list of the combined Events from Ticketmaster and Seatgeek
     '''
@@ -86,8 +88,8 @@ def getEvents(postal_code, max_price, start_date, end_date, size):
         tmsize = size // 2
         sgsize = (size // 2) + 1
 
-    tmEvents = ticketmasterGetEvents(postal_code, max_price, start_date, end_date, tmsize)
-    sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, end_date, sgsize)
+    tmEvents = ticketmasterGetEvents(postal_code, max_price, start_date, end_date, tmsize, genre)
+    sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, end_date, sgsize, genre)
 
     events = tmEvents + sgEvents
 
