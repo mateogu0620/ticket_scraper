@@ -82,7 +82,8 @@ tm_event_fields = api.model('TMGetEvents', {
     scraper.MAX_PRICE: fields.Integer,
     scraper.START_DATE: fields.DateTime,
     scraper.END_DATE: fields.DateTime,
-    scraper.SIZE: fields.Integer
+    scraper.SIZE: fields.Integer,
+    scraper.GENRE: fields.String
 })
 
 sg_event_fields = api.model('SGGetEvents', {
@@ -90,7 +91,8 @@ sg_event_fields = api.model('SGGetEvents', {
     scraper.MAX_PRICE: fields.Integer,
     scraper.START_DATE: fields.DateTime,
     scraper.END_DATE: fields.DateTime,
-    scraper.SIZE: fields.Integer
+    scraper.SIZE: fields.Integer,
+    scraper.GENRE: fields.String
 })
 
 all_fields = api.model('AllInsert', {
@@ -98,7 +100,8 @@ all_fields = api.model('AllInsert', {
     scraper.MAX_PRICE: fields.Integer,
     scraper.START_DATE: fields.DateTime,
     scraper.END_DATE: fields.DateTime,
-    scraper.SIZE: fields.Integer
+    scraper.SIZE: fields.Integer,
+    scraper.GENRE: fields.String
 })
 
 get_fields = api.model('GetAndConvert', {
@@ -111,7 +114,8 @@ generic_event_fields = api.model('GetEvents', {
     scraper.MAX_PRICE: fields.Integer,
     scraper.START_DATE: fields.DateTime,
     scraper.END_DATE: fields.DateTime,
-    scraper.SIZE: fields.Integer
+    scraper.SIZE: fields.Integer,
+    scraper.GENRE: fields.String
 })
 
 save_event_fields = api.model('NewEvent', {
@@ -137,12 +141,17 @@ class GetEvents(Resource):
         start_date = request.json[scraper.START_DATE]
         end_date = request.json[scraper.END_DATE]
         size = int(request.json[scraper.SIZE])
-        print(postal_code, max_price, start_date, end_date, size)
+        if scraper.GENRE in request.json:
+            genre = request.json[scraper.GENRE]
+        else:
+            genre = None
+        print(postal_code, max_price, start_date, end_date, size, genre)
         events = scraper.getEvents(postal_code,
                                    max_price,
                                    start_date,
                                    end_date,
-                                   size)
+                                   size,
+                                   genre)
         jsonEvents = [e.toDict() for e in events]
         return {EVENTS: jsonEvents}
 
@@ -344,11 +353,16 @@ class AllInsert(Resource):
         start_date = request.json[scraper.START_DATE]
         end_date = request.json[scraper.END_DATE]
         size = request.json[scraper.SIZE]
+        if scraper.GENRE in request.json:
+            genre = request.json[scraper.GENRE]
+        else:
+            genre = None
         events = scraper.getEvents(postal_code,
                                    max_price,
                                    start_date,
                                    end_date,
-                                   size)
+                                   size,
+                                   genre)
 
         for i in range(len(events)):
             events[i] = events[i].toDict()
