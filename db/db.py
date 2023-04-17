@@ -120,6 +120,16 @@ def people():
         print(err)
 
 
+def authenticate_and_store():
+    attributes = people()
+    response = POST("findOne", "accounts", attributes)
+    if response["document"] is not None:
+        return "successful login! or something"
+    else:
+        POST("insertOne", "accounts", attributes)
+        return "registered with TicketScraper"
+
+
 def refresh_token():
     token = open('token.json', 'r')
     tokenDict = json.load(token)
