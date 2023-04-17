@@ -15,7 +15,7 @@ SG_GENRES = ['Country', 'Pop', 'Rock', 'Alternative', 'Indie', 'Punk', 'Blues', 
              'Folk', 'Jazz', 'Reggae', 'Classic Rock', 'Hard Rock', 'Electronic', 'Rnb',
              'Hip-Hop', 'Rap', 'Funk', 'Latin', 'Classical', 'Techno']
 
-# List is not exhaustive!
+# List is not exhaustive(yet)!
 TM_GENRES = ['Alternative', 'Blues', 'Theatre', 'Classical', 'Comedy', 'Country', 'Dance',
              'Family', 'Festivals','Hip-Hop/Rap',  'Jazz', 'Latin','Miscellaneous', 'Musicals',
              'New Age', 'Opera', 'Pop', 'R&B/Soul', 'Reggae', 'Rock', 'Sports', 'Soul', 'Hip-Hop',
@@ -87,9 +87,21 @@ def getEvents(postal_code, max_price, start_date, end_date, size, genre):
         # one more event than Ticketmaster
         tmsize = size // 2
         sgsize = (size // 2) + 1
+    
+    # Standardize genre names for both API's
+    if genre not in INCLUSIVE_GENRES:
+        if genre in GENRE_MATCH_DICT:
+            genre = GENRE_MATCH_DICT[genre]
+        elif genre in UNINCLUSIVE_GENRES:
+            # Uninclusive genres are TM specific so we don't use SG results
+            events = ticketmasterGetEvents(postal_code, max_price, start_date, 
+                                           end_date, size, genre)
+            return events
 
-    tmEvents = ticketmasterGetEvents(postal_code, max_price, start_date, end_date, tmsize, genre)
-    sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, end_date, sgsize, genre)
+    tmEvents = ticketmasterGetEvents(postal_code, max_price, start_date, 
+                                     end_date, tmsize, genre)
+    sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, 
+                                 end_date, sgsize, genre)
 
     events = tmEvents + sgEvents
 
