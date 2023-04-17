@@ -123,6 +123,23 @@ save_event_fields = api.model('NewEvent', {
     se.EVENT_ID: fields.String,
 })
 
+save_event_fields = api.model('NewEvent', {
+    se.NAME: fields.String,
+    se.EVENT_ID: fields.String,
+})
+
+save_usernames = api.model('setUserName', {
+    se.NAME: fields.String,
+})
+
+save_password = api.model('setPassword', {
+    se.NAME: fields.String,
+})
+
+save_zipcode_preference = api.model('setSserZipCode', {
+    se.ZIP: fields.String,
+})
+
 
 @api.route(f'{GET_EVENTS}')
 class GetEvents(Resource):
