@@ -38,7 +38,7 @@ SG = "SEATGEEK"
 TM_GET_EVENTS = '/tm_get_events'
 SG_GET_EVENTS = '/sg_get_events'
 OAUTH_SET_CREDS = '/oauth_set_credentials'
-OAUTH_DELETE_CREDS = '/oauth_delete_creds'
+OAUTH_DELETE_CREDS = '/oauth_delete_credentials'
 OAUTH_REFRESH_TOKEN = '/oauth_refresh_token'
 OAUTH_GET_PEOPLE = '/oauth_get_people'
 GET_EVENTS = '/get-events'
@@ -177,7 +177,7 @@ class OAuthSetCredentials(Resource):
     """
     def post(self):
         """
-        Calls OAuth set cred function, gets creds
+        Calls OAuth set credential function, gets credentials
         """
         response = db.set_credentials()
         try:

@@ -21,7 +21,7 @@ from googleapiclient.errors import HttpError
 """
 
 MONGODB_API_KEY = os.getenv("MONGODB_API_KEY")
-SCOPES = ['https://www.googleapis.com/auth/contacts.readonly',
+SCOPES = ['https://www.googleapis.com/auth/userinfo.email',
           'https://www.googleapis.com/auth/userinfo.profile']
 
 
@@ -85,6 +85,7 @@ def login():
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
+    os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
     # If there are no (valid) credentials available, let the user log in.
@@ -112,7 +113,9 @@ def people():
             personFields='names,emailAddresses').execute()
         names = results.get('names', [])[0]
         nDisplayName = names.get('displayName')
-        return {"name": nDisplayName}
+        emails = results.get('emailAddresses', [])[0]
+        eDisplayName = emails.get('value')
+        return {"name": nDisplayName, "email": eDisplayName}
     except HttpError as err:
         print(err)
 
