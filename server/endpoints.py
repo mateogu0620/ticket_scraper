@@ -137,7 +137,7 @@ save_password = api.model('setPassword', {
 })
 
 save_zipcode_preference = api.model('setSserZipCode', {
-    se.ZIP: fields.String,
+    se.NAME: fields.String,
 })
 
 
