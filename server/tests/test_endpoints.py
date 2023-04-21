@@ -189,6 +189,15 @@ def test_all_clear():
     resp_json = TEST_CLIENT.delete(f'{ep.ALL_CLEAR}').get_json()
     assert isinstance(resp_json[ep.DELETED_COUNT], int)
 
+def test_all_genres():
+    """
+    Test if a list of all the genres is returned from scraper.py
+    """
+    response = TEST_CLIENT.get('/AllGenres')
+    assert response.status_code == 200
+    resp_json = response.get_json()
+    assert isinstance(resp_json["genres"], list)
+
 SAMPLE_EVENT_NM = 'Event1'
 SAMPLE_EVENT = {
     s_e.NAME : SAMPLE_EVENT_NM,
