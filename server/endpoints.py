@@ -508,6 +508,7 @@ class ReactTest(Resource):
     def getEventsREACT():
         return {"events": ["Event1", "Event2"]}
 
+
 @api.route('/AllGenres')
 class AllGenres(Resource):
     def get(self):
@@ -517,4 +518,4 @@ class AllGenres(Resource):
         in_both = scraper.INCLUSIVE_GENRES
         tm_only = scraper.UNINCLUSIVE_GENRES
         all_genres = in_both + tm_only
-        return {"genres": sorted(all_genres)} 
+        return {"genres": sorted(all_genres)}
