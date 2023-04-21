@@ -21,7 +21,7 @@ TM_GENRES = ['Alternative', 'Blues', 'Theatre', 'Classical', 'Comedy', 'Country'
              'New Age', 'Opera', 'Pop', 'R&B/Soul', 'Reggae', 'Rock', 'Sports', 'Soul', 'Hip-Hop',
              'Rap', 'R&B', 'Funk', 'Electronic', 'Folk', 'Punk', 'Indie'] # Hard Rock, Metal ? 
 
-# Will convert to dict that associates genres with a generic genre name for both APIs
+# Genres that are present in both API's, even under different names
 INCLUSIVE_GENRES = ['Alternative', 'Blues', 'Classical', 'Country', 'Jazz', 'Latin', 'Pop', 'Reggae', 
                     'Rock', 'Soul', 'Hip-Hop', 'Rap', 'Funk', 'Electronic', 'Folk', 'Punk',  'Indie']
 
