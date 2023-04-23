@@ -41,8 +41,9 @@ OAUTH_SET_CREDS = '/oauth_set_credentials'
 OAUTH_DELETE_CREDS = '/oauth_delete_credentials'
 OAUTH_REFRESH_TOKEN = '/oauth_refresh_token'
 OAUTH_GET_PEOPLE = '/oauth_get_people'
-GET_EVENTS = '/get-events'
 OAUTH_LOGIN = '/oauth_login'
+OAUTH_AND_STORE = '/oauth_and_store'
+GET_EVENTS = '/get-events'
 MG_GET_DOCUMENT = '/mg_get_document'
 MG_INSERT_DOCUMENT = '/mg_insert_document'
 MG_DELETE_DOCUMENT = '/mg_delete_document'
@@ -176,7 +177,7 @@ class GetEvents(Resource):
 @api.route(f'{OAUTH_LOGIN}')
 class OAuthLogin(Resource):
     """
-    Test to make sure the OAuth token is working properly.
+    Generate OAuth token by logging in
     """
     def get(self):
         """
@@ -185,6 +186,19 @@ class OAuthLogin(Resource):
         """
         response = db.login()
         return response
+
+
+@api.route(f'{OAUTH_AND_STORE}')
+class OAuthAndStore(Resource):
+    """
+    Get info and login/register.
+    """
+    def put(self):
+        """
+        Call authentication and storage method, register or login.
+        """
+        message = db.authenticate_and_store()
+        return message
 
 
 @api.route(f'{OAUTH_SET_CREDS}')

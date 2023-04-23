@@ -122,6 +122,8 @@ def people():
 
 def authenticate_and_store():
     attributes = people()
+    if "name" not in attributes or "email" not in attributes:
+        return "Unauthorized User"
     response = POST("findOne", "accounts", attributes)
     if response["document"] is not None:
         return "successful login! or something"
