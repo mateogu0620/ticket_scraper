@@ -198,7 +198,7 @@ class OAuthAndStore(Resource):
         Call authentication and storage method, register or login.
         """
         message = db.authenticate_and_store()
-        return message
+        return {MESSAGE: message}
 
 
 @api.route(f'{OAUTH_SET_CREDS}')

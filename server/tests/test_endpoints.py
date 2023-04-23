@@ -89,6 +89,14 @@ def test_oauth_get_people():
     resp_json = TEST_CLIENT.get(f'{ep.OAUTH_GET_PEOPLE}').get_json()
     assert isinstance(resp_json[ep.RESPONSE], dict)
 
+def test_oauth_and_store():
+    """
+    See if API call can use personal info to login/register
+    """
+    resp_json = TEST_CLIENT.get(f'{ep.OAUTH_AND_STORE}').get_json()
+    assert resp_json[ep.MESSAGE] == "successful login! or something" or \
+                                    "registered with TicketScraper"
+
 def test_oauth_delete_credentials():
     resp_json = TEST_CLIENT.delete(f'{ep.OAUTH_DELETE_CREDS}').get_json()
     assert resp_json[ep.MESSAGE] == "Credentials successfully removed!"
