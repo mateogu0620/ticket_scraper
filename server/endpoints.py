@@ -560,7 +560,7 @@ class AllGenres(Resource):
         """
         Returns a list of all genres used in both APIs
         """
-        in_both = scraper.GENRES_INBOTH 
-        tm_only = scraper.GENRES_TMONLY 
+        in_both = scraper.GENRES_INBOTH
+        tm_only = scraper.GENRES_TMONLY
         all_genres = in_both + tm_only
         return {"genres": sorted(all_genres)}
