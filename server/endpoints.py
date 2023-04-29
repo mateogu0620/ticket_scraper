@@ -31,7 +31,6 @@ api.add_namespace(sites_ns)
 
 LIST = 'list'
 DICT = 'dict'
-HELLO = '/hello'
 MESSAGE = 'message'
 TM = "TICKETMASTER"
 SG = "SEATGEEK"
@@ -561,7 +560,7 @@ class AllGenres(Resource):
         """
         Returns a list of all genres used in both APIs
         """
-        in_both = scraper.INCLUSIVE_GENRES
-        tm_only = scraper.UNINCLUSIVE_GENRES
+        in_both = scraper.GENRES_INBOTH 
+        tm_only = scraper.GENRES_TMONLY 
         all_genres = in_both + tm_only
         return {"genres": sorted(all_genres)}

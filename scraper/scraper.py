@@ -22,11 +22,11 @@ TM_GENRES = ['Alternative', 'Blues', 'Theatre', 'Classical', 'Comedy', 'Country'
              'Rap', 'R&B', 'Funk', 'Electronic', 'Folk', 'Punk', 'Indie'] # Hard Rock, Metal ? 
 
 # Genres that are present in both API's, even under different names
-INCLUSIVE_GENRES = ['Alternative', 'Blues', 'Classical', 'Country', 'Jazz', 'Latin', 'Pop', 'Reggae', 
+GENRES_INBOTH = ['Alternative', 'Blues', 'Classical', 'Country', 'Jazz', 'Latin', 'Pop', 'Reggae', 
                     'Rock', 'Soul', 'Hip-Hop', 'Rap', 'Funk', 'Electronic', 'Folk', 'Punk',  'Indie']
 
 # Genres with no equivalent in other API
-UNINCLUSIVE_GENRES = ['Theatre', 'Comedy', 'Dance', 'Family', 'Festivals', 'Hip-Hop/Rap', 'Miscellaneous', 
+GENRES_TMONLY = ['Theatre', 'Comedy', 'Dance', 'Family', 'Festivals', 'Hip-Hop/Rap', 'Miscellaneous', 
                       'Musicals', 'New Age', 'Opera', 'R&B/Soul', 'Sports', 'R&B', 'Classic Rock', 
                       'Hard Rock', 'Rnb', 'Techno'] 
 
@@ -89,10 +89,10 @@ def getEvents(postal_code, max_price, start_date, end_date, size, genre):
         sgsize = (size // 2) + 1
     
     # Standardize genre names for both API's
-    if genre not in INCLUSIVE_GENRES:
+    if genre not in GENRES_INBOTH:
         if genre in GENRE_MATCH_DICT:
             genre = GENRE_MATCH_DICT[genre]
-        elif genre in UNINCLUSIVE_GENRES:
+        elif genre in GENRES_TMONLY:
             # Uninclusive genres are TM specific so we don't use SG results
             events = ticketmasterGetEvents(postal_code, max_price, start_date, 
                                            end_date, size, genre)
