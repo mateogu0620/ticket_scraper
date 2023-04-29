@@ -53,6 +53,8 @@ ALL_CLEAR = '/all_clear'
 GET_AND_CONVERT = '/get_and_convert'
 MG_REGISTER = '/mg_register'
 MG_LOGIN = '/mg_login'
+MG_ADD_FAVORITES = '/mg_add_favorites'
+MG_GET_FAVORITES = '/mg_get_favorites'
 FILTER = 'filter'
 EVENTS = 'events'
 DOCUMENT = 'document'
@@ -218,6 +220,36 @@ class OAuthSetCredentials(Resource):
             return {MESSAGE: "OSError: file already exists"}
         finally:
             return {MESSAGE: "Credentials successfully set!"}
+
+
+@api.route(f'{MG_ADD_FAVORITES}/<event>')
+class MGAddFavorites(Resource):
+    """
+    Endpoint for adding a favorite event
+    """
+    def put(self, event):
+        """
+        Calls MongoDB insertOne function, puts in a favorite event
+        """
+        login = db.people()
+        event["name"] = login["name"]
+        event["email"] = login["email"]
+        response = db.POST("insertOne", "favorites", event)
+        return response
+
+
+@api.route(f'{MG_GET_FAVORITES}')
+class MGGetFavorites(Resource):
+    """
+    Endpoint for getting favorite events
+    """
+    def get(self):
+        """
+        Calls MongoDB findMany function, gets list of events
+        """
+        login = db.people()
+        response = db.post("findMany", "favorites", login)
+        return response
 
 
 @api.route(f'{OAUTH_DELETE_CREDS}')

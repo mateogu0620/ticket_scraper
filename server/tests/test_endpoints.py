@@ -4,6 +4,8 @@ import server.endpoints as ep
 import scraper.scraper as scraper
 import scraper.saved_events as s_e
 
+from unittest.mock import patch
+
 TEST_CLIENT = ep.app.test_client()
 
 TEST_EVENT_SIZE = 5
