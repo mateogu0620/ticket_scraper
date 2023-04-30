@@ -8,6 +8,16 @@ from unittest.mock import patch
 
 TEST_CLIENT = ep.app.test_client()
 
+TEST_PROVIDER = "tm"
+TEST_ID = 1231312312
+TEST_NAME = "Test Event Name"
+TEST_URL = "www.ticketmaster.com/monopoly"
+TEST_VENUE_NAME = "Test Venue"
+TEST_VENUE_ADDRESS = "12345 Test Avenue"
+TEST_DATE = "12 October 20Testing"
+TEST_TIME = "10:00:00"
+TEST_GENRE = "Rock"
+TEST_MIN_PRICE = 10
 TEST_EVENT_SIZE = 5
 TEST_POSTAL_CODE = '10036'
 TEST_MAX_PRICE = 200
@@ -21,6 +31,18 @@ TEST_FALSE_USERNAME = "test_ooser"
 TEST_FALSE_PASSWORD = "possward123"
 
 TEST_OAUTH_MESSAGE = "Valid OAuth token!"
+
+SAMPLE_EVENT_NM = 'Event1'
+SAMPLE_EVENT = {
+    s_e.NAME : SAMPLE_EVENT_NM,
+    s_e.EVENT_ID: '0', 
+}
+
+SAMPLE_PERSON = {
+    "name" : TEST_USERNAME,
+    "email" : TEST_EMAIL
+}
+
 
 def test_get_events():
     """
@@ -131,6 +153,38 @@ def test_mg_get_many():
     resp_json = TEST_CLIENT.get(f'{ep.MG_GET_MANY}/{TEST_EVENT_SIZE}/{TEST_POSTAL_CODE}').get_json()
     assert isinstance(resp_json[ep.DOCUMENTS], list)
 
+@patch('db.db.people', return_value = SAMPLE_PERSON)
+def test_mg_add_favorites(mock_person):
+    response = TEST_CLIENT.put(f'{ep.MG_ADD_FAVORITES}', json={
+        "provider": TEST_PROVIDER,
+        "id": TEST_ID,
+        "name": TEST_NAME,
+        "url": TEST_URL,
+        "venueName": TEST_VENUE_NAME,
+        "venueAddress": TEST_VENUE_ADDRESS,
+        "eventDate": TEST_DATE,
+        "eventTime": TEST_TIME,
+        "genre": TEST_GENRE,
+        "minPrice": TEST_MIN_PRICE,
+        "maxPrice": TEST_MAX_PRICE
+    })
+    assert response.status_code == 200
+    resp_json = response.get_json()
+    assert isinstance(resp_json[ep.INSERTED_ID], str)
+    """
+    See if MGAddFavorites endpoint can save a favorited event
+    """
+
+@patch('db.db.people', return_value = SAMPLE_PERSON)
+def test_mg_get_favorites(mock_person):
+    response = TEST_CLIENT.get(f'{ep.MG_GET_FAVORITES}')
+    assert response.status_code == 200
+    resp_json = response.get_json()
+    assert isinstance(resp_json[ep.DOCUMENTS], list)
+    """
+    See if MGGetFavorites can get the right favorited event
+    """
+
 def test_mg_register():
     """
     See if MongoDB's accounts collection can accept a new, unique account
@@ -208,8 +262,3 @@ def test_all_genres():
     resp_json = response.get_json()
     assert isinstance(resp_json["genres"], list)
 
-SAMPLE_EVENT_NM = 'Event1'
-SAMPLE_EVENT = {
-    s_e.NAME : SAMPLE_EVENT_NM,
-    s_e.EVENT_ID: '0', 
-}

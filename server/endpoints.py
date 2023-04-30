@@ -120,6 +120,20 @@ generic_event_fields = api.model('GetEvents', {
     scraper.GENRE: fields.String
 })
 
+mg_favorite_event_fields = api.model('MGAddFavorites', {
+    "provider": fields.String,
+    "id": fields.Integer,
+    "name": fields.String,
+    "url": fields.String,
+    "venueName": fields.String,
+    "venueAddress": fields.String,
+    "eventDate": fields.String,
+    "eventTime": fields.String,
+    "genre": fields.String,
+    "minPrice": fields.Integer,
+    "maxPrice": fields.Integer
+})
+
 save_event_fields = api.model('NewEvent', {
     se.NAME: fields.String,
     se.EVENT_ID: fields.String,
@@ -221,15 +235,28 @@ class OAuthSetCredentials(Resource):
             return {MESSAGE: "Credentials successfully set!"}
 
 
-@api.route(f'{MG_ADD_FAVORITES}/<event>')
+@api.route(f'{MG_ADD_FAVORITES}')
 class MGAddFavorites(Resource):
     """
     Endpoint for adding a favorite event
     """
-    def put(self, event):
+    @api.expect(mg_favorite_event_fields)
+    def put(self):
         """
         Calls MongoDB insertOne function, puts in a favorite event
         """
+        event = {
+            "provider": request.json["provider"],
+            "id": request.json["id"],
+            "name": request.json["name"],
+            "url": request.json["url"],
+            "venueName": request.json["venueName"],
+            "eventDate": request.json["eventDate"],
+            "eventTime": request.json["eventTime"],
+            "genre": request.json["genre"],
+            "minPrice": request.json["minPrice"],
+            "maxPrice": request.json["maxPrice"],
+        }
         login = db.people()
         event["name"] = login["name"]
         event["email"] = login["email"]
@@ -247,7 +274,7 @@ class MGGetFavorites(Resource):
         Calls MongoDB findMany function, gets list of events
         """
         login = db.people()
-        response = db.post("findMany", "favorites", login)
+        response = db.POST("find", "favorites", login)
         return response
 
 
@@ -436,7 +463,7 @@ class AllInsert(Resource):
 @api.route(f'{ALL_CLEAR}')
 class AllClear(Resource):
     """
-    Clears the entire MongoDB Event collection
+    Clears the entire MongoDB account collection
     """
     def delete(self):
         """
