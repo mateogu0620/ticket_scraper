@@ -5,6 +5,7 @@ Link: http://niravgolyalla.pythonanywhere.com/
 Base API uploaded
 Env variables added, api working
 Frontend Library Set up
+Frontend show setup
 
 
 
