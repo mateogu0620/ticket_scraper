@@ -5,6 +5,7 @@ The endpoint called `endpoints` will return all available endpoints.
 import sys
 import os
 import json
+import copy
 from flask import Flask, request
 from flask_restx import Resource, Api, fields, Namespace
 from flask_cors import CORS
@@ -186,7 +187,11 @@ class GetEvents(Resource):
                                    size,
                                    genre)
         jsonEvents = [e.toDict() for e in events]
-        return {EVENTS: jsonEvents}
+        jsonEventsDB = copy.deepcopy(jsonEvents)
+
+        response = db.POST("insertMany", "events", jsonEventsDB)
+
+        return {EVENTS: jsonEvents, INSERTED_IDS: response[INSERTED_IDS]}
 
 
 @api.route(f'{OAUTH_LOGIN}')
