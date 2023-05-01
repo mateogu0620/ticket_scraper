@@ -45,8 +45,8 @@ SEATGEEK_API_SECRET = os.getenv('SEATGEEK_API_SECRET')
 
 class Event:
     def __init__(self, provider, id_, name, url, venueName, venueAddress, eventDate, eventTime, genre, minPrice, maxPrice):
-        # provider: a string, either 'tm' or 'sg' to indicate where it comes from
-        # events will be identified by their provider AND the event id
+        # provider: a string, either 'tm' or 'sg' to indicate where it comes from -
+        # Events will be identified by their provider AND the event id
         self.provider = provider
         self.id_ = id_
         self.name = name
@@ -103,7 +103,7 @@ def getEvents(postal_code, max_price, start_date, end_date, size, genre):
     sgEvents = seatgeekGetEvents(postal_code, max_price, start_date, 
                                  end_date, sgsize, genre)
 
-    events = tmEvents + sgEvents
+    events = sgEvents + tmEvents
 
     return events
 
@@ -164,7 +164,7 @@ def ticketmasterGetEvents(postal_code, max_price, start_date, end_date, size, ge
         return parsed_events
 
 
-def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20, genre=None):
+def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size, genre=None):
     '''
      Return a list of events from SeatGeek based in a US postal code
                !!! Dates MUST be in the formay YYYY-MM-DD !!!
@@ -182,13 +182,15 @@ def seatgeekGetEvents(postal_code, max_price, start_date, end_date, size=20, gen
         SGQuery += f"&taxonomies.name={genre}" # filter events by genre
 
     responseSG = get(SGQuery, auth=(SEATGEEK_API_KEY, SEATGEEK_API_SECRET)).json()
-
     events =  makeAPICall(responseSG, size)
     parsed_events = parseSeatGeek(events)
     return parsed_events
 
 
 def makeAPICall(response, size):
+    """
+    Returns list of events from response
+    """
     # If invalid API call
     if 'status' in response:
         raise Exception(f"{response['message']}")
@@ -201,7 +203,10 @@ def makeAPICall(response, size):
 
 
 def parseTicketmasterEvents(events):
+    """
+    Converts a Ticketmaster API response into a list of Event objects 
     # Resource for parsing: https://developer.ticketmaster.com/api-explorer/v2/
+    """
     parsed_events = []
     for ev in events:
         # name, location/venue, dates, pirce, url, genre
@@ -229,6 +234,9 @@ def parseTicketmasterEvents(events):
 
 
 def parseSeatGeek(events):
+    """
+    Converts a Seatgeek API response into a list of Event objects
+    """
     parsed_events = []
     for e in events:
         try:

@@ -3,6 +3,8 @@ This is the file containing all of the endpoints for our flask app.
 The endpoint called `endpoints` will return all available endpoints.
 """
 import sys
+import os
+import json
 from flask import Flask, request
 from flask_restx import Resource, Api, fields, Namespace
 from flask_cors import CORS
@@ -10,8 +12,6 @@ from scraper import scraper
 from scraper import saved_events as se
 from scraper import share
 from scraper import URL
-import json
-import os
 from db import db
 
 print(sys.path)
