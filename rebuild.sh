@@ -6,7 +6,8 @@ touch rebuild
 echo "Rebuilding"
 
 echo "Pulling code from master"
-git pull origin master
+git fetch origin master
+git reset --hard FETCH_HEAD
 
 echo "Installing packages"
 pip install -r requirements.txt
