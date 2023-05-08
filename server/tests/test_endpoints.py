@@ -186,6 +186,13 @@ def test_mg_get_favorites(mock_person):
     See if MGGetFavorites can get the right favorited event
     """
 
+@patch('db.db.people', return_value = SAMPLE_PERSON)
+def test_delete_account(mock_person):
+    response = TEST_CLIENT.put(f'{ep.DELETE_ACCOUNT}')
+    assert response.status_code == 200
+    resp_json = response.get_json()
+    assert isinstance(resp_json["favorites"][ep.DELETED_COUNT],int)
+    assert isinstance(resp_json["accounts"][ep.DELETED_COUNT],int)
 
 def test_mg_register():
     """
