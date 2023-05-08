@@ -186,6 +186,7 @@ def test_mg_get_favorites(mock_person):
     See if MGGetFavorites can get the right favorited event
     """
 
+
 def test_mg_register():
     """
     See if MongoDB's accounts collection can accept a new, unique account
@@ -217,23 +218,6 @@ def test_login_fail():
                                  f'/{TEST_USERNAME}'
                                  f'/{TEST_FALSE_PASSWORD}').get_json()
     assert resp_2[ep.MESSAGE] == "Incorrect password."
-
-def test_all_insert():
-    """
-    See if TM and SG to Mongo insertion results in two lists of inserted IDs
-    (this basically checks if all three API keys are working properly)
-    """
-    response = TEST_CLIENT.put(f'{ep.ALL_INSERT}', json={
-        scraper.POSTAL_CODE: TEST_POSTAL_CODE,
-        scraper.MAX_PRICE: TEST_MAX_PRICE,
-        scraper.START_DATE: TEST_START_DATE + "T00:00:00Z",
-        scraper.END_DATE: TEST_END_DATE + "T23:59:00Z",
-        scraper.SIZE: TEST_EVENT_SIZE
-    })
-    assert response.status_code == 200
-    resp_json = response.get_json()
-    #check response
-    assert isinstance(resp_json[ep.INSERTED_IDS], list)
 
 def test_get_and_convert():
     """

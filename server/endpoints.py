@@ -55,6 +55,7 @@ MG_REGISTER = '/mg_register'
 MG_LOGIN = '/mg_login'
 MG_ADD_FAVORITES = '/mg_add_favorites'
 MG_GET_FAVORITES = '/mg_get_favorites'
+DELETE_ACCOUNT = '/delete_account'
 FILTER = 'filter'
 EVENTS = 'events'
 DOCUMENT = 'document'
@@ -430,41 +431,6 @@ class MGLogin(Resource):
             return {RESPONSE: True}
 
 
-@api.route(f'{ALL_INSERT}')
-class AllInsert(Resource):
-    """
-    Test insertion of parsed events from Ticketmaster and Seatgeek
-    into MongoDB collection
-    """
-    @api.expect(all_fields)
-    def put(self):
-        """
-        Calls Ticketmaster, SeatGeek, and MongoAPI to get events and then
-        insert them, returns inserted IDs for both
-        """
-        postal_code = request.json[scraper.POSTAL_CODE]
-        max_price = request.json[scraper.MAX_PRICE]
-        start_date = request.json[scraper.START_DATE]
-        end_date = request.json[scraper.END_DATE]
-        size = request.json[scraper.SIZE]
-        if scraper.GENRE in request.json:
-            genre = request.json[scraper.GENRE]
-        else:
-            genre = None
-        events = scraper.getEvents(postal_code,
-                                   max_price,
-                                   start_date,
-                                   end_date,
-                                   size,
-                                   genre)
-
-        for i in range(len(events)):
-            events[i] = events[i].toDict()
-
-        response = db.POST("insertMany", "events", events)
-        return response
-
-
 @api.route(f'{ALL_CLEAR}')
 class AllClear(Resource):
     """
@@ -498,6 +464,21 @@ class GetAndConvert(Resource):
         documents = db.POST("find", "events", filter)
         events = db.convertToEvent(documents[DOCUMENTS])
         return {EVENTS: events}
+
+
+@api.route(f'{DELETE_ACCOUNT}')
+class DeleteAccount(Resource):
+    """
+    API for removing all traces of an account from the database.
+    """
+    def put(self):
+        doc = db.people()
+        result1 = db.POST("deleteMany", "favorites", doc)
+        result2 = db.POST("deleteOne", "accounts", doc)
+        return {
+            "favorites": result1,
+            "accounts": result2
+            }
 
 
 @api.route(PROFILE_MENU)
